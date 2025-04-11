@@ -8,7 +8,7 @@ public:
 	void Initialize();
 
 	// デストラクタ
-	 ~GameScene();
+	~GameScene();
 
 	// 更新
 	void Update();
@@ -38,4 +38,7 @@ private:
 
 	// ImGuiで値を入力する変数
 	float inputFloat3[3] = {0, 0, 0};
+
+	// デバックカメラ
+	KamataEngine::DebugCamera* debugCamera_ = nullptr;
 };
