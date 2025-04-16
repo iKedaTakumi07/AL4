@@ -2,13 +2,13 @@
 #include "KamataEngine.h"
 #include <Windows.h>
 
+using namespace KamataEngine;
+
 // Windowsアプリでのエントリーポイント(main関数)
 int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 
 	// エンジンの初期化
 	KamataEngine::Initialize(L"LE2C_03_イケダ_タクミ_AL3");
-
-	using namespace KamataEngine;
 
 	// DirectXCommomnインスタンスの取得
 	DirectXCommon* dxCommon = DirectXCommon::GetInstance();
