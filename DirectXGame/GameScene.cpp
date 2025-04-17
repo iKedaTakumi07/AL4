@@ -20,6 +20,10 @@ void GameScene::Initialize() { /*初期化を書く*/
 	// サウンドデータの読み込み
 	soundDataHandle_ = Audio::GetInstance()->LoadWave("fanfare.wav");
 
+	// 音声再生
+	/* Audio::GetInstance()->PlayWave(soundDataHandle_);*/
+	voiceHandle_ = Audio::GetInstance()->PlayWave(soundDataHandle_, true);
+
 	// ライン描画
 	PrimitiveDrawer::GetInstance()->SetCamera(&camera_);
 
@@ -47,9 +51,6 @@ void GameScene::Update() { /* 更新勝利を書く */
 	// 移動した座標をスプライトンに反映
 	sprite_->SetPosition(position);
 
-	// 音声再生
-	/* Audio::GetInstance()->PlayWave(soundDataHandle_);*/
-	voiceHandle_ = Audio::GetInstance()->PlayWave(soundDataHandle_, true);
 	// スペースキーを押した瞬間
 	if (Input::GetInstance()->TriggerKey(DIK_SPACE)) {
 		// 音声停止
