@@ -2,7 +2,6 @@
 #include "KamataEngine.h"
 #include <vector>
 
-
 // ゲームシーン
 class GameScene {
 public:
@@ -26,4 +25,8 @@ public:
 
 	// カメラ
 	KamataEngine::Camera camer_;
+
+	
 };
+
+
