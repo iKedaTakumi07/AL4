@@ -3,7 +3,7 @@
 
 class Skydome {
 public:
-	void Initialize();
+	void Initialize(KamataEngine::Model* model, KamataEngine::Camera* camera);
 
 	void Update();
 
@@ -17,5 +17,8 @@ private:
 	KamataEngine::Model* model_ = nullptr;
 
 	// カメラ
-	KamataEngine::Camera* camer_;
+	KamataEngine::Camera* camera_;
+
+	// テクスチャハンドル
+	//uint32_t textureHandle_ = 0;
 };

@@ -1,5 +1,6 @@
 #pragma once
 #include "KamataEngine.h"
+#include "Skydome.h"
 #include <vector>
 
 // ゲームシーン
@@ -25,11 +26,14 @@ public:
 	KamataEngine::Model* modelSkydome_ = nullptr;
 
 	// カメラ
-	KamataEngine::Camera camer_;
+	KamataEngine::Camera camera_;
 
 	// デバックカメラ有効
 	bool isDebugCameraActive_ = false;
 
 	// デバックカメラ
 	KamataEngine::DebugCamera* debugCamera_ = nullptr;
+
+	// 背景
+	Skydome* skydome_ = nullptr;
 };

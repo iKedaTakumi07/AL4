@@ -8,9 +8,12 @@ Matrix4x4 MakeAffineMatrix(Vector3 scale, Vector3 rotate, Vector3 translate);
 void GameScene::Initialize() { /*初期化を書く*/
 	// 3Dモデルを生成
 	model_ = Model::Create();
-	modelSkydome_ = Model::CreateFromOBJ("AL3_02_03", true);
+	modelSkydome_ = Model::CreateFromOBJ("Skydome", true);
 	// 初期化
-	camer_.Initialize();
+	camera_.Initialize();
+
+	skydome_ = new Skydome();
+	skydome_->Initialize(modelSkydome_, &camera_);
 
 	// 要素数
 	const uint32_t kNumBlockVirtical = 10;
@@ -70,12 +73,12 @@ void GameScene::Update() { /* 更新勝利を書く */
 	if (isDebugCameraActive_) {
 		// デバックカメラ更新
 		debugCamera_->Update();
-		camer_.matView = debugCamera_->GetCamera().matView;
-		camer_.matProjection = debugCamera_->GetCamera().matProjection;
+		camera_.matView = debugCamera_->GetCamera().matView;
+		camera_.matProjection = debugCamera_->GetCamera().matProjection;
 
-		camer_.TransferMatrix();
+		camera_.TransferMatrix();
 	} else {
-		camer_.UpdateMatrix();
+		camera_.UpdateMatrix();
 	}
 
 #endif // _DEBUG
@@ -93,6 +96,9 @@ void GameScene::Update() { /* 更新勝利を書く */
 			worldTransformBlock->TransferMatrix();
 		}
 	}
+
+	// 背景
+	skydome_->Update();
 }
 
 void GameScene::Draw() {
@@ -108,9 +114,12 @@ void GameScene::Draw() {
 			if (!worldTransformBlock)
 				continue;
 
-			model_->Draw(*worldTransformBlock, camer_);
+			model_->Draw(*worldTransformBlock, camera_);
 		}
 	}
+
+	// 背景
+	skydome_->Draw();
 
 	Model::PostDraw();
 }
