@@ -18,7 +18,7 @@ public:
 	void Draw();
 
 public:
-	std::vector<KamataEngine::WorldTransform*> worldTransformBlocks_;
+	std::vector<std::vector<KamataEngine::WorldTransform*>> worldTransformBlocks_;
 
 	// 3Dモデル
 	KamataEngine::Model* model_ = nullptr;
@@ -26,7 +26,9 @@ public:
 	// カメラ
 	KamataEngine::Camera camer_;
 
-	
+	// デバックカメラ有効
+	bool isDebugCameraActive_ = false;
+
+	// デバックカメラ
+	KamataEngine::DebugCamera* debugCamera_ = nullptr;
 };
-
-

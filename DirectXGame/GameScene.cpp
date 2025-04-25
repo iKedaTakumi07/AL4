@@ -9,57 +9,109 @@ void GameScene::Initialize() { /*初期化を書く*/
 	// 3Dモデルを生成
 	model_ = Model::Create();
 	// 初期化
-	camer_.translation_ = Vector3(0.0f, 0.0f, -5.0f);
+
 	camer_.Initialize();
 
 	// 要素数
+	const uint32_t kNumBlockVirtical = 10;
 	const uint32_t kNumBlockHorizontal = 20;
+
 	// ブロック1個分の横幅
 	const float kBlockWidth = 2.0f;
+	const float kBlockHeight = 2.0f;
+
+	// デバックカメラの生成
+	debugCamera_ = new DebugCamera(1280, 720);
+
 	// 要素数を変更する
-	worldTransformBlocks_.resize(kNumBlockHorizontal);
+	worldTransformBlocks_.resize(kNumBlockVirtical);
+	for (uint32_t i = 0; i < kNumBlockVirtical; ++i) {
+		worldTransformBlocks_[i].resize(kNumBlockHorizontal);
+	}
 
-	for (uint32_t i = 0; i < kNumBlockHorizontal; ++i) {
+	for (uint32_t i = 0; i < kNumBlockVirtical; ++i) {
+		for (uint32_t j = 0; j < kNumBlockHorizontal; ++j) {
 
-		worldTransformBlocks_[i] = new WorldTransform();
-		worldTransformBlocks_[i]->Initialize();
-		worldTransformBlocks_[i]->translation_.x = kBlockWidth * i;
-		worldTransformBlocks_[i]->translation_.y = 0.0f;
+			if (i % 2 == 1) {
+				worldTransformBlocks_[i][j] = new WorldTransform();
+				worldTransformBlocks_[i][j]->Initialize();
+				worldTransformBlocks_[i][j]->translation_.x = kBlockWidth * j;
+				worldTransformBlocks_[i][j]->translation_.y = kBlockHeight * i;
+			} else {
+				worldTransformBlocks_[i][j] = new WorldTransform();
+
+				worldTransformBlocks_[i][j] = nullptr;
+			}
+		}
 	}
 }
 
 GameScene::~GameScene() {
 	// ですトラ
 	delete model_;
+	delete debugCamera_;
 
-	for (WorldTransform* worldTransformBlock : worldTransformBlocks_) {
-		delete worldTransformBlock;
+	for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) {
+		for (WorldTransform* worldTransformBlock : worldTransformBlockLine) {
+			delete worldTransformBlock;
+		}
 	}
 	worldTransformBlocks_.clear();
 }
 
 void GameScene::Update() { /* 更新勝利を書く */
+
+#ifdef _DEBUG
+	if (Input::GetInstance()->TriggerKey(DIK_SPACE)) {
+		isDebugCameraActive_ = true;
+	}
+
+	if (isDebugCameraActive_) {
+		// デバックカメラ更新
+		debugCamera_->Update();
+		camer_.matView = debugCamera_->GetCamera().matView;
+		camer_.matProjection = debugCamera_->GetCamera().matProjection;
+
+		camer_.TransferMatrix();
+	} else {
+		camer_.UpdateMatrix();
+	}
+
+#endif // _DEBUG
+
 	// ブロックの更新
-	for (WorldTransform* worldTransBlock : worldTransformBlocks_) {
+	for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) {
+		for (WorldTransform* worldTransformBlock : worldTransformBlockLine) {
+			if (!worldTransformBlock)
+				continue;
 
-		// アフィン変換
-		worldTransBlock->matWorld_ = MakeAffineMatrix(worldTransBlock->scale_, worldTransBlock->rotation_, worldTransBlock->translation_);
+			// アフィン変換
+			worldTransformBlock->matWorld_ = MakeAffineMatrix(worldTransformBlock->scale_, worldTransformBlock->rotation_, worldTransformBlock->translation_);
 
-		// 定数バッファ
-		worldTransBlock->TransferMatrix();
+			// 定数バッファ
+			worldTransformBlock->TransferMatrix();
+		}
 	}
 }
 
 void GameScene::Draw() {
 
+	// directXCommonインスタンスの取得
+	DirectXCommon* dxCommon = DirectXCommon::GetInstance();
 
-	Model::PreDraw
-	
+	Model::PreDraw(dxCommon->GetCommandList());
 
 	// ブロックの描画
-	for (WorldTransform* worldTransformBlock : worldTransformBlocks_) {
-		model_->Draw(*worldTransformBlock, camer_);
+	for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) {
+		for (WorldTransform* worldTransformBlock : worldTransformBlockLine) {
+			if (!worldTransformBlock)
+				continue;
+
+			model_->Draw(*worldTransformBlock, camer_);
+		}
 	}
+
+	Model::PostDraw();
 }
 
 // アフィン変換行列を高速に生成する
