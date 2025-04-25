@@ -22,6 +22,7 @@ public:
 
 	// 3Dモデル
 	KamataEngine::Model* model_ = nullptr;
+	KamataEngine::Model* modelSkydome_ = nullptr;
 
 	// カメラ
 	KamataEngine::Camera camer_;

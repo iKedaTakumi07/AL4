@@ -8,8 +8,8 @@ Matrix4x4 MakeAffineMatrix(Vector3 scale, Vector3 rotate, Vector3 translate);
 void GameScene::Initialize() { /*初期化を書く*/
 	// 3Dモデルを生成
 	model_ = Model::Create();
+	modelSkydome_ = Model::CreateFromOBJ("AL3_02_03", true);
 	// 初期化
-
 	camer_.Initialize();
 
 	// 要素数
@@ -50,6 +50,7 @@ GameScene::~GameScene() {
 	// ですトラ
 	delete model_;
 	delete debugCamera_;
+	delete modelSkydome_;
 
 	for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) {
 		for (WorldTransform* worldTransformBlock : worldTransformBlockLine) {
