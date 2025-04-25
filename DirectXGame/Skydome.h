@@ -1,6 +1,5 @@
 #pragma once
 #include "KamataEngine.h"
-#include ""
 
 
 class Skydome {

@@ -15,7 +15,7 @@ Matrix4x4 MakeAffineMatrix(const Vector3& scale, const Vector3& rotate, const Ve
 void GameScene::Initialize() { /*初期化を書く*/
 	// 3Dモデルを生成
 	model_ = Model::Create();
-	modelSkydome_ = Model::CreateFromOBJ("Skydome", true);
+	modelSkydome_ = Model::CreateFromOBJ("skymode", true);
 	// 初期化
 	camera_.Initialize();
 
