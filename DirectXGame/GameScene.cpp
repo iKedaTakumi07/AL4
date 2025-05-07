@@ -1,5 +1,5 @@
 #include "GameScene.h"
-
+#include "calculation.h"
 
 using namespace KamataEngine;
 
@@ -9,16 +9,6 @@ void GameScene::Initialize() { /*初期化を書く*/
 	modelSkydome_ = Model::CreateFromOBJ("skymode", true);
 	modelPlayer_ = Model::CreateFromOBJ("PlayerModel", true);
 
-	// 初期化
-	camera_.farZ = 0.0f;
-	camera_.Initialize();
-
-	skydome_ = new Skydome();
-	skydome_->Initialize(modelSkydome_, &camera_);
-
-	player_ = new Player();
-	player_->Initialize(modelPlayer_, &camera_);
-
 	// 要素数
 	const uint32_t kNumBlockVirtical = 10;
 	const uint32_t kNumBlockHorizontal = 20;
@@ -27,8 +17,12 @@ void GameScene::Initialize() { /*初期化を書く*/
 	const float kBlockWidth = 2.0f;
 	const float kBlockHeight = 2.0f;
 
-	// デバックカメラの生成
-	debugCamera_ = new DebugCamera(1280, 720);
+	// 初期化
+	camera_.farZ = 0.0f;
+	camera_.Initialize();
+
+	skydome_ = new Skydome();
+	skydome_->Initialize(modelSkydome_, &camera_);
 
 	// 要素数を変更する
 	worldTransformBlocks_.resize(kNumBlockVirtical);
@@ -44,6 +38,12 @@ void GameScene::Initialize() { /*初期化を書く*/
 				worldTransformBlocks_[i][j]->Initialize();
 				worldTransformBlocks_[i][j]->translation_.x = kBlockWidth * j;
 				worldTransformBlocks_[i][j]->translation_.y = kBlockHeight * i;
+			} else if (i == 1 && j == 1) {
+				worldTransformBlocks_[i][j] = new WorldTransform();
+				worldTransformBlocks_[i][j]->Initialize();
+				worldTransformBlocks_[i][j]->translation_.x = kBlockWidth * j;
+				worldTransformBlocks_[i][j]->translation_.y = kBlockHeight * i;
+
 			} else {
 				worldTransformBlocks_[i][j] = new WorldTransform();
 
@@ -51,6 +51,12 @@ void GameScene::Initialize() { /*初期化を書く*/
 			}
 		}
 	}
+
+	player_ = new Player();
+	player_->Initialize(modelPlayer_, &camera_, worldTransformBlocks_[1][1]);
+
+	// デバックカメラの生成
+	debugCamera_ = new DebugCamera(1280, 720);
 }
 
 GameScene::~GameScene() {
@@ -90,19 +96,19 @@ void GameScene::Update() { /* 更新勝利を書く */
 
 #endif // _DEBUG
 
-	// ブロックの更新
-	for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) {
-		for (WorldTransform* worldTransformBlock : worldTransformBlockLine) {
-			if (!worldTransformBlock)
-				continue;
+	//// ブロックの更新
+	// for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) {
+	//	for (WorldTransform* worldTransformBlock : worldTransformBlockLine) {
+	//		if (!worldTransformBlock)
+	//			continue;
 
-			// アフィン変換
-			worldTransformBlock->matWorld_ = MakeAffineMatrix(worldTransformBlock->scale_, worldTransformBlock->rotation_, worldTransformBlock->translation_);
+	//		// アフィン変換
+	//		worldTransformBlock->matWorld_ = MakeAffineMatrix(worldTransformBlock->scale_, worldTransformBlock->rotation_, worldTransformBlock->translation_);
 
-			// 定数バッファ
-			worldTransformBlock->TransferMatrix();
-		}
-	}
+	//		// 定数バッファ
+	//		worldTransformBlock->TransferMatrix();
+	//	}
+	//}
 
 	// 背景
 	skydome_->Update();

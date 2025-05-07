@@ -2,7 +2,6 @@
 #include "KamataEngine.h"
 #include "Player.h"
 #include "Skydome.h"
-#include "calculation.h"
 #include <vector>
 
 // ゲームシーン
