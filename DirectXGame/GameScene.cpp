@@ -1,5 +1,5 @@
 #include "GameScene.h"
-#include "calculation.h"
+// #include "calculation.h"
 
 using namespace KamataEngine;
 
@@ -23,6 +23,9 @@ void GameScene::Initialize() { /*初期化を書く*/
 
 	skydome_ = new Skydome();
 	skydome_->Initialize(modelSkydome_, &camera_);
+
+	player_ = new Player();
+	player_->Initialize(modelPlayer_, &camera_);
 
 	// 要素数を変更する
 	worldTransformBlocks_.resize(kNumBlockVirtical);
@@ -51,9 +54,6 @@ void GameScene::Initialize() { /*初期化を書く*/
 			}
 		}
 	}
-
-	player_ = new Player();
-	player_->Initialize(modelPlayer_, &camera_);
 
 	// デバックカメラの生成
 	debugCamera_ = new DebugCamera(1280, 720);
