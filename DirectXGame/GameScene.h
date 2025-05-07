@@ -1,6 +1,8 @@
 #pragma once
 #include "KamataEngine.h"
+#include "Player.h"
 #include "Skydome.h"
+#include "calculation.h"
 #include <vector>
 
 // ゲームシーン
@@ -24,6 +26,7 @@ public:
 	// 3Dモデル
 	KamataEngine::Model* model_ = nullptr;
 	KamataEngine::Model* modelSkydome_ = nullptr;
+	KamataEngine::Model* modelPlayer_ = nullptr;
 
 	// カメラ
 	KamataEngine::Camera camera_;
@@ -36,4 +39,7 @@ public:
 
 	// 背景
 	Skydome* skydome_ = nullptr;
+
+	// プレイヤー
+	Player* player_ = nullptr;
 };
