@@ -17,6 +17,7 @@ void GameScene::Initialize() { /*初期化を書く*/
 	model_ = Model::Create();
 	modelSkydome_ = Model::CreateFromOBJ("skymode", true);
 	// 初期化
+	camera_.farZ = 0.0f;
 	camera_.Initialize();
 
 	skydome_ = new Skydome();
