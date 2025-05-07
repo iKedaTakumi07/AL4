@@ -53,7 +53,7 @@ void GameScene::Initialize() { /*初期化を書く*/
 	}
 
 	player_ = new Player();
-	player_->Initialize(modelPlayer_, &camera_, worldTransformBlocks_[1][1]);
+	player_->Initialize(modelPlayer_, &camera_);
 
 	// デバックカメラの生成
 	debugCamera_ = new DebugCamera(1280, 720);
