@@ -1,5 +1,5 @@
 #include "GameScene.h"
-// #include "calculation.h"
+ #include "MakeAffine.h"
 
 using namespace KamataEngine;
 
@@ -96,19 +96,19 @@ void GameScene::Update() { /* 更新勝利を書く */
 
 #endif // _DEBUG
 
-	//// ブロックの更新
-	// for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) {
-	//	for (WorldTransform* worldTransformBlock : worldTransformBlockLine) {
-	//		if (!worldTransformBlock)
-	//			continue;
+	// ブロックの更新
+	 for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) {
+		for (WorldTransform* worldTransformBlock : worldTransformBlockLine) {
+			if (!worldTransformBlock)
+				continue;
 
-	//		// アフィン変換
-	//		worldTransformBlock->matWorld_ = MakeAffineMatrix(worldTransformBlock->scale_, worldTransformBlock->rotation_, worldTransformBlock->translation_);
+			// アフィン変換
+			worldTransformBlock->matWorld_ = MakeAffineMatrix(worldTransformBlock->scale_, worldTransformBlock->rotation_, worldTransformBlock->translation_);
 
-	//		// 定数バッファ
-	//		worldTransformBlock->TransferMatrix();
-	//	}
-	//}
+			// 定数バッファ
+			worldTransformBlock->TransferMatrix();
+		}
+	}
 
 	// 背景
 	skydome_->Update();

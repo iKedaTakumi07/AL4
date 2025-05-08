@@ -1,30 +1,26 @@
-#pragma once
-#include "KamataEngine.h"
+#include "MakeAffine.h"
+
 using namespace KamataEngine;
 
-// 1.x軸回転行列
-Matrix4x4 MakeRotateXMatrix(float radian) {
+Matrix4x4 MakeAffine::MakeRotateXMatrix(float radian) {
 	Matrix4x4 num;
 	num = {1, 0, 0, 0, 0, std::cos(radian), std::sin(radian), 0, 0, std::sin(-radian), std::cos(radian), 0, 0, 0, 0, 1};
 	return num;
 }
 
-// 2.y軸回転行列
-Matrix4x4 MakeRotateYMatrix(float radian) {
+Matrix4x4 MakeAffine::MakeRotateYMatrix(float radian) {
 	Matrix4x4 num;
 	num = {std::cos(radian), 0, std::sin(-radian), 0, 0, 1, 0, 0, std::sin(radian), 0, std::cos(radian), 0, 0, 0, 0, 1};
 	return num;
 }
 
-// 3.z軸回転行列
-Matrix4x4 MakeRotateZMatrix(float radian) {
+Matrix4x4 MakeAffine::MakeRotateZMatrix(float radian) {
 	Matrix4x4 num;
 	num = {std::cos(radian), std::sin(radian), 0, 0, std::sin(-radian), std::cos(radian), 0, 0, 0, 0, 1, 0, 0, 0, 0, 1};
 	return num;
 }
 
-// 行列の積
-Matrix4x4 Mulyiply(const Matrix4x4& m1, const Matrix4x4& m2) {
+Matrix4x4 MakeAffine::Mulyiply(const Matrix4x4& m1, const Matrix4x4& m2) {
 	Matrix4x4 num;
 	num.m[0][0] = m1.m[0][0] * m2.m[0][0] + m1.m[0][1] * m2.m[1][0] + m1.m[0][2] * m2.m[2][0] + m1.m[0][3] * m2.m[3][0];
 	num.m[0][1] = m1.m[0][0] * m2.m[0][1] + m1.m[0][1] * m2.m[1][1] + m1.m[0][2] * m2.m[2][1] + m1.m[0][3] * m2.m[3][1];
@@ -49,7 +45,7 @@ Matrix4x4 Mulyiply(const Matrix4x4& m1, const Matrix4x4& m2) {
 	return num;
 }
 
-Matrix4x4 MakeAffineMatrix(const Vector3& scale, const Vector3& rotate, const Vector3& translate) {
+Matrix4x4 MakeAffine::MakeAffineMatrix(const Vector3& scale, const Vector3& rotate, const Vector3& translate) {
 	Matrix4x4 rotateX = MakeRotateXMatrix(rotate.x);
 	Matrix4x4 rotateY = MakeRotateYMatrix(rotate.y);
 	Matrix4x4 rotateZ = MakeRotateZMatrix(rotate.z);
