@@ -27,6 +27,12 @@ public:
 	KamataEngine::Model* modelSkydome_ = nullptr;
 	KamataEngine::Model* modelPlayer_ = nullptr;
 
+	// 背景
+	Skydome* skydome_ = nullptr;
+
+	// プレイヤー
+	Player* player_ = nullptr;
+
 	// カメラ
 	KamataEngine::Camera camera_;
 
@@ -35,10 +41,4 @@ public:
 
 	// デバックカメラ
 	KamataEngine::DebugCamera* debugCamera_ = nullptr;
-
-	// 背景
-	Skydome* skydome_ = nullptr;
-
-	// プレイヤー
-	Player* player_ = nullptr;
 };
