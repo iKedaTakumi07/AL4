@@ -3,6 +3,10 @@
 
 using namespace KamataEngine;
 
+Matrix4x4 MakeRotateXMatrix(float radian);
+Matrix4x4 MakeRotateYMatrix(float radian);
+Matrix4x4 MakeRotateZMatrix(float radian);
+Matrix4x4 Mulyiply(const Matrix4x4& m1, const Matrix4x4& m2);
 Matrix4x4 MakeAffineMatrix(const Vector3& scale, const Vector3& rotate, const Vector3& translate);
 
 void Player::Initialize(KamataEngine::Model* model, KamataEngine::Camera* camera) {
@@ -31,15 +35,8 @@ void Player::Update() {
 
 void Player::Draw() {
 
-	// directXCommonインスタンスの取得
-	DirectXCommon* dxCommon = DirectXCommon::GetInstance();
-
-	Model::PreDraw(dxCommon->GetCommandList());
-
 	// 3Dモデルを描画
 	model_->Draw(worldTransform_, *camera_);
-
-	Model::PostDraw();
 }
 
 Matrix4x4 MakeRotateXMatrix(float radian) {

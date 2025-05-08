@@ -3,13 +3,13 @@
 
 using namespace KamataEngine;
 
-//Matrix4x4 MakeAffineMatrix(const Vector3& scale, const Vector3& rotate, const Vector3& translate);
+// Matrix4x4 MakeAffineMatrix(const Vector3& scale, const Vector3& rotate, const Vector3& translate);
 
 void GameScene::Initialize() { /*初期化を書く*/
 	// 3Dモデルを生成
 	model_ = Model::Create();
+	modelPlayer_ = Model::CreateFromOBJ("player");
 	modelSkydome_ = Model::CreateFromOBJ("skymode", true);
-	modelPlayer_ = Model::CreateFromOBJ("skymode");
 
 	// 要素数
 	const uint32_t kNumBlockVirtical = 10;
@@ -26,8 +26,7 @@ void GameScene::Initialize() { /*初期化を書く*/
 	skydome_ = new Skydome();
 	skydome_->Initialize(modelSkydome_, &camera_);
 
-	player_ = new Player();
-	player_->Initialize(modelPlayer_, &camera_);
+
 
 	// 要素数を変更する
 	worldTransformBlocks_.resize(kNumBlockVirtical);
@@ -44,13 +43,11 @@ void GameScene::Initialize() { /*初期化を書く*/
 				worldTransformBlocks_[i][j]->translation_.x = kBlockWidth * j;
 				worldTransformBlocks_[i][j]->translation_.y = kBlockHeight * i;
 			} else if (i == 1 && j == 1) {
-				worldTransformBlocks_[i][j] = new WorldTransform();
-				worldTransformBlocks_[i][j]->Initialize();
-				worldTransformBlocks_[i][j]->translation_.x = kBlockWidth * j;
-				worldTransformBlocks_[i][j]->translation_.y = kBlockHeight * i;
+				player_ = new Player();
+				player_->Initialize(modelPlayer_, &camera_);
 
 			} else {
-				worldTransformBlocks_[i][j] = new WorldTransform();
+				/*worldTransformBlocks_[i][j] = new WorldTransform();*/
 
 				worldTransformBlocks_[i][j] = nullptr;
 			}
@@ -99,7 +96,7 @@ void GameScene::Update() { /* 更新勝利を書く */
 #endif // _DEBUG
 
 	//// ブロックの更新
-	//for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) {
+	// for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) {
 	//	for (WorldTransform* worldTransformBlock : worldTransformBlockLine) {
 	//		if (!worldTransformBlock)
 	//			continue;
@@ -125,6 +122,9 @@ void GameScene::Draw() {
 
 	Model::PreDraw(dxCommon->GetCommandList());
 
+	// プレイヤー
+	player_->Draw();
+
 	// ブロックの描画
 	for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) {
 		for (WorldTransform* worldTransformBlock : worldTransformBlockLine) {
@@ -138,31 +138,28 @@ void GameScene::Draw() {
 	// 背景
 	skydome_->Draw();
 
-	// プレイヤー
-	player_->Draw();
-
 	Model::PostDraw();
 }
 //
-//Matrix4x4 MakeRotateXMatrix(float radian) {
+// Matrix4x4 MakeRotateXMatrix(float radian) {
 //	Matrix4x4 num;
 //	num = {1, 0, 0, 0, 0, std::cos(radian), std::sin(radian), 0, 0, std::sin(-radian), std::cos(radian), 0, 0, 0, 0, 1};
 //	return num;
 //}
 //
-//Matrix4x4 MakeRotateYMatrix(float radian) {
+// Matrix4x4 MakeRotateYMatrix(float radian) {
 //	Matrix4x4 num;
 //	num = {std::cos(radian), 0, std::sin(-radian), 0, 0, 1, 0, 0, std::sin(radian), 0, std::cos(radian), 0, 0, 0, 0, 1};
 //	return num;
 //}
 //
-//Matrix4x4 MakeRotateZMatrix(float radian) {
+// Matrix4x4 MakeRotateZMatrix(float radian) {
 //	Matrix4x4 num;
 //	num = {std::cos(radian), std::sin(radian), 0, 0, std::sin(-radian), std::cos(radian), 0, 0, 0, 0, 1, 0, 0, 0, 0, 1};
 //	return num;
 //}
 //
-//Matrix4x4 Mulyiply(const Matrix4x4& m1, const Matrix4x4& m2) {
+// Matrix4x4 Mulyiply(const Matrix4x4& m1, const Matrix4x4& m2) {
 //	Matrix4x4 num;
 //	num.m[0][0] = m1.m[0][0] * m2.m[0][0] + m1.m[0][1] * m2.m[1][0] + m1.m[0][2] * m2.m[2][0] + m1.m[0][3] * m2.m[3][0];
 //	num.m[0][1] = m1.m[0][0] * m2.m[0][1] + m1.m[0][1] * m2.m[1][1] + m1.m[0][2] * m2.m[2][1] + m1.m[0][3] * m2.m[3][1];
@@ -187,7 +184,7 @@ void GameScene::Draw() {
 //	return num;
 //}
 //
-//Matrix4x4 MakeAffineMatrix(const Vector3& scale, const Vector3& rotate, const Vector3& translate) {
+// Matrix4x4 MakeAffineMatrix(const Vector3& scale, const Vector3& rotate, const Vector3& translate) {
 //	Matrix4x4 rotateX = MakeRotateXMatrix(rotate.x);
 //	Matrix4x4 rotateY = MakeRotateYMatrix(rotate.y);
 //	Matrix4x4 rotateZ = MakeRotateZMatrix(rotate.z);
