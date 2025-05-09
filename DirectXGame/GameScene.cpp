@@ -5,17 +5,17 @@ using namespace KamataEngine;
 
 void GameScene::Initialize() { /*初期化を書く*/
 	// 3Dモデルを生成
-	model_ = Model::Create();
+	modelblock_ = Model::CreateFromOBJ("block", true);
 	modelPlayer_ = Model::CreateFromOBJ("player");
-	modelSkydome_ = Model::CreateFromOBJ("skymode", true);
+	modelSkydome_ = Model::CreateFromOBJ("skydome", true);
 
 	// 要素数
 	const uint32_t kNumBlockVirtical = 10;
 	const uint32_t kNumBlockHorizontal = 20;
 
 	// ブロック1個分の横幅
-	const float kBlockWidth = 2.0f;
-	const float kBlockHeight = 2.0f;
+	const float kBlockWidth = 1.0f;
+	const float kBlockHeight = 1.0f;
 
 	// 初期化
 	camera_.farZ = 0.0f;
@@ -42,7 +42,10 @@ void GameScene::Initialize() { /*初期化を書く*/
 				worldTransformBlocks_[i][j]->translation_.x = kBlockWidth * j;
 				worldTransformBlocks_[i][j]->translation_.y = kBlockHeight * i;
 			} else if (i == 1 && j == 1) {
-
+				worldTransformBlocks_[i][j] = new WorldTransform();
+				worldTransformBlocks_[i][j]->Initialize();
+				worldTransformBlocks_[i][j]->translation_.x = kBlockWidth * j;
+				worldTransformBlocks_[i][j]->translation_.y = kBlockHeight * i;
 			} else {
 				/*worldTransformBlocks_[i][j] = new WorldTransform();*/
 
@@ -57,7 +60,7 @@ void GameScene::Initialize() { /*初期化を書く*/
 
 GameScene::~GameScene() {
 	// ですトラ
-	delete model_;
+	delete modelblock_;
 	delete debugCamera_;
 	delete modelSkydome_;
 	delete skydome_;
@@ -125,7 +128,7 @@ void GameScene::Draw() {
 			if (!worldTransformBlock)
 				continue;
 
-			model_->Draw(*worldTransformBlock, camera_);
+			modelblock_->Draw(*worldTransformBlock, camera_);
 		}
 	}
 
