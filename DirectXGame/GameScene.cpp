@@ -7,7 +7,7 @@ void GameScene::Initialize() { /*初期化を書く*/
 	// 3Dモデルを生成
 	model_ = Model::Create();
 	modelPlayer_ = Model::CreateFromOBJ("player");
-	modelSkydome_ = Model::CreateFromOBJ("skymode", true);
+	modelSkydome_ = Model::CreateFromOBJ("skydome", true);
 
 	// 要素数
 	const uint32_t kNumBlockVirtical = 10;
