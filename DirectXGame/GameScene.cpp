@@ -36,21 +36,12 @@ void GameScene::Initialize() { /*初期化を書く*/
 	for (uint32_t i = 0; i < kNumBlockVirtical; ++i) {
 		for (uint32_t j = 0; j < kNumBlockHorizontal; ++j) {
 
-			if (i % 2 == 1) {
-				worldTransformBlocks_[i][j] = new WorldTransform();
-				worldTransformBlocks_[i][j]->Initialize();
-				worldTransformBlocks_[i][j]->translation_.x = kBlockWidth * j;
-				worldTransformBlocks_[i][j]->translation_.y = kBlockHeight * i;
-			} else if (i == 1 && j == 1) {
-				worldTransformBlocks_[i][j] = new WorldTransform();
-				worldTransformBlocks_[i][j]->Initialize();
-				worldTransformBlocks_[i][j]->translation_.x = kBlockWidth * j;
-				worldTransformBlocks_[i][j]->translation_.y = kBlockHeight * i;
-			} else {
-				/*worldTransformBlocks_[i][j] = new WorldTransform();*/
-
-				worldTransformBlocks_[i][j] = nullptr;
-			}
+			if ((i + j) % 2 == 1)
+				continue;
+			worldTransformBlocks_[i][j] = new WorldTransform();
+			worldTransformBlocks_[i][j]->Initialize();
+			worldTransformBlocks_[i][j]->translation_.x = kBlockWidth * j;
+			worldTransformBlocks_[i][j]->translation_.y = kBlockHeight * i;
 		}
 	}
 
