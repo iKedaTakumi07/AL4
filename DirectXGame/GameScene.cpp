@@ -23,7 +23,9 @@ void GameScene::Initialize() { /*初期化を書く*/
 	skydome_->Initialize(modelSkydome_, &camera_);
 
 	player_ = new Player();
-	player_->Initialize(modelPlayer_, &camera_);
+	// 座標を指定
+	Vector3 playerPosition = mapChipField_->GetMapChipPositionByIndex(1, 19);
+	player_->Initialize(modelPlayer_, &camera_, playerPosition);
 
 	// デバックカメラの生成
 	debugCamera_ = new DebugCamera(1280, 720);
