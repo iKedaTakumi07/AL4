@@ -31,7 +31,7 @@ private:
 	float turnFirstRotationY_ = 0.0f;
 	float turnTimer_ = 0.0f;
 	// 旋回時間
-	static inline const float kTimeTurn = 1.0f;
+	static inline const float kTimeTurn = 0.5f;
 
 	// 着地状態フラグ
 	bool onGround_ = true;
