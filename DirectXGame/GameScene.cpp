@@ -1,5 +1,5 @@
 #include "GameScene.h"
-#include "WorldTransForm.h"
+#include "Math.h"
 
 using namespace KamataEngine;
 
@@ -51,6 +51,23 @@ GameScene::~GameScene() {
 
 void GameScene::Update() { /* 更新勝利を書く */
 
+	// プレイヤー
+	player_->Update();
+
+	// ブロックの更新
+	for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) {
+		for (WorldTransform* worldTransformBlock : worldTransformBlockLine) {
+			if (!worldTransformBlock)
+				continue;
+
+			// アフィン変換
+			WolrdtransformUpdate(*worldTransformBlock);
+		}
+	}
+
+	// 背景
+	skydome_->Update();
+
 #ifdef _DEBUG
 	if (Input::GetInstance()->TriggerKey(DIK_SPACE)) {
 		isDebugCameraActive_ = true;
@@ -68,23 +85,6 @@ void GameScene::Update() { /* 更新勝利を書く */
 	}
 
 #endif // _DEBUG
-
-	// ブロックの更新
-	for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) {
-		for (WorldTransform* worldTransformBlock : worldTransformBlockLine) {
-			if (!worldTransformBlock)
-				continue;
-
-			// アフィン変換
-			WolrdtransformUpdate(*worldTransformBlock);
-		}
-	}
-
-	// 背景
-	skydome_->Update();
-
-	// プレイヤー
-	player_->Update();
 }
 
 void GameScene::Draw() {
