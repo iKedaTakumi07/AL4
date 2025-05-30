@@ -21,4 +21,7 @@ private:
 
 	// 対象者
 	Player* target_ = nullptr;
+
+	// オフセット
+	Vector3 targetOffset_ = {0, 0, -15.0f};
 };

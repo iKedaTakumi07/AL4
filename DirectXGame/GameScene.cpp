@@ -1,5 +1,5 @@
 #include "GameScene.h"
-#include "WorldTransForm.h"
+#include "Math.h"
 
 using namespace KamataEngine;
 
@@ -32,6 +32,8 @@ void GameScene::Initialize() { /*初期化を書く*/
 	// 追跡カメラ
 	CameraController_ = new CameraController();
 	CameraController_->Initialize(&camera_);
+	CameraController_->SetTarget(player_);
+	CameraController_->Reset();
 }
 
 GameScene::~GameScene() {
@@ -111,6 +113,9 @@ void GameScene::Draw() {
 
 	// 背景
 	skydome_->Draw();
+
+	// 追跡カメラ
+	CameraController_->Update();
 
 	Model::PostDraw();
 }

@@ -1,26 +1,12 @@
 #define NOMINMAX
 
 #include "Player.h"
-#include "WorldTransForm.h"
+#include "Math.h"
 #include <algorithm>
 #include <cassert>
 #include <numbers>
 
 using namespace KamataEngine;
-
-static float easeInOutQuint(float s, float e, float t) {
-	float easedT;
-	float rotationY;
-
-	easedT = (t < 0.5 ? 8 * t * t * t * t : 1 - std::powf(-2 * t + 2, 4) / 2);
-	if (easedT >= 1.0f) {
-		easedT = 1.0f;
-	}
-
-	rotationY = (1.0f - easedT) * s + easedT * e;
-
-	return rotationY;
-}
 
 void Player::Initialize(KamataEngine::Model* model, KamataEngine::Camera* camera, const Vector3& position) {
 
