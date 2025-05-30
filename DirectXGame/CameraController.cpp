@@ -9,5 +9,5 @@ void CameraController::Update() {}
 
 void CameraController::Reset() {
 	// 追跡委対象の座標を参照
-	const WorldTransform& targetWorldTransForm = target_.
+	const WorldTransform& targetWorldTransForm = target_->GetWorldTransform();
 }

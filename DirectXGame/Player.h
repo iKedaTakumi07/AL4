@@ -15,7 +15,7 @@ public:
 
 	void Draw();
 
-	
+	KamataEngine::WorldTransform& GetWorldTransform() { return worldTransform_; };
 
 private:
 	// ワールド変換データ
