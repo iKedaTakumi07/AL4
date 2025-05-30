@@ -12,12 +12,11 @@ void GameScene::Initialize() { /*初期化を書く*/
 	// 読み込み
 	mapChipField_ = new MapChipField;
 	mapChipField_->LoadMapChipCsv("Resources/map.csv");
+	GenerateBlocks();
 
 	// 初期化
 	camera_.farZ = 0.0f;
 	camera_.Initialize();
-
-	GenerateBlocks();
 
 	skydome_ = new Skydome();
 	skydome_->Initialize(modelSkydome_, &camera_);
@@ -29,6 +28,10 @@ void GameScene::Initialize() { /*初期化を書く*/
 
 	// デバックカメラの生成
 	debugCamera_ = new DebugCamera(1280, 720);
+
+	// 追跡カメラ
+	CameraController_ = new CameraController();
+	CameraController_->Initialize(&camera_);
 }
 
 GameScene::~GameScene() {
