@@ -60,6 +60,7 @@ void GameScene::Update() { /* 更新勝利を書く */
 	if (Input::GetInstance()->TriggerKey(DIK_SPACE)) {
 		isDebugCameraActive_ = true;
 	}
+#endif // _DEBUG
 
 	if (isDebugCameraActive_) {
 		// デバックカメラ更新
@@ -72,11 +73,10 @@ void GameScene::Update() { /* 更新勝利を書く */
 		camera_.UpdateMatrix();
 	}
 
-#endif // _DEBUG
 
 	// ブロックの更新
 	for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) {
-		for (WorldTransform* worldTransformBlock : worldTransformBlockLine) {
+		for (WorldTransform*& worldTransformBlock : worldTransformBlockLine) {
 			if (!worldTransformBlock)
 				continue;
 
@@ -90,6 +90,9 @@ void GameScene::Update() { /* 更新勝利を書く */
 
 	// プレイヤー
 	player_->Update();
+
+	// 追跡カメラ
+	CameraController_->Update();
 }
 
 void GameScene::Draw() {
@@ -103,7 +106,7 @@ void GameScene::Draw() {
 
 	// ブロックの描画
 	for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) {
-		for (WorldTransform* worldTransformBlock : worldTransformBlockLine) {
+		for (WorldTransform*& worldTransformBlock : worldTransformBlockLine) {
 			if (!worldTransformBlock)
 				continue;
 
@@ -113,9 +116,6 @@ void GameScene::Draw() {
 
 	// 背景
 	skydome_->Draw();
-
-	// 追跡カメラ
-	CameraController_->Update();
 
 	Model::PostDraw();
 }
