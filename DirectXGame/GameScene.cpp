@@ -27,14 +27,14 @@ void GameScene::Initialize() { /*初期化を書く*/
 	player_->Initialize(modelPlayer_, &camera_, playerPosition);
 
 	// 追従カメラ
-	CameraController_ = new CameraController(); // 生成
-	CameraController_->Initialize(&camera_);    // 初期化
-	CameraController_->SetTarget(player_);      // 追従対象セット
-	CameraController_->Reset();                 // リセット
+	//CameraController_ = new CameraController(); // 生成
+	//CameraController_->Initialize(&camera_);    // 初期化
+	//CameraController_->SetTarget(player_);      // 追従対象セット
+	//CameraController_->Reset();                 // リセット
 
 	// 初期位置
-	CameraController::Rect cameraArea = {12.0f, 100 - 12.0f, 6.0f, 6.0f};
-	CameraController_->SetMovablearea(cameraArea);
+	//CameraController::Rect cameraArea = {12.0f, 100 - 12.0f, 6.0f, 6.0f};
+	//CameraController_->SetMovablearea(cameraArea);
 
 	// デバックカメラの生成
 	debugCamera_ = new DebugCamera(1280, 720);
