@@ -12,12 +12,11 @@ void GameScene::Initialize() { /*初期化を書く*/
 	// 読み込み
 	mapChipField_ = new MapChipField;
 	mapChipField_->LoadMapChipCsv("Resources/map.csv");
+	GenerateBlocks();
 
 	// 初期化
 	camera_.farZ = 0.0f;
 	camera_.Initialize();
-
-	GenerateBlocks();
 
 	skydome_ = new Skydome();
 	skydome_->Initialize(modelSkydome_, &camera_);
@@ -26,6 +25,16 @@ void GameScene::Initialize() { /*初期化を書く*/
 	// 座標を指定
 	Vector3 playerPosition = mapChipField_->GetMapChipPositionByIndex(1, 19);
 	player_->Initialize(modelPlayer_, &camera_, playerPosition);
+
+	// 追従カメラ
+	CameraController_ = new CameraController(); // 生成
+	CameraController_->Initialize(&camera_);    // 初期化
+	CameraController_->SetTarget(player_);      // 追従対象セット
+	CameraController_->Reset();                 // リセット
+
+	// 初期位置
+	CameraController::Rect cameraArea = {12.0f, 100 - 12.0f, 6.0f, 6.0f};
+	CameraController_->SetMovablearea(cameraArea);
 
 	// デバックカメラの生成
 	debugCamera_ = new DebugCamera(1280, 720);
@@ -53,10 +62,14 @@ void GameScene::Update() { /* 更新勝利を書く */
 
 	// プレイヤー
 	player_->Update();
+	// 背景
+	skydome_->Update();
+
+	CameraController_->Update();
 
 	// ブロックの更新
 	for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) {
-		for (WorldTransform* worldTransformBlock : worldTransformBlockLine) {
+		for (WorldTransform*& worldTransformBlock : worldTransformBlockLine) {
 			if (!worldTransformBlock)
 				continue;
 
@@ -64,9 +77,6 @@ void GameScene::Update() { /* 更新勝利を書く */
 			WolrdtransformUpdate(*worldTransformBlock);
 		}
 	}
-
-	// 背景
-	skydome_->Update();
 
 #ifdef _DEBUG
 	if (Input::GetInstance()->TriggerKey(DIK_SPACE)) {
@@ -96,18 +106,18 @@ void GameScene::Draw() {
 	// プレイヤー
 	player_->Draw();
 
+	// 背景
+	skydome_->Draw();
+
 	// ブロックの描画
 	for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) {
-		for (WorldTransform* worldTransformBlock : worldTransformBlockLine) {
+		for (WorldTransform*& worldTransformBlock : worldTransformBlockLine) {
 			if (!worldTransformBlock)
 				continue;
 
 			modelblock_->Draw(*worldTransformBlock, camera_);
 		}
 	}
-
-	// 背景
-	skydome_->Draw();
 
 	Model::PostDraw();
 }

@@ -140,10 +140,18 @@ const Vector3 operator+(const Vector3& v1, const Vector3& v2) {
 }
 
 // 線形保管の関数
-Vector3 Lerp(const Vector3& a, const Vector3& b, float t) {
-	Vector3 p;
-	p.x = t * a.x + (1.0f - t) * b.x;
-	p.y = t * a.y + (1.0f - t) * b.y;
-	p.z = t * a.z + (1.0f - t) * b.z;
-	return p;
+Vector3 Lerp(Vector3 x1, Vector3 x2, float t) { return {(1.0f - t) * x1.x + t * x2.x, (1.0f - t) * x1.y + t * x2.y, (1.0f - t) * x1.z + t * x2.z}; }
+
+float easeInOutQuint(float s, float e, float t) {
+	float easedT;
+	float rotationY;
+
+	easedT = (t < 0.5 ? 8 * t * t * t * t : 1 - std::powf(-2 * t + 2, 4) / 2);
+	if (easedT >= 1.0f) {
+		easedT = 1.0f;
+	}
+
+	rotationY = (1.0f - easedT) * s + easedT * e;
+
+	return rotationY;
 }

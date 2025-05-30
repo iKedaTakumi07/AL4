@@ -1,9 +1,10 @@
 #pragma once
+#include "CameraController.h"
 #include "KamataEngine.h"
+#include "MapChipField.h"
 #include "Player.h"
 #include "Skydome.h"
 #include <vector>
-#include "MapChipField.h"
 
 // ゲームシーン
 class GameScene {
@@ -36,6 +37,9 @@ public:
 
 	// プレイヤー
 	Player* player_ = nullptr;
+
+	// 追従カメラ
+	CameraController* CameraController_ = nullptr;
 
 	// マップチップフィールド
 	MapChipField* mapChipField_;
