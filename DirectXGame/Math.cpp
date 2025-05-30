@@ -1,4 +1,4 @@
-#include "WorldTransForm.h"
+#include "Math.h"
 
 using namespace KamataEngine;
 
@@ -82,4 +82,76 @@ Matrix4x4 MakeAffineMatrix(const Vector3& scale, const Vector3& rotate, const Ve
 	num.m[3][2] = translate.z;
 	num.m[3][3] = 1.0f;
 	return num;
+}
+
+const Vector3 operator+=(Vector3& v1, const Vector3& v2) {
+	v1.x += v2.x;
+	v1.y += v2.y;
+	v1.z += v2.z;
+
+	return v1;
+}
+
+const Vector3 operator-=(Vector3& v1, const Vector3& v2) {
+	v1.x -= v2.x;
+	v1.y -= v2.y;
+	v1.z -= v2.z;
+
+	return v1;
+}
+
+Vector3& operator*=(Vector3& v, float s) {
+	v.x *= s;
+	v.y *= s;
+	v.z *= s;
+	return v;
+}
+
+Vector3& operator/=(Vector3& v, float s) {
+	v.x /= s;
+	v.y /= s;
+	v.z /= s;
+	return v;
+}
+
+Matrix4x4& operator*=(Matrix4x4& lhm, const Matrix4x4& rhm) {
+	Matrix4x4 result{};
+
+	for (size_t i = 0; i < 4; i++) {
+		for (size_t j = 0; j < 4; j++) {
+			for (size_t k = 0; k < 4; k++) {
+				result.m[i][j] += lhm.m[i][k] * rhm.m[k][j];
+			}
+		}
+	}
+	lhm = result;
+	return lhm;
+}
+
+Matrix4x4 operator*(const Matrix4x4& m1, const Matrix4x4& m2) {
+	Matrix4x4 result = m1;
+
+	return result *= m2;
+}
+
+const Vector3 operator+(const Vector3& v1, const Vector3& v2) {
+	Vector3 temp(v1);
+	return temp += v2;
+}
+
+// 線形保管の関数
+Vector3 Lerp(Vector3 x1, Vector3 x2, float t) { return {(1.0f - t) * x1.x + t * x2.x, (1.0f - t) * x1.y + t * x2.y, (1.0f - t) * x1.z + t * x2.z}; }
+
+float easeInOutQuint(float s, float e, float t) {
+	float easedT;
+	float rotationY;
+
+	easedT = (t < 0.5 ? 8 * t * t * t * t : 1 - std::powf(-2 * t + 2, 4) / 2);
+	if (easedT >= 1.0f) {
+		easedT = 1.0f;
+	}
+
+	rotationY = (1.0f - easedT) * s + easedT * e;
+
+	return rotationY;
 }
