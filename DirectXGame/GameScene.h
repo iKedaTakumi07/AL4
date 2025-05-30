@@ -1,5 +1,5 @@
 #pragma once
-#include "CameraController.h"
+#include "CameraControlloer.h"
 #include "KamataEngine.h"
 #include "MapChipField.h"
 #include "Player.h"
@@ -39,7 +39,7 @@ public:
 	Player* player_ = nullptr;
 
 	// 追従カメラ
-	CameraController* CameraController_ = nullptr;
+	CameraControlloer* CameraController_ = nullptr;
 
 	// マップチップフィールド
 	MapChipField* mapChipField_;

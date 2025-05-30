@@ -17,7 +17,7 @@ public:
 
 	KamataEngine::WorldTransform& GetWorldTransform() { return worldTransform_; };
 
-	const KamataEngine::Vector3& GetVelocity() const { return velocity_; };
+	/*const KamataEngine::Vector3& GetVelocity() const { return velocity_; };*/
 
 private:
 	// ワールド変換データ

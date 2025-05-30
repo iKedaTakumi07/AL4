@@ -27,7 +27,7 @@ void GameScene::Initialize() { /*初期化を書く*/
 	player_->Initialize(modelPlayer_, &camera_, playerPosition);
 
 	// 追従カメラ
-	CameraController_ = new CameraController(); // 生成
+	CameraController_ = new CameraControlloer(); // 生成
 	CameraController_->Initialize(&camera_);    // 初期化
 	CameraController_->SetTarget(player_);      // 追従対象セット
 	CameraController_->Reset();                 // リセット
@@ -65,6 +65,7 @@ void GameScene::Update() { /* 更新勝利を書く */
 	// 背景
 	skydome_->Update();
 
+	// 追跡カメラ
 	CameraController_->Update();
 
 	// ブロックの更新

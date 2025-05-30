@@ -3,10 +3,10 @@
 
 using namespace KamataEngine;
 
-void CameraControlloer::Initialize() {
+void CameraControlloer::Initialize(Camera* camera) {
 
 	// 初期化
-	camera_->Initialize();
+	camera_ = camera;
 }
 
 void CameraControlloer::Update() {
