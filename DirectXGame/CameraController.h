@@ -1,6 +1,8 @@
 #pragma once
 #include <KamataEngine.h>
 
+class Player;
+
 using namespace KamataEngine;
 
 class CameraController {
@@ -9,6 +11,14 @@ public:
 
 	void Update();
 
+	void SetTarget(Player* target) { target_ = target; }
+
+	void Reset();
+
 private:
+	// 追跡カメラ
 	Camera* camera_ = nullptr;
+
+	// 対象者
+	Player* target_ = nullptr;
 };
