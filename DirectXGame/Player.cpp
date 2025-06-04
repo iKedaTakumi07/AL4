@@ -16,12 +16,12 @@ void Player::Initialize(KamataEngine::Model* model, KamataEngine::Camera* camera
 	// 初期化
 	model_ = model;
 	camera_ = camera;
-	worldTransform_.translation_ = position;
-	worldTransform_.rotation_.y = std::numbers::pi_v<float> / 2.0f;
 
 	// ワールド変換の初期アk
 	worldTransform_.Initialize();
-	worldTransform_.translation_ = {1.0f, 1.0f, 0.0f};
+	worldTransform_.translation_ = position;
+	worldTransform_.rotation_.y = std::numbers::pi_v<float> / 2.0f;
+	/*worldTransform_.translation_ = {1.0f, 1.0f, 0.0f};*/
 }
 
 void Player::Update() {
@@ -118,22 +118,21 @@ void Player::Update() {
 		}
 	}
 
-	// 旋回制限
+	// 移動
+	worldTransform_.translation_.x += velocity_.x;
+	worldTransform_.translation_.y += velocity_.y;
+	worldTransform_.translation_.z += velocity_.z;
 
+	// 旋回制限
 	if (turnTimer_ > 0.0f) {
-		turnTimer_ -= 1.0f / 60.0f;
+		turnTimer_ = std::max(turnTimer_ - (1.0f / 60.0f), 0.0f);
 
 		float destinationRotationYTable[] = {std::numbers::pi_v<float> / 2.0f, std::numbers::pi_v<float> * 3.0f / 2.0f};
 		// 状況に応じた角度を取得する
 		float destiationRotationY = destinationRotationYTable[static_cast<uint32_t>(lrDirection_)];
 		// 自キャラの角度を設定すル
-		worldTransform_.rotation_.y = easeInOutQuint(destiationRotationY, turnFirstRotationY_, turnTimer_);
+		worldTransform_.rotation_.y = easeInOutQuint(destiationRotationY, turnFirstRotationY_, turnTimer_ / kTimeTurn);
 	}
-
-	// 移動
-	worldTransform_.translation_.x += velocity_.x;
-	worldTransform_.translation_.y += velocity_.y;
-	worldTransform_.translation_.z += velocity_.z;
 
 	// 行列を定数バッファに転送
 	WolrdtransformUpdate(worldTransform_);

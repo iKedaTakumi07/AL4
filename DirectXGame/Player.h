@@ -1,28 +1,30 @@
 #pragma once
 #include "KamataEngine.h"
 
-// 左右
-enum class LRDirection {
-	kRight,
-	kleft,
-};
+using namespace KamataEngine;
 
 class Player {
 public:
-	void Initialize(KamataEngine::Model* model, KamataEngine::Camera* camera, const KamataEngine::Vector3& position);
+	// 左右
+	enum class LRDirection {
+		kRight,
+		kleft,
+	};
+
+	void Initialize(Model* model, Camera* camera, const Vector3& position);
 
 	void Update();
 
 	void Draw();
 
-	KamataEngine::WorldTransform& GetWorldTransform() { return worldTransform_; };
+	WorldTransform& GetWorldTransform() { return worldTransform_; };
 
 private:
 	// ワールド変換データ
-	KamataEngine::WorldTransform worldTransform_;
+	WorldTransform worldTransform_;
 
 	// 座標
-	KamataEngine::Vector3 velocity_{};
+	Vector3 velocity_{};
 	// 加速/減速/最大速度
 	static inline const float kAcceleration = 0.05f;
 	static inline const float kAtteleration = 0.025f;
@@ -44,8 +46,8 @@ private:
 	static inline const float kJumpAcceleration = 0.5f;
 
 	// モデル
-	KamataEngine::Model* model_ = nullptr;
+	Model* model_ = nullptr;
 
 	// カメラ
-	KamataEngine::Camera* camera_;
+	Camera* camera_ = nullptr;
 };

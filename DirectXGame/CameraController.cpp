@@ -1,12 +1,14 @@
 #include "CameraController.h"
 #include "Math.h"
 #include "player.h"
+#include <imgui.h>
 
 using namespace KamataEngine;
 
 void CameraController::Initialize(Camera* camera) { camera_ = camera; }
 
 void CameraController::Update() {
+
 	// 追跡委対象の座標を参照
 	const WorldTransform& targetWorldTransForm = target_->GetWorldTransform();
 

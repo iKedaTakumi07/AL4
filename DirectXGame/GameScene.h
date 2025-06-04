@@ -9,11 +9,11 @@
 // ゲームシーン
 class GameScene {
 public:
-	// 初期化
-	void Initialize();
-
 	// デストラ
 	~GameScene();
+
+	// 初期化
+	void Initialize();
 
 	// 更新
 	void Update();
