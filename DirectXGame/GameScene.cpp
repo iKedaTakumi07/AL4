@@ -56,6 +56,9 @@ void GameScene::Initialize() { /*初期化を書く*/
 	CameraController_->Initialize(&camera_);
 	CameraController_->SetTarget(player_);
 	CameraController_->Reset();
+
+	CameraController::Rect cameraArea = {12.0f, 100 - 12.0f, 6.0f, 6.0f};
+	CameraController_->SetMovableArea(cameraArea);
 }
 
 void GameScene::GenerateBlocks() {
