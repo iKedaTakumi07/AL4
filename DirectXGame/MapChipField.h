@@ -1,5 +1,9 @@
 #pragma once
 #include "KamataEngine.h"
+#include "Math.h"
+#include <cstdint>
+#include <string>
+#include <vector>
 
 enum class MapChipType {
 	kBlank, // 空白

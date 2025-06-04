@@ -84,7 +84,7 @@ void Player::Update() {
 		if (Input::GetInstance()->PushKey(DIK_UP)) {
 
 			// ジャンプ初速
-			velocity_.y += kJumpAcceleration;
+			velocity_.y += kJumpAcceleration / 60.0f;
 		}
 
 		// ジャンプ開始
@@ -102,7 +102,7 @@ void Player::Update() {
 		}
 
 		// 落下速度
-		velocity_.y += -kGravityAcceleration;
+		velocity_.y += -kGravityAcceleration / 60.0f;
 		// 落下速度制限
 		velocity_.y = std::max(velocity_.y, -kLimitFallSpeed);
 

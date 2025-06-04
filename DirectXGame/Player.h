@@ -26,9 +26,9 @@ private:
 	// 座標
 	Vector3 velocity_{};
 	// 加速/減速/最大速度
-	static inline const float kAcceleration = 0.05f;
-	static inline const float kAtteleration = 0.025f;
-	static inline const float kLimitRunSpeed = 0.08f;
+	static inline const float kAcceleration = 0.01f;
+	static inline const float kAtteleration = 0.05f;
+	static inline const float kLimitRunSpeed = 0.3f;
 
 	// 左右向き/角度/タイマー/旋回時間
 	LRDirection lrDirection_ = LRDirection::kRight;
@@ -41,9 +41,9 @@ private:
 	bool onGround_ = true;
 
 	// 重力加速度/最大落下速度/ジャンプ初速
-	static inline const float kGravityAcceleration = 0.025f;
-	static inline const float kLimitFallSpeed = 0.075f;
-	static inline const float kJumpAcceleration = 0.5f;
+	static inline const float kGravityAcceleration = 0.98f;
+	static inline const float kLimitFallSpeed = 0.5f;
+	static inline const float kJumpAcceleration = 20.0f;
 
 	// モデル
 	Model* model_ = nullptr;

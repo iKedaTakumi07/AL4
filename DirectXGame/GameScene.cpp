@@ -6,12 +6,9 @@ using namespace KamataEngine;
 GameScene::~GameScene() {
 	// ですトラ
 	delete modelblock_;
-	delete debugCamera_;
-	delete modelSkydome_;
 	delete skydome_;
 	delete modelPlayer_;
 	delete player_;
-	delete mapChipField_;
 
 	for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) {
 		for (WorldTransform* worldTransformBlock : worldTransformBlockLine) {
@@ -19,20 +16,21 @@ GameScene::~GameScene() {
 		}
 	}
 	worldTransformBlocks_.clear();
+	delete debugCamera_;
+	delete modelSkydome_;
+	delete mapChipField_;
 }
 
 void GameScene::Initialize() { /*初期化を書く*/
 
 	// 初期化
 	camera_.Initialize();
-	camera_.farZ = 0.0f;
 
+	// プレイヤー
 	player_ = new Player();
 
 	modelPlayer_ = Model::CreateFromOBJ("player");
-
-	// 座標を指定
-	Vector3 playerPosition = mapChipField_->GetMapChipPositionByIndex(2, 19);
+	Vector3 playerPosition = mapChipField_->GetMapChipPositionByIndex(2, 18);
 
 	player_->Initialize(modelPlayer_, &camera_, playerPosition);
 
@@ -40,19 +38,17 @@ void GameScene::Initialize() { /*初期化を書く*/
 	modelblock_ = Model::CreateFromOBJ("block", true);
 
 	// デバックカメラの生成
-	debugCamera_ = new DebugCamera(1280, 720);
+	debugCamera_ = new DebugCamera(WinApp::kWindowWidth, WinApp::kWindowHeight);
 
+	// 天球
 	skydome_ = new Skydome();
 
 	modelSkydome_ = Model::CreateFromOBJ("skydome", true);
-
 	skydome_->Initialize(modelSkydome_, &camera_);
 
+	// マップチップ
 	mapChipField_ = new MapChipField;
-
-	// 読み込み
 	mapChipField_->LoadMapChipCsv("Resources/map.csv");
-
 	GenerateBlocks();
 
 	// 追跡カメラ
@@ -66,14 +62,18 @@ void GameScene::GenerateBlocks() {
 	// 要素数
 	uint32_t numBlockVirtical = mapChipField_->GetNumBlockVirtical();
 	uint32_t numBlockHorizontal = mapChipField_->GetNumBlockHorizontal();
+
 	// 要素数を変更する
 	worldTransformBlocks_.resize(numBlockVirtical);
 	for (uint32_t i = 0; i < numBlockVirtical; ++i) {
 		worldTransformBlocks_[i].resize(numBlockHorizontal);
 	}
 
+	// ブロックの生成
 	for (uint32_t i = 0; i < numBlockVirtical; ++i) {
+
 		for (uint32_t j = 0; j < numBlockHorizontal; ++j) {
+
 			if (mapChipField_->GetMapChipTypeByIndex(j, i) == MapChipType::kBlock) {
 				WorldTransform* worldTransform = new WorldTransform();
 				worldTransform->Initialize();
@@ -103,6 +103,7 @@ void GameScene::Update() { /* 更新勝利を書く */
 
 	if (isDebugCameraActive_) {
 		// デバックカメラ更新
+		debugCamera_->Update();
 		camera_.matView = debugCamera_->GetCamera().matView;
 		camera_.matProjection = debugCamera_->GetCamera().matProjection;
 
