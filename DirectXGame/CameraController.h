@@ -46,4 +46,7 @@ private:
 
 	// 速度掛け率
 	static inline const float KVelocityBias = 30.0f;
+
+	// 追従対象のカメラ移動範囲
+	static inline const Rect targetMargin = {-9.0f, 9.0f, -5.0f, 5.0f};
 };
