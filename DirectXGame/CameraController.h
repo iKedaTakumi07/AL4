@@ -37,4 +37,10 @@ private:
 
 	// カメラ移動範囲
 	Rect movableArea_ = {0, 100, 0, 100};
+
+	// 目標座標
+	Vector3 destination_;
+
+	// 座標補間
+	static inline const float KinterpolationRate = 0.1f;
 };
