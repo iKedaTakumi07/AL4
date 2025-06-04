@@ -43,4 +43,7 @@ private:
 
 	// 座標補間
 	static inline const float KinterpolationRate = 0.1f;
+
+	// 速度掛け率
+	static inline const float KVelocityBias = 30.0f;
 };

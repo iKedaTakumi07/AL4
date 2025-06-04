@@ -14,10 +14,12 @@ void CameraController::Update() {
 	// 追跡委対象の座標を参照
 	const WorldTransform& targetWorldTransForm = target_->GetWorldTransform();
 
+	const Vector3& targetVelocity = target_->GetVelocity();
+
 	// 目標座標を計算
-	destination_.x = targetWorldTransForm.translation_.x + targetOffset_.x;
-	destination_.y = targetWorldTransForm.translation_.y + targetOffset_.y;
-	destination_.z = targetWorldTransForm.translation_.z + targetOffset_.z;
+	destination_.x = targetWorldTransForm.translation_.x + targetOffset_.x + targetVelocity.x * KVelocityBias;
+	destination_.y = targetWorldTransForm.translation_.y + targetOffset_.y + targetVelocity.y * KVelocityBias;
+	destination_.z = targetWorldTransForm.translation_.z + targetOffset_.z + targetVelocity.z * KVelocityBias;
 
 	// 対象者のカメラ座標を計算
 	camera_->translation_ = Lerp(camera_->translation_, destination_, KinterpolationRate);
