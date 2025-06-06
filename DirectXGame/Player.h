@@ -59,4 +59,15 @@ private:
 
 	// マップチップによるフィールド
 	MapChipField* mapChipFeild_ = nullptr;
+
+	// キャラクターの当たり判定サイズ
+	static inline const float kWidth = 0.8f;
+	static inline const float kHeight = 0.8f;
+
+	struct CollisionMapInfo {
+		bool ceiling = false;
+		bool landing = false;
+		bool hitWall = false;
+		Vector3 move;
+	};
 };
