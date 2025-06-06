@@ -118,6 +118,14 @@ void Player::Update() {
 		}
 	}
 
+	// 衝突情報を初期化
+	CollisionMapInfo collisionMapInfo;
+	// 移動量に速度の値をコピー
+	collisionMapInfo.move = velocity_;
+
+	// 衝突チェック
+	CheckMapCollision(collisionMapInfo);
+
 	// 移動
 	worldTransform_.translation_.x += velocity_.x;
 	worldTransform_.translation_.y += velocity_.y;
@@ -143,3 +151,19 @@ void Player::Draw() {
 	// 3Dモデルを描画
 	model_->Draw(worldTransform_, *camera_);
 }
+
+void Player::CheckMapCollision(CollisionMapInfo& info) {
+
+	CheckMapCollisionUP(info);
+	CheckMapCollisionDown(info);
+	CheckMapCollisionRight(info);
+	CheckMapCollisionLeft(info);
+}
+
+void Player::CheckMapCollisionUP(CollisionMapInfo& info) {}
+
+void Player::CheckMapCollisionDown(CollisionMapInfo& info) {}
+
+void Player::CheckMapCollisionRight(CollisionMapInfo& info) {}
+
+void Player::CheckMapCollisionLeft(CollisionMapInfo& info) {}

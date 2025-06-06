@@ -70,4 +70,12 @@ private:
 		bool hitWall = false;
 		Vector3 move;
 	};
+
+	void CheckMapCollision(CollisionMapInfo& info);
+
+	// 全方向
+	void CheckMapCollisionUP(CollisionMapInfo& info);
+	void CheckMapCollisionDown(CollisionMapInfo& info);
+	void CheckMapCollisionRight(CollisionMapInfo& info);
+	void CheckMapCollisionLeft(CollisionMapInfo& info);
 };
