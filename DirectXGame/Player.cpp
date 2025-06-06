@@ -167,3 +167,14 @@ void Player::CheckMapCollisionDown(CollisionMapInfo& info) {}
 void Player::CheckMapCollisionRight(CollisionMapInfo& info) {}
 
 void Player::CheckMapCollisionLeft(CollisionMapInfo& info) {}
+
+Vector3 Player::CornerPosition(const Vector3& center, Corner corner) {
+	Vector3 offsetTable[] = {
+	    {+kWidth / 2.0f, -kHeight / 2.0f, 0},
+        {-kWidth / 2.0f, -kHeight / 2.0f, 0},
+        {+kWidth / 2.0f, +kHeight / 2.0f, 0},
+        {-kWidth / 2.0f, +kHeight / 2.0f, 0}
+    };
+
+	return center + offsetTable[static_cast<uint32_t>(corner)];
+}

@@ -13,6 +13,15 @@ public:
 		kleft,
 	};
 
+	enum Corner {
+		kRightBottom,
+		kLeftBottom,
+		kRightTop,
+		KLeftTop,
+
+		KNumCorner, // 要素数
+	};
+
 	void Initialize(Model* model, Camera* camera, const Vector3& position);
 
 	void Update();
@@ -78,4 +87,7 @@ private:
 	void CheckMapCollisionDown(CollisionMapInfo& info);
 	void CheckMapCollisionRight(CollisionMapInfo& info);
 	void CheckMapCollisionLeft(CollisionMapInfo& info);
+
+	// 指定した角の計算
+	Vector3 CornerPosition(const Vector3& center, Corner Corner);
 };
