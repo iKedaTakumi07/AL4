@@ -188,6 +188,12 @@ void Player::CheckMapCollisionUP(CollisionMapInfo& info) {
 	}
 
 	// 右上点の判定
+	indexSet = mapChipFeild_->GetMapChipIndexSetByPosition(positionsNew[kRightTop]);
+	mapChipType = mapChipFeild_->GetMapChipTypeByIndex(indexSet.xindex, indexSet.yindex);
+
+	if (mapChipType == MapChipType::kBlock) {
+		hit = true;
+	}
 }
 
 void Player::CheckMapCollisionDown(CollisionMapInfo& info) {}

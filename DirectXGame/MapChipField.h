@@ -26,6 +26,14 @@ public:
 		uint32_t yindex;
 	};
 
+	// 範囲矩形
+	struct Rect {
+		float left;
+		float right;
+		float bottom;
+		float top;
+	};
+
 	// 1ブロックのサイズ
 	static inline const float kBlockWidth = 1.0f;
 	static inline const float kBlockHeight = 1.0f;
@@ -41,6 +49,8 @@ public:
 	uint32_t GetNumBlockHorizontal();
 
 	IndexSet GetMapChipIndexSetByPosition(const Vector3& position);
+
+	Rect GetRectByindex(uint32_t xindex, uint32_t yindex);
 
 private:
 	MapChipDate mapCgipData_;
