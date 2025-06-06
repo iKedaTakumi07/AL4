@@ -26,14 +26,6 @@ void GameScene::Initialize() { /*初期化を書く*/
 	// 初期化
 	camera_.Initialize();
 
-	// プレイヤー
-	player_ = new Player();
-
-	modelPlayer_ = Model::CreateFromOBJ("player");
-	Vector3 playerPosition = mapChipField_->GetMapChipPositionByIndex(2, 18);
-
-	player_->Initialize(modelPlayer_, &camera_, playerPosition);
-
 	// 3Dモデルを生成
 	modelblock_ = Model::CreateFromOBJ("block", true);
 
@@ -50,6 +42,15 @@ void GameScene::Initialize() { /*初期化を書く*/
 	mapChipField_ = new MapChipField;
 	mapChipField_->LoadMapChipCsv("Resources/map.csv");
 	GenerateBlocks();
+
+	// プレイヤー
+	player_ = new Player();
+
+	modelPlayer_ = Model::CreateFromOBJ("player");
+	Vector3 playerPosition = mapChipField_->GetMapChipPositionByIndex(2, 18);
+
+	player_->SetMapChipField(mapChipField_);
+	player_->Initialize(modelPlayer_, &camera_, playerPosition);
 
 	// 追跡カメラ
 	CameraController_ = new CameraController();

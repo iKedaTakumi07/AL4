@@ -3,6 +3,8 @@
 
 using namespace KamataEngine;
 
+class MapChipField;
+
 class Player {
 public:
 	// 左右
@@ -20,6 +22,8 @@ public:
 	WorldTransform& GetWorldTransform() { return worldTransform_; };
 
 	const Vector3& GetVelocity() const { return velocity_; };
+
+	void SetMapChipField(MapChipField* mapChipField) { mapChipFeild_ = mapChipField; };
 
 private:
 	// ワールド変換データ
@@ -52,4 +56,7 @@ private:
 
 	// カメラ
 	Camera* camera_ = nullptr;
+
+	// マップチップによるフィールド
+	MapChipField* mapChipFeild_ = nullptr;
 };
