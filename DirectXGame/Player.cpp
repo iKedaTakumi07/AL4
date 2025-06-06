@@ -160,7 +160,20 @@ void Player::CheckMapCollision(CollisionMapInfo& info) {
 	CheckMapCollisionLeft(info);
 }
 
-void Player::CheckMapCollisionUP(CollisionMapInfo& info) {}
+void Player::CheckMapCollisionUP(CollisionMapInfo& info) {
+
+	// 上昇あり?
+	if (info.move.y <= 0) {
+		return;
+	}
+
+	// 移動後の4つの角度の座標
+	std::array<Vector3, KNumCorner> positionsNew;
+
+	for (uint32_t i = 0; i < positionsNew.size(); ++i) {
+		positionsNew[i] = CornerPosition(worldTransform_.translation_ + info.move, static_cast<Corner>(i));
+	}
+}
 
 void Player::CheckMapCollisionDown(CollisionMapInfo& info) {}
 
