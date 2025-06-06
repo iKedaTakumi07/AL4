@@ -1,6 +1,7 @@
 #define NOMINMAX
 
 #include "Player.h"
+#include "MapChipField.h"
 #include "Math.h"
 #include <algorithm>
 #include <cassert>
@@ -25,6 +26,14 @@ void Player::Initialize(KamataEngine::Model* model, KamataEngine::Camera* camera
 }
 
 void Player::Update() {
+
+	// 衝突情報を初期化
+	CollisionMapInfo collisionMapInfo;
+	// 移動量に速度の値をコピー
+	collisionMapInfo.move = velocity_;
+
+	// 衝突チェック
+	CheckMapCollision(collisionMapInfo);
 
 	// 着地フラグ
 	bool landing = false;
@@ -118,14 +127,6 @@ void Player::Update() {
 		}
 	}
 
-	// 衝突情報を初期化
-	CollisionMapInfo collisionMapInfo;
-	// 移動量に速度の値をコピー
-	collisionMapInfo.move = velocity_;
-
-	// 衝突チェック
-	CheckMapCollision(collisionMapInfo);
-
 	// 移動
 	worldTransform_.translation_.x += velocity_.x;
 	worldTransform_.translation_.y += velocity_.y;
@@ -173,6 +174,20 @@ void Player::CheckMapCollisionUP(CollisionMapInfo& info) {
 	for (uint32_t i = 0; i < positionsNew.size(); ++i) {
 		positionsNew[i] = CornerPosition(worldTransform_.translation_ + info.move, static_cast<Corner>(i));
 	}
+
+	// 真上の当たり判定を行う
+	MapChipType mapChipType;
+
+	bool hit = false;
+	// 左下点の判定
+	MapChipField::IndexSet indexSet;
+	indexSet = mapChipFeild_->GetMapChipIndexSetByPosition(positionsNew[KLeftTop]);
+	mapChipType = mapChipFeild_->GetMapChipTypeByIndex(indexSet.xindex, indexSet.yindex);
+	if (mapChipType == MapChipType::kBlock) {
+		hit = true;
+	}
+
+	// 右上点の判定
 }
 
 void Player::CheckMapCollisionDown(CollisionMapInfo& info) {}
