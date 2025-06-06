@@ -80,6 +80,8 @@ private:
 		Vector3 move;
 	};
 
+	void InputMove();
+
 	void CheckMapCollision(CollisionMapInfo& info);
 
 	// 全方向

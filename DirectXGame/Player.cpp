@@ -27,6 +27,8 @@ void Player::Initialize(KamataEngine::Model* model, KamataEngine::Camera* camera
 
 void Player::Update() {
 
+	InputMove();
+
 	// 衝突情報を初期化
 	CollisionMapInfo collisionMapInfo;
 	// 移動量に速度の値をコピー
@@ -35,8 +37,68 @@ void Player::Update() {
 	// 衝突チェック
 	CheckMapCollision(collisionMapInfo);
 
+	worldTransform_.translation_ += collisionMapInfo.move;
+
+	// 移動
+	/*worldTransform_.translation_ += velocity_;*/
+
+	if (collisionMapInfo.ceiling) {
+		velocity_.y = 0;
+	}
+
 	// 着地フラグ
 	bool landing = false;
+
+	// 地面との当たり班{
+	if (velocity_.y < 0) {
+		if (worldTransform_.translation_.y <= 1.0f) {
+			landing = true;
+		}
+	}
+
+	// 設置判定
+	if (onGround_) {
+		// ジャンプ開始
+		if (velocity_.y > 0.0f) {
+			onGround_ = false;
+		}
+
+	} else {
+
+		// 着地
+		if (landing) {
+			// めり込み排除
+			worldTransform_.translation_.y = 1.0f;
+			// 摩擦で横方向速度が減衰
+			velocity_.x *= (1.0f - kAtteleration);
+			// 下方方向速度をリセット
+			velocity_.y = 0.0f;
+			onGround_ = true;
+		}
+	}
+
+	// 旋回制限
+	if (turnTimer_ > 0.0f) {
+		turnTimer_ = std::max(turnTimer_ - (1.0f / 60.0f), 0.0f);
+
+		float destinationRotationYTable[] = {std::numbers::pi_v<float> / 2.0f, std::numbers::pi_v<float> * 3.0f / 2.0f};
+		// 状況に応じた角度を取得する
+		float destiationRotationY = destinationRotationYTable[static_cast<uint32_t>(lrDirection_)];
+		// 自キャラの角度を設定すル
+		worldTransform_.rotation_.y = easeInOutQuint(destiationRotationY, turnFirstRotationY_, turnTimer_ / kTimeTurn);
+	}
+
+	// 行列を定数バッファに転送
+	WolrdtransformUpdate(worldTransform_);
+}
+
+void Player::Draw() {
+
+	// 3Dモデルを描画
+	model_->Draw(worldTransform_, *camera_);
+}
+
+void Player::InputMove() {
 
 	// 移動入力
 	// 左右移動操作
@@ -96,61 +158,13 @@ void Player::Update() {
 			velocity_.y += kJumpAcceleration / 60.0f;
 		}
 
-		// ジャンプ開始
-		if (velocity_.y > 0.0f) {
-			onGround_ = false;
-		}
-
 	} else {
-
-		// 地面との当たり班
-		if (velocity_.y < 0) {
-			if (worldTransform_.translation_.y <= 1.0f) {
-				landing = true;
-			}
-		}
 
 		// 落下速度
 		velocity_.y += -kGravityAcceleration / 60.0f;
 		// 落下速度制限
 		velocity_.y = std::max(velocity_.y, -kLimitFallSpeed);
-
-		// 着地
-		if (landing) {
-			// めり込み排除
-			worldTransform_.translation_.y = 1.0f;
-			// 摩擦で横方向速度が減衰
-			velocity_.x *= (1.0f - kAtteleration);
-			// 下方方向速度をリセット
-			velocity_.y = 0.0f;
-			onGround_ = true;
-		}
 	}
-
-	// 移動
-	worldTransform_.translation_.x += velocity_.x;
-	worldTransform_.translation_.y += velocity_.y;
-	worldTransform_.translation_.z += velocity_.z;
-
-	// 旋回制限
-	if (turnTimer_ > 0.0f) {
-		turnTimer_ = std::max(turnTimer_ - (1.0f / 60.0f), 0.0f);
-
-		float destinationRotationYTable[] = {std::numbers::pi_v<float> / 2.0f, std::numbers::pi_v<float> * 3.0f / 2.0f};
-		// 状況に応じた角度を取得する
-		float destiationRotationY = destinationRotationYTable[static_cast<uint32_t>(lrDirection_)];
-		// 自キャラの角度を設定すル
-		worldTransform_.rotation_.y = easeInOutQuint(destiationRotationY, turnFirstRotationY_, turnTimer_ / kTimeTurn);
-	}
-
-	// 行列を定数バッファに転送
-	WolrdtransformUpdate(worldTransform_);
-}
-
-void Player::Draw() {
-
-	// 3Dモデルを描画
-	model_->Draw(worldTransform_, *camera_);
 }
 
 void Player::CheckMapCollision(CollisionMapInfo& info) {
