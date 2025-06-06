@@ -220,11 +220,11 @@ void Player::CheckMapCollisionUP(CollisionMapInfo& info) {
 	}
 }
 
-void Player::CheckMapCollisionDown(CollisionMapInfo& info) {}
+void Player::CheckMapCollisionDown(CollisionMapInfo& info) { info; }
 
-void Player::CheckMapCollisionRight(CollisionMapInfo& info) {}
+void Player::CheckMapCollisionRight(CollisionMapInfo& info) { info; }
 
-void Player::CheckMapCollisionLeft(CollisionMapInfo& info) {}
+void Player::CheckMapCollisionLeft(CollisionMapInfo& info) { info; }
 
 Vector3 Player::CornerPosition(const Vector3& center, Corner corner) {
 	Vector3 offsetTable[] = {
