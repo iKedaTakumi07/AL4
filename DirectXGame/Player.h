@@ -1,7 +1,6 @@
 #pragma once
 #include "KamataEngine.h"
 
-
 using namespace KamataEngine;
 
 class MapChipField;
@@ -91,4 +90,6 @@ private:
 
 	// 指定した角の計算
 	Vector3 CornerPosition(const Vector3& center, Corner Corner);
+
+	static inline const float kBlank = 0.04f;
 };

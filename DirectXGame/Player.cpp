@@ -194,6 +194,16 @@ void Player::CheckMapCollisionUP(CollisionMapInfo& info) {
 	if (mapChipType == MapChipType::kBlock) {
 		hit = true;
 	}
+
+	// ブロックにヒット?
+	if (hit) {
+		// めり込みを排除
+		indexSet = mapChipFeild_->GetMapChipIndexSetByPosition(worldTransform_.translation_ + info.move + Vector3(0, +kHeight / 2.0f, 0));
+		// 　めり込み先のブロックの範囲矩形
+		MapChipField::Rect rect = mapChipFeild_->GetRectByindex(indexSet.xindex, indexSet.yindex);
+		info.move.y = std::max(0.0f, rect.bottom - worldTransform_.translation_.y - (kHeight / 2.0f + kBlank));
+		info.ceiling = true;
+	}
 }
 
 void Player::CheckMapCollisionDown(CollisionMapInfo& info) {}
