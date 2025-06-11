@@ -220,7 +220,37 @@ void Player::CheckMapCollisionUP(CollisionMapInfo& info) {
 	}
 }
 
-void Player::CheckMapCollisionDown(CollisionMapInfo& info) { info; }
+void Player::CheckMapCollisionDown(CollisionMapInfo& info) {
+
+	if (info.move.y >= 0) {
+		return;
+	}
+
+	std::array<Vector3, KNumCorner> positionNew;
+
+	for (uint32_t i = 0; i < positionNew.size(); ++i) {
+		positionNew[i] = CornerPosition(worldTransform_.translation_ + info.move, static_cast<Corner>(i));
+	}
+
+	MapChipType mapChipType;
+	// 真下の当たり判定を行う
+	bool hit = false;
+	// 左下点の判定
+	MapChipField::IndexSet indexSet;
+	indexSet = mapChipFeild_->GetMapChipIndexSetByPosition(positionNew[kLeftBottom]);
+	mapChipType = mapChipFeild_->GetMapChipTypeByIndex(indexSet.xindex, indexSet.yindex);
+	if (mapChipType == MapChipType::kBlock) {
+		hit = true;
+	}
+
+	// 幹下点の判定
+	MapChipField::IndexSet indexSet;
+	indexSet = mapChipFeild_->GetMapChipIndexSetByPosition(positionNew[kRightBottom]);
+	mapChipType = mapChipFeild_->GetMapChipTypeByIndex(indexSet.xindex, indexSet.yindex);
+	if (mapChipType == MapChipType::kBlock) {
+		hit = true;
+	}
+}
 
 void Player::CheckMapCollisionRight(CollisionMapInfo& info) { info; }
 
