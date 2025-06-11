@@ -94,4 +94,11 @@ private:
 	Vector3 CornerPosition(const Vector3& center, Corner Corner);
 
 	static inline const float kBlank = 0.04f;
+	// 設置状態の切り替え
+	void UpDateOnGround(const CollisionMapInfo& info);
+	// 着地時の速度軽減率
+	static inline const float kAttenuationLanding = 0.1f;
+	// 微小な数値
+	static inline const float kGroundSearchHeight = 0.06f;
+
 };

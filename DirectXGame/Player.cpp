@@ -276,3 +276,53 @@ Vector3 Player::CornerPosition(const Vector3& center, Corner corner) {
 
 	return center + offsetTable[static_cast<uint32_t>(corner)];
 }
+
+void Player::UpDateOnGround(const CollisionMapInfo& info) {
+
+	info;
+
+	if (onGround_) {
+		if (velocity_.y > 0.0f) {
+			onGround_ = false;
+		} else {
+
+			std::array<Vector3, KNumCorner> positionNew;
+
+			for (uint32_t i = 0; i < positionNew.size(); ++i) {
+				positionNew[i] = CornerPosition(worldTransform_.translation_ + info.move, static_cast<Corner>(i));
+			}
+
+			MapChipType mapChipType;
+
+			// 真下の当たり班テオ
+			bool hit = false;
+
+			// 右下の判定
+			MapChipField::IndexSet indexSet;
+			indexSet = mapChipFeild_->GetMapChipIndexSetByPosition(positionNew[kRightBottom] + Vector3(0, -kGroundSearchHeight, 0));
+			mapChipType = mapChipFeild_->GetMapChipTypeByIndex(indexSet.xindex, indexSet.yindex);
+			if (mapChipType == MapChipType::kBlock) {
+				hit = true;
+			}
+			// 左下点の判定
+			MapChipField::IndexSet indexSet;
+			indexSet = mapChipFeild_->GetMapChipIndexSetByPosition(positionNew[kLeftBottom] + Vector3(0, -kGroundSearchHeight, 0));
+			mapChipType = mapChipFeild_->GetMapChipTypeByIndex(indexSet.xindex, indexSet.yindex);
+			if (mapChipType == MapChipType::kBlock) {
+				hit = true;
+			}
+
+			// 落下判定
+			if (!hit) {
+				onGround_ = false;
+			}
+		}
+
+	} else {
+		if (info.landing) {
+			onGround_ = true;
+			velocity_.x *= (1.0f - kAttenuationLanding);
+			velocity_.y = 0.0f;
+		}
+	}
+}
