@@ -39,6 +39,8 @@ void Player::Update() {
 
 	worldTransform_.translation_ += collisionMapInfo.move;
 
+	UpDateOnGround(collisionMapInfo);
+
 	// 移動
 	/*worldTransform_.translation_ += velocity_;*/
 
