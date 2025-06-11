@@ -244,7 +244,7 @@ void Player::CheckMapCollisionDown(CollisionMapInfo& info) {
 	}
 
 	// 幹下点の判定
-	MapChipField::IndexSet indexSet;
+
 	indexSet = mapChipFeild_->GetMapChipIndexSetByPosition(positionNew[kRightBottom]);
 	mapChipType = mapChipFeild_->GetMapChipTypeByIndex(indexSet.xindex, indexSet.yindex);
 	if (mapChipType == MapChipType::kBlock) {
@@ -305,7 +305,7 @@ void Player::UpDateOnGround(const CollisionMapInfo& info) {
 				hit = true;
 			}
 			// 左下点の判定
-			MapChipField::IndexSet indexSet;
+
 			indexSet = mapChipFeild_->GetMapChipIndexSetByPosition(positionNew[kLeftBottom] + Vector3(0, -kGroundSearchHeight, 0));
 			mapChipType = mapChipFeild_->GetMapChipTypeByIndex(indexSet.xindex, indexSet.yindex);
 			if (mapChipType == MapChipType::kBlock) {
