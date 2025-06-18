@@ -90,6 +90,9 @@ private:
 	void CheckMapCollisionRight(CollisionMapInfo& info);
 	void CheckMapCollisionLeft(CollisionMapInfo& info);
 
+	// 衝突判定
+	void UpdateOnWall(const CollisionMapInfo& info);
+
 	// 指定した角の計算
 	Vector3 CornerPosition(const Vector3& center, Corner Corner);
 
@@ -100,5 +103,6 @@ private:
 	static inline const float kAttenuationLanding = 0.1f;
 	// 微小な数値
 	static inline const float kGroundSearchHeight = 0.06f;
-
+	// 速度減衰率
+	static inline const float kAttenuationWall = 0.2f;
 };
