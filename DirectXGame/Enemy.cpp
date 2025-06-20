@@ -1,3 +1,5 @@
+#define NOMINMAX
+
 #include "Enemy.h"
 #include "Math.h"
 #include <numbers>
@@ -28,6 +30,10 @@ void Enemy::Update() {
 
 	// タイマーの更新
 	walkTimer_ += 1.0f / 60.0f;
+
+	// 回転
+	//float param = std::sin()
+	worldTransform_.rotation_.x = std::sin(std::numbers::pi_v<float> * 2.0f * walkTimer_ / kWalkMotionTime);
 
 	// 更新
 	WolrdtransformUpdate(worldTransform_);
