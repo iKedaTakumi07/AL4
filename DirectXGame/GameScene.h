@@ -1,10 +1,10 @@
 #pragma once
 #include "CameraController.h"
+#include "Enemy.h"
 #include "KamataEngine.h"
 #include "MapChipField.h"
 #include "Player.h"
 #include "Skydome.h"
-#include "Enemy.h"
 #include <vector>
 
 // ゲームシーン
@@ -55,6 +55,6 @@ public:
 	KamataEngine::DebugCamera* debugCamera_ = nullptr;
 
 	// 敵
-	Enemy* enemy_ = nullptr;
 	KamataEngine::Model* modelEnemy_ = nullptr;
+	std::list<Enemy*> enemies_;
 };

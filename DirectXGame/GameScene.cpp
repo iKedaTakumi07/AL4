@@ -19,7 +19,9 @@ GameScene::~GameScene() {
 	delete debugCamera_;
 	delete modelSkydome_;
 	delete mapChipField_;
-	delete enemy_;
+	for (Enemy* enemy : enemies_) {
+		delete enemy;
+	}
 }
 
 void GameScene::Initialize() { /*初期化を書く*/
@@ -63,10 +65,14 @@ void GameScene::Initialize() { /*初期化を書く*/
 	CameraController_->SetMovableArea(cameraArea);
 
 	// 敵
-	enemy_ = new Enemy();
 	modelEnemy_ = Model::CreateFromOBJ("enemy");
-	Vector3 enemyPosition = mapChipField_->GetMapChipPositionByIndex(11, 18);
-	enemy_->Initialize(modelEnemy_, &camera_, enemyPosition);
+	for (int32_t i = 0; i < 3; ++i) {
+		Enemy* newEnemy = new Enemy();
+		Vector3 enemyPosition = mapChipField_->GetMapChipPositionByIndex(11 + i * 2, 18);
+		newEnemy->Initialize(modelEnemy_, &camera_, enemyPosition);
+
+		enemies_.push_back(newEnemy);
+	}
 }
 
 void GameScene::GenerateBlocks() {
@@ -107,7 +113,9 @@ void GameScene::Update() { /* 更新勝利を書く */
 	CameraController_->Update();
 
 	// 敵
-	enemy_->Update();
+	for (Enemy* enemy : enemies_) {
+		enemy->Update();
+	}
 
 #ifdef _DEBUG
 	if (Input::GetInstance()->TriggerKey(DIK_SPACE)) {
@@ -154,7 +162,9 @@ void GameScene::Draw() {
 	skydome_->Draw();
 
 	// 敵
-	enemy_->Draw();
+	for (Enemy* enemy : enemies_) {
+		enemy->Draw();
+	}
 
 	// ブロックの描画
 	for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) {
