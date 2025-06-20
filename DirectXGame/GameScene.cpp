@@ -19,7 +19,7 @@ GameScene::~GameScene() {
 	delete debugCamera_;
 	delete modelSkydome_;
 	delete mapChipField_;
-	delete enemy_
+	delete enemy_;
 }
 
 void GameScene::Initialize() { /*初期化を書く*/
@@ -65,7 +65,7 @@ void GameScene::Initialize() { /*初期化を書く*/
 	// 敵
 	enemy_ = new Enemy();
 	modelEnemy_ = Model::CreateFromOBJ("enemy");
-	Vector3 enemyPosition = mapChipField_->GetMapChipPositionByIndex(14, 18);
+	Vector3 enemyPosition = mapChipField_->GetMapChipPositionByIndex(11, 18);
 	enemy_->Initialize(modelEnemy_, &camera_, enemyPosition);
 }
 
@@ -105,6 +105,9 @@ void GameScene::Update() { /* 更新勝利を書く */
 
 	// 追跡カメラ
 	CameraController_->Update();
+
+	// 敵
+	enemy_->Update();
 
 #ifdef _DEBUG
 	if (Input::GetInstance()->TriggerKey(DIK_SPACE)) {
@@ -149,6 +152,9 @@ void GameScene::Draw() {
 
 	// 背景
 	skydome_->Draw();
+
+	// 敵
+	enemy_->Draw();
 
 	// ブロックの描画
 	for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) {

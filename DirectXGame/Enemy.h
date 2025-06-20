@@ -19,4 +19,9 @@ private:
 
 	// カメラ
 	Camera* camera_ = nullptr;
+
+	// 歩きの速さ
+	static inline const float kwalkSpeed = 0.02f;
+	// 速度
+	Vector3 velocity_ = {};
 };
