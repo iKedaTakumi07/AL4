@@ -233,7 +233,7 @@ void Player::CheckMapCollisionUP(CollisionMapInfo& info) {
 		indexSet = mapChipFeild_->GetMapChipIndexSetByPosition(worldTransform_.translation_ + info.move + Vector3(0, +kHeight / 2.0f, 0));
 		// 現在座標が壁の祖とかの判定
 		MapChipField::IndexSet indexSetNow;
-		indexSetNow = mapChipFeild_->GetMapChipIndexSetByPosition(worldTransform_.translation_);
+		indexSetNow = mapChipFeild_->GetMapChipIndexSetByPosition(worldTransform_.translation_ + Vector3(0, +kHeight / 2.0f, 0));
 		if (indexSetNow.yindex != indexSet.yindex) {
 			// 　めり込み先のブロックの範囲矩形
 			MapChipField::Rect rect = mapChipFeild_->GetRectByindex(indexSet.xindex, indexSet.yindex);
@@ -284,7 +284,7 @@ void Player::CheckMapCollisionDown(CollisionMapInfo& info) {
 		indexSet = mapChipFeild_->GetMapChipIndexSetByPosition(worldTransform_.translation_ + info.move + Vector3(0, -kHeight / 2.0f, 0));
 		// 現在座標が壁の祖とかの判定
 		MapChipField::IndexSet indexSetNow;
-		indexSetNow = mapChipFeild_->GetMapChipIndexSetByPosition(worldTransform_.translation_);
+		indexSetNow = mapChipFeild_->GetMapChipIndexSetByPosition(worldTransform_.translation_ + Vector3(0, -kHeight / 2.0f, 0));
 		if (indexSetNow.yindex != indexSet.yindex) {
 			// めり込み先のブロックの範囲矩形
 			MapChipField::Rect rect = mapChipFeild_->GetRectByindex(indexSet.xindex, indexSet.yindex);
