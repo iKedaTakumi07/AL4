@@ -104,6 +104,16 @@ void Player::Draw() {
 	model_->Draw(worldTransform_, *camera_);
 }
 
+Vector3 Player::GetWorldPosition() {
+	// ワールド座標を取得
+	Vector3 WorldPos;
+	WorldPos.x = worldTransform_.translation_.x;
+	WorldPos.y = worldTransform_.translation_.y;
+	WorldPos.z = worldTransform_.translation_.z;
+
+	return WorldPos;
+}
+
 void Player::InputMove() {
 
 	// 移動入力
