@@ -4,7 +4,7 @@ using namespace KamataEngine;
 
 class Enemy {
 public:
-	void Initialize();
+	void Initialize(Model* model, Camera* camera, const Vector3& position);
 
 	void Update();
 
