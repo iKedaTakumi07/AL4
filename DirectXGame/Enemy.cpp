@@ -15,9 +15,20 @@ void Enemy::Initialize(KamataEngine::Model* model, KamataEngine::Camera* camera,
 	worldTransform_.Initialize();
 	worldTransform_.translation_ = position;
 	worldTransform_.rotation_.y = std::numbers::pi_v<float> * 3.0f / 2.0f;
+
+	velocity_ = {-kwalkSpeed, 0, 0};
+
+	walkTimer_ = 0.0f;
 }
 
 void Enemy::Update() {
+
+	// 移動
+	worldTransform_.translation_ += velocity_;
+
+	// タイマーの更新
+	walkTimer_ += 1.0f / 60.0f;
+
 	// 更新
 	WolrdtransformUpdate(worldTransform_);
 }
