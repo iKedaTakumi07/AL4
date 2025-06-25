@@ -1,5 +1,6 @@
 #pragma once
 #include "KamataEngine.h"
+#include "Math.h"
 
 using namespace KamataEngine;
 
@@ -35,6 +36,8 @@ public:
 	void SetMapChipField(MapChipField* mapChipField) { mapChipFeild_ = mapChipField; };
 
 	Vector3 GetWorldPosition();
+
+	AABB GetAABB();
 
 private:
 	// ワールド変換データ
