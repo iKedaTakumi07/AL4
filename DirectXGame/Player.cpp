@@ -1,6 +1,7 @@
 #define NOMINMAX
 
 #include "Player.h"
+#include "Enemy.h"
 #include "MapChipField.h"
 #include "Math.h"
 #include <algorithm>

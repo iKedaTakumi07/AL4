@@ -119,7 +119,7 @@ void GameScene::CheckAllCollisions() {
 				player_->OnCollision(enemy);
 
 				// 敵キャラの衝突判定を呼び出す
-				enemy->OnCollsion(player_);
+				enemy->OnCollision(player_);
 			}
 		}
 	}

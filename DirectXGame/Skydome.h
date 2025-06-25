@@ -18,7 +18,7 @@ private:
 	KamataEngine::Model* model_ = nullptr;
 
 	// カメラ
-	KamataEngine::Camera* camera_;
+	KamataEngine::Camera* camera_ =nullptr;
 
 	// テクスチャハンドル
 	//uint32_t textureHandle_ = 0;

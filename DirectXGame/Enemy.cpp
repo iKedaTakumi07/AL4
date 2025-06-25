@@ -3,6 +3,7 @@
 #include "Enemy.h"
 #include "Math.h"
 #include "Player.h"
+#include <cassert>
 #include <numbers>
 
 void Enemy::Initialize(KamataEngine::Model* model, KamataEngine::Camera* camera, const Vector3& position) {
@@ -34,7 +35,10 @@ Vector3 Enemy::GetWorldPosition() {
 	return WorldPos;
 }
 
-void Enemy::OnCollsion(const Player* player) { (void)player; }
+void Enemy::OnCollision(const Player* player) {
+	(void)player;
+	//
+}
 
 AABB Enemy::GetAABB() {
 

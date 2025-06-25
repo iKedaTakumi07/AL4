@@ -1,6 +1,7 @@
 #pragma once
-#include "Math.h"
 #include <KamataEngine.h>
+#include "Math.h"
+
 using namespace KamataEngine;
 
 class player;
@@ -17,7 +18,7 @@ public:
 
 	Vector3 GetWorldPosition();
 
-	void OnCollsion(const Player* player);
+	void OnCollision(const Player* player);
 
 private:
 	// トランスフォーム
