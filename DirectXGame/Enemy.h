@@ -4,7 +4,7 @@
 
 using namespace KamataEngine;
 
-class player;
+class Player;
 
 class Enemy {
 public:

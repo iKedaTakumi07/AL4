@@ -35,22 +35,6 @@ Vector3 Enemy::GetWorldPosition() {
 	return WorldPos;
 }
 
-void Enemy::OnCollision(const Player* player) {
-	(void)player;
-	//
-}
-
-AABB Enemy::GetAABB() {
-
-	Vector3 worldPos = GetWorldPosition();
-
-	AABB aabb;
-	aabb.min = {worldPos.x - kWidth / 2.0f, worldPos.y - kHeight / 2.0f, worldPos.z - kWidth / 2.0f};
-	aabb.max = {worldPos.x + kWidth / 2.0f, worldPos.y + kHeight / 2.0f, worldPos.z + kWidth / 2.0f};
-
-	return aabb;
-}
-
 void Enemy::Update() {
 
 	// 移動
@@ -70,4 +54,19 @@ void Enemy::Update() {
 void Enemy::Draw() {
 	// 描画
 	model_->Draw(worldTransform_, *camera_);
+}
+
+AABB Enemy::GetAABB() {
+
+	Vector3 worldPos = GetWorldPosition();
+
+	AABB aabb;
+	aabb.min = {worldPos.x - kWidth / 2.0f, worldPos.y - kHeight / 2.0f, worldPos.z - kWidth / 2.0f};
+	aabb.max = {worldPos.x + kWidth / 2.0f, worldPos.y + kHeight / 2.0f, worldPos.z + kWidth / 2.0f};
+
+	return aabb;
+}
+void Enemy::OnCollision(const Player* player) {
+	(void)player;
+	//
 }
