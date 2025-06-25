@@ -5,6 +5,7 @@
 using namespace KamataEngine;
 
 class MapChipField;
+class Enemy;
 
 class Player {
 public:
@@ -38,6 +39,8 @@ public:
 	Vector3 GetWorldPosition();
 
 	AABB GetAABB();
+
+	void OnCollision(const Enemy* enemy);
 
 private:
 	// ワールド変換データ

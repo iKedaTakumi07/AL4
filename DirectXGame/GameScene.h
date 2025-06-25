@@ -3,6 +3,7 @@
 #include "Enemy.h"
 #include "KamataEngine.h"
 #include "MapChipField.h"
+#include "Math.h"
 #include "Player.h"
 #include "Skydome.h"
 #include <vector>
@@ -24,6 +25,9 @@ public:
 
 	// 表示ブロックの生成
 	void GenerateBlocks();
+
+	// 全ての当たり判定を行う
+	void CheckAllCollisions();
 
 public:
 	std::vector<std::vector<KamataEngine::WorldTransform*>> worldTransformBlocks_;

@@ -101,6 +101,30 @@ void GameScene::GenerateBlocks() {
 	}
 }
 
+void GameScene::CheckAllCollisions() {
+
+
+#pragma region
+	{
+		AABB aabb1, aabb2;
+
+		aabb1 = player_->GetAABB();
+
+		for (Enemy* enemy : enemies_) {
+			aabb2 = enemy->GetAABB();
+
+			// AABB同士の交差判定
+			if (IsCollision(aabb1, aabb2)) {
+				// 自キャラの衝突関数を呼び出す
+				player_->OnCollision(enemy);
+
+				// 敵キャラの衝突判定を呼び出す
+				enemy->OnCollsion(player_);
+			}
+		}
+	}
+}
+
 void GameScene::Update() { /* 更新勝利を書く */
 
 	// プレイヤー
@@ -147,6 +171,8 @@ void GameScene::Update() { /* 更新勝利を書く */
 
 	// デバックカメラ更新
 	debugCamera_->Update();
+
+	CheckAllCollisions();
 }
 
 void GameScene::Draw() {

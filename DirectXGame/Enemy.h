@@ -1,6 +1,9 @@
 #pragma once
+#include "Math.h"
 #include <KamataEngine.h>
 using namespace KamataEngine;
+
+class player;
 
 class Enemy {
 public:
@@ -9,6 +12,12 @@ public:
 	void Update();
 
 	void Draw();
+
+	AABB GetAABB();
+
+	Vector3 GetWorldPosition();
+
+	void OnCollsion(const Player* player);
 
 private:
 	// トランスフォーム
@@ -33,4 +42,7 @@ private:
 	static inline const float kWalkMotionTime = 1.0f;
 	// 経過時間
 	float walkTimer_ = 0.0f;
+
+	static inline const float kWidth = 0.8f;
+	static inline const float kHeight = 0.8f;
 };

@@ -2,6 +2,7 @@
 
 #include "Enemy.h"
 #include "Math.h"
+#include "Player.h"
 #include <numbers>
 
 void Enemy::Initialize(KamataEngine::Model* model, KamataEngine::Camera* camera, const Vector3& position) {
@@ -23,6 +24,29 @@ void Enemy::Initialize(KamataEngine::Model* model, KamataEngine::Camera* camera,
 	walkTimer_ = 0.0f;
 }
 
+Vector3 Enemy::GetWorldPosition() {
+	// ワールド座標を取得
+	Vector3 WorldPos;
+	WorldPos.x = worldTransform_.matWorld_.m[3][0];
+	WorldPos.y = worldTransform_.matWorld_.m[3][1];
+	WorldPos.z = worldTransform_.matWorld_.m[3][2];
+
+	return WorldPos;
+}
+
+void Enemy::OnCollsion(const Player* player) { (void)player; }
+
+AABB Enemy::GetAABB() {
+
+	Vector3 worldPos = GetWorldPosition();
+
+	AABB aabb;
+	aabb.min = {worldPos.x - kWidth / 2.0f, worldPos.y - kHeight / 2.0f, worldPos.z - kWidth / 2.0f};
+	aabb.max = {worldPos.x + kWidth / 2.0f, worldPos.y + kHeight / 2.0f, worldPos.z + kWidth / 2.0f};
+
+	return aabb;
+}
+
 void Enemy::Update() {
 
 	// 移動
@@ -32,7 +56,7 @@ void Enemy::Update() {
 	walkTimer_ += 1.0f / 60.0f;
 
 	// 回転
-	//float param = std::sin()
+	// float param = std::sin()
 	worldTransform_.rotation_.x = std::sin(std::numbers::pi_v<float> * 2.0f * walkTimer_ / kWalkMotionTime);
 
 	// 更新

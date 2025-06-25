@@ -125,6 +125,12 @@ AABB Player::GetAABB() {
 	return aabb;
 }
 
+void Player::OnCollision(const Enemy* enemy) {
+	(void)enemy;
+
+	velocity_ += Vector3(0, kJumpAcceleration / 60.0f, 0);
+}
+
 void Player::InputMove() {
 
 	// 移動入力
