@@ -2,6 +2,7 @@
 
 #include "Math.h"
 #include "kamataEngine.h"
+#include <algorithm>
 #include <array>
 #include <numbers>
 
@@ -35,4 +36,8 @@ private:
 	bool isFinished_ = false;
 	// 経過時間買ううんと
 	float counter_ = 0.0f;
+	// 色変更オブジェクト
+	ObjectColor objectColor_;
+	// 色の数値
+	Vector4 color_;
 };

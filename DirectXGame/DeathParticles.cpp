@@ -7,6 +7,9 @@ void DeathParticles::Initialize(Model* model, Camera* camera, const Vector3& pos
 	model_ = model;
 	camera_ = camera;
 
+	objectColor_.Initialize();
+	color_ = {1, 1, 1, 1};
+
 	for (auto& worldTransform : worldTransform_) {
 		worldTransform.Initialize();
 		worldTransform.translation_ = position;
@@ -42,6 +45,10 @@ void DeathParticles::Update() {
 		worldTransform_[i].translation_ += velocity;
 	}
 
+	color_.w = std::clamp(1.0f - counter_ / kDuration, 0.0f, 1.0f);
+	// 色変更オブジェクトに色の数値を設定する
+	objectColor_.SetColor(color_);
+
 	// ワールド座標の更新
 	for (auto& worldTransform : worldTransform_) {
 		WolrdtransformUpdate(worldTransform);
@@ -56,6 +63,6 @@ void DeathParticles::Draw() {
 	}
 
 	for (auto& worldTransform : worldTransform_) {
-		model_->Draw(worldTransform, *camera_);
+		model_->Draw(worldTransform, *camera_, &objectColor_);
 	}
 }
