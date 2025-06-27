@@ -1,5 +1,6 @@
 #pragma once
 #include "CameraController.h"
+#include "DeathParticles.h"
 #include "Enemy.h"
 #include "KamataEngine.h"
 #include "MapChipField.h"
@@ -7,6 +8,8 @@
 #include "Player.h"
 #include "Skydome.h"
 #include <vector>
+
+using namespace KamataEngine;
 
 // ゲームシーン
 class GameScene {
@@ -30,12 +33,14 @@ public:
 	void CheckAllCollisions();
 
 public:
-	std::vector<std::vector<KamataEngine::WorldTransform*>> worldTransformBlocks_;
+	std::vector<std::vector<WorldTransform*>> worldTransformBlocks_;
 
 	// 3Dモデル
-	KamataEngine::Model* modelblock_ = nullptr;
-	KamataEngine::Model* modelSkydome_ = nullptr;
-	KamataEngine::Model* modelPlayer_ = nullptr;
+	Model* modelblock_ = nullptr;
+	Model* modelSkydome_ = nullptr;
+	Model* modelPlayer_ = nullptr;
+	Model* modelEnemy_ = nullptr;
+	Model* modelDeathParticles_ = nullptr;
 
 	// 背景
 	Skydome* skydome_ = nullptr;
@@ -50,15 +55,17 @@ public:
 	MapChipField* mapChipField_;
 
 	// カメラ
-	KamataEngine::Camera camera_;
+	Camera camera_;
 
 	// デバックカメラ有効
 	bool isDebugCameraActive_ = false;
 
 	// デバックカメラ
-	KamataEngine::DebugCamera* debugCamera_ = nullptr;
+	DebugCamera* debugCamera_ = nullptr;
 
 	// 敵
-	KamataEngine::Model* modelEnemy_ = nullptr;
 	std::list<Enemy*> enemies_;
+
+	// ですパーティクル
+	DeathParticles* deathParticles_ = nullptr;
 };

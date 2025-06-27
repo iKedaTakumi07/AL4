@@ -19,7 +19,7 @@ private:
 	Model* model_ = nullptr;
 
 	// パーティクルの工数
-	static inline const uint32_t kNumParticles = 0;
+	static inline const uint32_t kNumParticles = 8;
 
 	std::array<WorldTransform, kNumParticles> worldTransform_;
 };

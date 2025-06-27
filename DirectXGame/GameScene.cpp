@@ -16,12 +16,17 @@ GameScene::~GameScene() {
 		}
 	}
 	worldTransformBlocks_.clear();
+
 	delete debugCamera_;
 	delete modelSkydome_;
 	delete mapChipField_;
 	for (Enemy* enemy : enemies_) {
 		delete enemy;
 	}
+	delete modelEnemy_;
+
+	delete modelDeathParticles_;
+	delete deathParticles_;
 }
 
 void GameScene::Initialize() { /*初期化を書く*/
@@ -73,6 +78,11 @@ void GameScene::Initialize() { /*初期化を書く*/
 
 		enemies_.push_back(newEnemy);
 	}
+
+	// デスパーティクル
+	modelDeathParticles_ = Model::CreateFromOBJ("deathParticle");
+	deathParticles_ = new DeathParticles;
+	deathParticles_->Initialize(modelDeathParticles_, &camera_, playerPosition);
 }
 
 void GameScene::GenerateBlocks() {
@@ -102,7 +112,6 @@ void GameScene::GenerateBlocks() {
 }
 
 void GameScene::CheckAllCollisions() {
-
 
 #pragma region
 	{
@@ -169,6 +178,11 @@ void GameScene::Update() { /* 更新勝利を書く */
 		}
 	}
 
+	// パーティクル
+	if (deathParticles_) {
+		deathParticles_->Update();
+	}
+
 	// デバックカメラ更新
 	debugCamera_->Update();
 
@@ -200,6 +214,11 @@ void GameScene::Draw() {
 
 			modelblock_->Draw(*worldTransformBlock, camera_);
 		}
+	}
+
+	// パーティクル
+	if (deathParticles_) {
+		deathParticles_->Draw();
 	}
 
 	Model::PostDraw();
