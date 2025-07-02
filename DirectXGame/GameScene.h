@@ -32,6 +32,9 @@ public:
 	// 全ての当たり判定を行う
 	void CheckAllCollisions();
 
+	// フェーズの切り替え
+	void ChangePhase();
+
 public:
 	std::vector<std::vector<WorldTransform*>> worldTransformBlocks_;
 
@@ -68,4 +71,11 @@ public:
 
 	// ですパーティクル
 	DeathParticles* deathParticles_ = nullptr;
+
+	enum class Phase {
+		kPlay,
+		kDeath,
+	};
+
+	Phase phase_;
 };

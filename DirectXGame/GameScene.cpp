@@ -31,6 +31,9 @@ GameScene::~GameScene() {
 
 void GameScene::Initialize() { /*初期化を書く*/
 
+	// ゲームプレイフェーズから開始
+	phase_ = Phase::kPlay;
+
 	// 初期化
 	camera_.Initialize();
 
@@ -81,8 +84,6 @@ void GameScene::Initialize() { /*初期化を書く*/
 
 	// デスパーティクル
 	modelDeathParticles_ = Model::CreateFromOBJ("deathParticle");
-	deathParticles_ = new DeathParticles;
-	deathParticles_->Initialize(modelDeathParticles_, &camera_, playerPosition);
 }
 
 void GameScene::GenerateBlocks() {
@@ -134,7 +135,36 @@ void GameScene::CheckAllCollisions() {
 	}
 }
 
+void GameScene::ChangePhase() {
+
+	switch (phase_) {
+	case GameScene::Phase::kPlay:
+
+		if (player_->IsDead()) {
+			phase_ = Phase::kDeath;
+
+			const Vector3& dethParticlesPosition = player_->GetWorldPosition();
+
+			deathParticles_ = new DeathParticles;
+			deathParticles_->Initialize(modelDeathParticles_, &camera_, dethParticlesPosition);
+		}
+
+		break;
+	case GameScene::Phase::kDeath:
+		break;
+	}
+}
+
 void GameScene::Update() { /* 更新勝利を書く */
+
+	ChangePhase();
+
+	switch (phase_) {
+	case GameScene::Phase::kPlay:
+		break;
+	case GameScene::Phase::kDeath:
+		break;
+	}
 
 	// プレイヤー
 	player_->Update();
@@ -196,7 +226,9 @@ void GameScene::Draw() {
 	Model::PreDraw(dxCommon->GetCommandList());
 
 	// プレイヤー
-	player_->Draw();
+	if (!player_->IsDead()) {
+		player_->Draw();
+	}
 
 	// 背景
 	skydome_->Draw();
