@@ -25,6 +25,8 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 	TitleScene* titleScene = new TitleScene;
 	titleScene->Initialize();
 
+	// ゲームスクリーン
+
 	// メインループ
 	while (true) {
 		// エンジンの更新
