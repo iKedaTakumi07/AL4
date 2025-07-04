@@ -16,6 +16,8 @@ public:
 
 	void Draw();
 
+	bool IsFinished() { return isFinished_; }
+
 private:
 	Camera* camera_ = nullptr;
 	Model* model_ = nullptr;

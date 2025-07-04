@@ -3,7 +3,68 @@
 #include "TitleScene.h"
 #include <Windows.h>
 
+TitleScene* titleScene = nullptr;
+GameScene* gameScene = nullptr;
 using namespace KamataEngine;
+
+enum class Scene {
+	kunknown = 0,
+
+	kTitle,
+	kGame,
+};
+
+// ゲームスクリーン
+Scene scene = Scene::kunknown;
+
+void ChangeScene() {
+	switch (scene) {
+
+	case Scene::kTitle:
+		if (titleScene->isFinished()) {
+			scene = Scene::kGame;
+			delete titleScene;
+			gameScene = new GameScene;
+			gameScene->Initialize();
+		}
+
+		break;
+	case Scene::kGame:
+		if (gameScene->isFinished()) {
+			scene = Scene::kTitle;
+			delete gameScene;
+			gameScene = nullptr;
+			titleScene = new TitleScene();
+			titleScene->Initialize();
+
+			break;
+		}
+	}
+}
+
+void UpdateScene() {
+	switch (scene) {
+	case Scene::kTitle:
+		titleScene->Update();
+
+		break;
+	case Scene::kGame:
+		gameScene->Update();
+		break;
+	}
+}
+
+void DrawScene() {
+	switch (scene) {
+	case Scene::kTitle:
+		titleScene->Draw();
+
+		break;
+	case Scene::kGame:
+		gameScene->Draw();
+		break;
+	}
+}
 
 // Windowsアプリでのエントリーポイント(main関数)
 int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
@@ -17,16 +78,13 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 	ImGuiManager* imguiManager = ImGuiManager::GetInstance();
 
 	// ゲームシーンのインスタンス生成
-	GameScene* gameScene = new GameScene();
+
 	// ゲームシーンの初期化
-	gameScene->Initialize();
 
 	// タイトルシーン
-	TitleScene* titleScene = new TitleScene;
+	scene = Scene::kTitle;
+	titleScene = new TitleScene;
 	titleScene->Initialize();
-
-	// ゲームスクリーン
-
 	// メインループ
 	while (true) {
 		// エンジンの更新
@@ -37,10 +95,9 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 		imguiManager->Begin();
 
 		// ゲームシーンの更新
-		gameScene->Update();
+		ChangeScene();
 
-		// タイトルシーンの更新
-		titleScene->Update();
+		gameScene->Update();
 
 		imguiManager->End();
 
@@ -48,12 +105,7 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 		dxCommon->PreDraw();
 
 		// ここに更新処理を記述する
-
-		// ゲームシーンの描画
-		gameScene->Draw();
-
-		// タイトルシーンの描画
-		titleScene->Draw();
+		DrawScene();
 
 		// 軸上
 		AxisIndicator::GetInstance()->Draw();

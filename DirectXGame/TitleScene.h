@@ -13,6 +13,8 @@ public:
 
 	~TitleScene();
 
+	bool isFinished() const { return finished_; };
+
 private:
 	// 3Dモデル
 	Model* modelTitle_ = nullptr;
@@ -27,4 +29,6 @@ private:
 	float counter_ = 0.0f;
 
 	static inline const float kTimeTitleMove = 2.0f;
+
+	bool finished_ = false;
 };

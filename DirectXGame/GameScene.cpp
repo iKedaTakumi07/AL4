@@ -163,6 +163,10 @@ void GameScene::Update() { /* 更新勝利を書く */
 	case GameScene::Phase::kPlay:
 		break;
 	case GameScene::Phase::kDeath:
+		if (deathParticles_ && deathParticles_->IsFinished()) {
+			finished_ = true;
+		}
+
 		break;
 	}
 

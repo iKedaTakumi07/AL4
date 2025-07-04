@@ -35,6 +35,8 @@ public:
 	// フェーズの切り替え
 	void ChangePhase();
 
+	bool isFinished() const { return finished_; };
+
 public:
 	std::vector<std::vector<WorldTransform*>> worldTransformBlocks_;
 
@@ -78,4 +80,6 @@ public:
 	};
 
 	Phase phase_;
+
+	bool finished_ = false;
 };
