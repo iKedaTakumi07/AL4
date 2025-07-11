@@ -27,9 +27,15 @@ void TitleScene::Initialize() {
 	worldTransformplayer_.rotation_.y = 0.95f * std::numbers::pi_v<float>;
 	worldTransformplayer_.translation_.x = -2.0f;
 	worldTransformplayer_.translation_.y = -10.0f;
+
+	fade_ = new Fade;
+	fade_->Initialize();
 }
 
 void TitleScene::Update() {
+
+	fade_->Update();
+
 	if (Input::GetInstance()->PushKey(DIK_SPACE)) {
 		finished_ = true;
 	}
@@ -58,6 +64,8 @@ void TitleScene::Draw() {
 	modelPlayer_->Draw(worldTransformplayer_, camera_);
 	modelTitle_->Draw(worldTransformTitle_, camera_);
 
+	fade_->Draw();
+
 	Model::PostDraw();
 }
 
@@ -65,4 +73,6 @@ TitleScene::~TitleScene() {
 
 	delete modelPlayer_;
 	delete modelTitle_;
+
+	delete fade_;
 }

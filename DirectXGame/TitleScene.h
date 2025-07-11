@@ -1,4 +1,5 @@
 #pragma once
+#include "Fade.h"
 #include "KamataEngine.h"
 using namespace KamataEngine;
 
@@ -31,4 +32,6 @@ private:
 	static inline const float kTimeTitleMove = 2.0f;
 
 	bool finished_ = false;
+
+	Fade* fade_ = nullptr;
 };

@@ -121,8 +121,8 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 	}
 
 	// ゲームシーンの解放
-	delete gameScene;
 	delete titleScene;
+	delete gameScene;
 
 	// nullptrの代入
 	gameScene = nullptr;
