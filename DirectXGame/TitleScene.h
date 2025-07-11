@@ -4,8 +4,13 @@
 using namespace KamataEngine;
 
 class TitleScene {
-
 public:
+	enum class Phase {
+		kFadeIn, // フェードイン
+		kMain,   // メイン部
+		kFadeOut // フェードアウト
+	};
+
 	void Initialize();
 
 	void Update();
@@ -34,4 +39,6 @@ private:
 	bool finished_ = false;
 
 	Fade* fade_ = nullptr;
+
+	Phase phase_ = Phase::kFadeIn;
 };

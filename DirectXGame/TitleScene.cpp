@@ -29,15 +29,32 @@ void TitleScene::Initialize() {
 
 	fade_ = new Fade;
 	fade_->Initialize();
-	fade_->Start(Fade::Status::FadeIn,1.0f);
+	fade_->Start(Fade::Status::FadeIn, 1.0f);
 }
 
 void TitleScene::Update() {
 
-	fade_->Update();
+	switch (phase_) {
+	case TitleScene::Phase::kFadeIn:
+		fade_->Update();
 
-	if (Input::GetInstance()->PushKey(DIK_SPACE)) {
-		finished_ = true;
+		if (fade_->IsFinished()) {
+			phase_ = Phase::kMain;
+		}
+		break;
+	case TitleScene::Phase::kMain:
+		if (Input::GetInstance()->PushKey(DIK_SPACE)) {
+			fade_->Start(Fade::Status::FadeOut, 1.0f);
+			phase_ = Phase::kFadeOut;
+		}
+		break;
+	case TitleScene::Phase::kFadeOut:
+		fade_->Update();
+		if (fade_->IsFinished()) {
+			finished_ = true;
+		}
+
+		break;
 	}
 
 	counter_ += 1.0f / 60.0f;

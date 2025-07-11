@@ -24,6 +24,7 @@ void ChangeScene() {
 		if (titleScene->isFinished()) {
 			scene = Scene::kGame;
 			delete titleScene;
+			titleScene = nullptr;
 			gameScene = new GameScene;
 			gameScene->Initialize();
 		}

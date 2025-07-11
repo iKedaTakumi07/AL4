@@ -19,6 +19,10 @@ public:
 
 	void Start(Status status, float duration);
 
+	void Stop();
+
+	bool IsFinished() const;
+
 private:
 	Sprite* sprite_ = nullptr;
 

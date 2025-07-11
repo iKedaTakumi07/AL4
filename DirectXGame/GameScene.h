@@ -8,6 +8,7 @@
 #include "Player.h"
 #include "Skydome.h"
 #include <vector>
+#include "Fade.h"
 
 using namespace KamataEngine;
 
@@ -75,11 +76,15 @@ public:
 	DeathParticles* deathParticles_ = nullptr;
 
 	enum class Phase {
+		kFadeIn,
 		kPlay,
 		kDeath,
+		kFadeOut,
 	};
 
 	Phase phase_;
+
+	Fade* fade_ = nullptr;
 
 	bool finished_ = false;
 };

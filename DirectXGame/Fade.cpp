@@ -37,6 +37,10 @@ void Fade::Update() {
 
 void Fade::Draw() {
 
+	if (status_ == Status::None) {
+		return;
+	}
+
 	Sprite::PreDraw(DirectXCommon::GetInstance()->GetCommandList());
 	sprite_->Draw();
 	Sprite::PostDraw();
@@ -46,4 +50,22 @@ void Fade::Start(Status status, float duration) {
 	status_ = status;
 	duration_ = duration;
 	counter_ = 0.0f;
+}
+
+void Fade::Stop() { status_ = Status::None; }
+
+bool Fade::IsFinished() const {
+
+	// フェード状態に夜分岐
+	switch (status_) {
+	case Fade::Status::FadeIn:
+	case Fade::Status::FadeOut:
+
+		if (counter_ >= duration_) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	return true;
 }
