@@ -9,6 +9,13 @@ class Enemy;
 
 class Player {
 public:
+	// ふるまい
+	enum class Behavior {
+		kUnknown = -1,
+		kRoot,
+		kAttack,
+	};
+
 	// 左右
 	enum class LRDirection {
 		kRight,
@@ -45,7 +52,11 @@ public:
 	// ですフラグのトリがー
 	bool IsDead() const { return isDead_; };
 
+	void BehaviorRootInitialize();
+
 	void BehaviorRootUpdata();
+
+	void BehaviorAttackInitialize();
 
 	void BehaviorAttackUpdata();
 
@@ -123,4 +134,13 @@ private:
 
 	// ですフラグ
 	bool isDead_ = false;
+
+	// ふるまい
+	Behavior behavior_ = Behavior::kRoot;
+
+	// 次のふるまい
+	Behavior behaviorRequest_ = Behavior::kUnknown;
+
+	// 攻撃ギミックの経過時間カウンター
+	uint32_t attackParameter_ = 0;
 };

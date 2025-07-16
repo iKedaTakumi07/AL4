@@ -26,7 +26,32 @@ void Player::Initialize(KamataEngine::Model* model, KamataEngine::Camera* camera
 	/*worldTransform_.translation_ = {1.0f, 1.0f, 0.0f};*/
 }
 
-void Player::Update() { BehaviorRootUpdata(); }
+void Player::Update() {
+
+	if (behaviorRequest_ != Behavior::kUnknown) {
+		behavior_ = behaviorRequest_;
+
+		switch (behavior_) {
+		case Player::Behavior::kRoot:
+		default:
+			BehaviorRootInitialize();
+			break;
+		case Player::Behavior::kAttack:
+			BehaviorAttackInitialize();
+			break;
+		}
+
+		// ふるまいをリセット
+		behaviorRequest_ = Behavior::kUnknown;
+	}
+
+	// 行列を定数バッファに転送
+	WolrdtransformUpdate(worldTransform_);
+
+	BehaviorRootUpdata();
+
+	BehaviorAttackUpdata();
+}
 
 void Player::Draw() {
 
@@ -61,6 +86,8 @@ void Player::OnCollision(const Enemy* enemy) {
 	/*velocity_ += Vector3(0, kJumpAcceleration / 60.0f, 0);*/
 	isDead_ = true;
 }
+
+void Player::BehaviorRootInitialize() {}
 
 void Player::BehaviorRootUpdata() {
 
@@ -97,8 +124,49 @@ void Player::BehaviorRootUpdata() {
 		worldTransform_.rotation_.y = easeInOutQuint(destiationRotationY, turnFirstRotationY_, turnTimer_ / kTimeTurn);
 	}
 
-	// 行列を定数バッファに転送
-	WolrdtransformUpdate(worldTransform_);
+	if (Input::GetInstance()->TriggerKey(DIK_SPACE)) {
+		behaviorRequest_ = Behavior::kAttack;
+	}
+}
+
+void Player::BehaviorAttackInitialize() {
+
+	// 初期化
+	attackParameter_ = 0;
+
+	velocity_ = {};
+}
+
+void Player::BehaviorAttackUpdata() {
+
+	attackParameter_++;
+
+	if (attackParameter_ >= 20.0f) {
+		behaviorRequest_ = Behavior::kRoot;
+	}
+
+	// 衝突情報を初期化
+	CollisionMapInfo collisionMapInfo;
+	// 移動量に速度の値をコピー
+	collisionMapInfo.move = velocity_;
+	collisionMapInfo.landing = false;
+	collisionMapInfo.hitWall = false;
+
+	// 衝突チェック
+	CheckMapCollision(collisionMapInfo);
+
+	worldTransform_.translation_ += collisionMapInfo.move;
+
+	// 旋回制限
+	if (turnTimer_ > 0.0f) {
+		turnTimer_ = std::max(turnTimer_ - (1.0f / 60.0f), 0.0f);
+
+		float destinationRotationYTable[] = {std::numbers::pi_v<float> / 2.0f, std::numbers::pi_v<float> * 3.0f / 2.0f};
+		// 状況に応じた角度を取得する
+		float destiationRotationY = destinationRotationYTable[static_cast<uint32_t>(lrDirection_)];
+		// 自キャラの角度を設定すル
+		worldTransform_.rotation_.y = easeInOutQuint(destiationRotationY, turnFirstRotationY_, turnTimer_ / kTimeTurn);
+	}
 }
 
 void Player::InputMove() {
