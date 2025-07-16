@@ -155,4 +155,12 @@ private:
 
 	// 攻撃モーション
 	AttackPhase attackPhase_ = AttackPhase::kUnknown;
+
+	// 予備動作の時間
+	static inline const uint32_t KanticipationTime = 8;
+	// 前進動作の時間
+	static inline const uint32_t kActionTime = 5;
+	// 余韻動作の時間
+	static inline const uint32_t kRecoveryTime = 12;
+	WorldTransform worldTransformAttack_;
 };

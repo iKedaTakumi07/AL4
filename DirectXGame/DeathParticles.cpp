@@ -51,7 +51,7 @@ void DeathParticles::Update() {
 
 	// ワールド座標の更新
 	for (auto& worldTransform : worldTransform_) {
-		WolrdtransformUpdate(worldTransform);
+		WorldtransformUpdate(worldTransform);
 	}
 }
 

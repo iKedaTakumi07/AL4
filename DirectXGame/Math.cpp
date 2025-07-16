@@ -2,13 +2,16 @@
 
 using namespace KamataEngine;
 
+Vector3 operator+(const Vector3& v) { return v; }
+Vector3 operator-(const Vector3& v) { return Vector3(-v.x, -v.y, -v.z); }
+
 Matrix4x4 MakeRotateXMatrix(float radian);
 Matrix4x4 MakeRotateYMatrix(float radian);
 Matrix4x4 MakeRotateZMatrix(float radian);
 Matrix4x4 Mulyiply(const Matrix4x4& m1, const Matrix4x4& m2);
 Matrix4x4 MakeAffineMatrix(const Vector3& scale, const Vector3& rotate, const Vector3& translate);
 
-void WolrdtransformUpdate(KamataEngine::WorldTransform& worldTransform) {
+void WorldtransformUpdate(KamataEngine::WorldTransform& worldTransform) {
 	// 行列計算
 	worldTransform.matWorld_ = MakeAffineMatrix(worldTransform.scale_, worldTransform.rotation_, worldTransform.translation_);
 	// 書き込み
@@ -139,6 +142,19 @@ const Vector3 operator+(const Vector3& v1, const Vector3& v2) {
 
 // 線形保管の関数
 Vector3 Lerp(Vector3 x1, Vector3 x2, float t) { return {(1.0f - t) * x1.x + t * x2.x, (1.0f - t) * x1.y + t * x2.y, (1.0f - t) * x1.z + t * x2.z}; }
+float Lerp(float x1, float x2, float t) { return (1.0f - t) * x1 + t * x2; }
+
+float EaseIn(float x1, float x2, float t) {
+	float easedT = t * t;
+
+	return Lerp(x1, x2, easedT);
+}
+
+float EaseOut(float x1, float x2, float t) {
+	float easedT = 1.0f - std::powf(1.0f - t, 3.0f);
+
+	return Lerp(x1, x2, easedT);
+}
 
 float easeInOutQuint(float s, float e, float t) {
 	float easedT;

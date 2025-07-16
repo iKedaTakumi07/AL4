@@ -45,12 +45,19 @@ void Player::Update() {
 		behaviorRequest_ = Behavior::kUnknown;
 	}
 
+	switch (behavior_) {
+	case Behavior::kRoot:
+	default:
+		BehaviorRootUpdata();
+		break;
+	case Behavior::kAttack:
+		BehaviorAttackUpdata();
+		break;
+	}
+
 	// 行列を定数バッファに転送
-	WolrdtransformUpdate(worldTransform_);
-
-	BehaviorRootUpdata();
-
-	BehaviorAttackUpdata();
+	WorldtransformUpdate(worldTransform_);
+	WorldtransformUpdate(worldTransformAttack_);
 }
 
 void Player::Draw() {
@@ -135,24 +142,51 @@ void Player::BehaviorAttackInitialize() {
 	attackParameter_ = 0;
 
 	velocity_ = {};
+
+	attackPhase_ = AttackPhase::kAnticipation;
 }
 
 void Player::BehaviorAttackUpdata() {
 
-	attackParameter_++;
+	const Vector3 attackVelocity = {0.8f, 0.0f, 0.0f};
 
-	if (attackParameter_ >= 20.0f) {
-		behaviorRequest_ = Behavior::kRoot;
-	}
+	Vector3 velocity{};
+
+	attackParameter_++;
 
 	switch (attackPhase_) {
 	case Player::AttackPhase::kAnticipation:
-		
+	default: {
+		velocity = {};
+		float t = static_cast<float>(attackParameter_) / KanticipationTime;
+		worldTransform_.scale_.z = EaseOut(1.0f, 0.3f, t);
+		worldTransform_.scale_.y = EaseOut(1.0f, 1.6f, t);
+
+		if (attackParameter_ >= KanticipationTime) {
+			attackPhase_ = AttackPhase::kAction;
+			attackParameter_ = 0;
+		}
 		break;
-	case Player::AttackPhase::kAction:
+	}
+	case Player::AttackPhase::kAction: {
+		if (lrDirection_ == LRDirection::kRight) {
+			velocity = +attackVelocity;
+		} else {
+			velocity = -attackVelocity;
+		}
+	} break;
+	case Player::AttackPhase::kRecovery: {
+		velocity = {};
+		float t = static_cast<float>(attackParameter_) / kRecoveryTime;
+		worldTransform_.scale_.z = EaseOut(1.3f, 1.0f, t);
+		worldTransform_.scale_.y = EaseOut(0.7f, 1.0f, t);
+
+		// 通常行動に戻る
+		if (attackParameter_ >= kRecoveryTime) {
+			behaviorRequest_ = Behavior::kRoot;
+		}
 		break;
-	case Player::AttackPhase::kRecovery:
-		break;
+	}
 	}
 
 	// 衝突情報を初期化
@@ -177,6 +211,9 @@ void Player::BehaviorAttackUpdata() {
 		// 自キャラの角度を設定すル
 		worldTransform_.rotation_.y = easeInOutQuint(destiationRotationY, turnFirstRotationY_, turnTimer_ / kTimeTurn);
 	}
+
+	worldTransformAttack_.translation_ = worldTransform_.translation_;
+	worldTransformAttack_.rotation_ = worldTransform_.rotation_;
 }
 
 void Player::InputMove() {

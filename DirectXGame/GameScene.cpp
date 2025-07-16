@@ -209,7 +209,7 @@ void GameScene::Update() { /* 更新勝利を書く */
 					continue;
 
 				// アフィン変換～DirectXに転送
-				WolrdtransformUpdate(*worldTransformBlock);
+				WorldtransformUpdate(*worldTransformBlock);
 			}
 		}
 		break;
@@ -253,7 +253,7 @@ void GameScene::Update() { /* 更新勝利を書く */
 					continue;
 
 				// アフィン変換～DirectXに転送
-				WolrdtransformUpdate(*worldTransformBlock);
+				WorldtransformUpdate(*worldTransformBlock);
 			}
 		}
 

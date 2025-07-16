@@ -65,9 +65,9 @@ void TitleScene::Update() {
 
 	camera_.TransferMatrix();
 
-	WolrdtransformUpdate(worldTransformplayer_);
+	WorldtransformUpdate(worldTransformplayer_);
 
-	WolrdtransformUpdate(worldTransformTitle_);
+	WorldtransformUpdate(worldTransformTitle_);
 }
 
 void TitleScene::Draw() {

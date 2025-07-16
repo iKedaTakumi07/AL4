@@ -48,7 +48,7 @@ void Enemy::Update() {
 	worldTransform_.rotation_.x = std::sin(std::numbers::pi_v<float> * 2.0f * walkTimer_ / kWalkMotionTime);
 
 	// 更新
-	WolrdtransformUpdate(worldTransform_);
+	WorldtransformUpdate(worldTransform_);
 }
 
 void Enemy::Draw() {
