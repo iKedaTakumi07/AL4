@@ -23,7 +23,10 @@ void Player::Initialize(KamataEngine::Model* model, KamataEngine::Camera* camera
 	worldTransform_.Initialize();
 	worldTransform_.translation_ = position;
 	worldTransform_.rotation_.y = std::numbers::pi_v<float> / 2.0f;
-	/*worldTransform_.translation_ = {1.0f, 1.0f, 0.0f};*/
+
+	worldTransformAttack_.Initialize();
+	worldTransformAttack_.translation_ = worldTransform_.translation_;
+	worldTransformAttack_.rotation_ = worldTransform_.rotation_;
 }
 
 void Player::Update() {
@@ -174,7 +177,19 @@ void Player::BehaviorAttackUpdata() {
 		} else {
 			velocity = -attackVelocity;
 		}
-	} break;
+
+		float t = static_cast<float>(attackParameter_) / kActionTime;
+		worldTransform_.scale_.z = EaseOut(0.3f, 1.3f, t);
+		worldTransform_.scale_.y = EaseIn(1.6f, 0.7f, t);
+
+		// 余韻動作へ移行
+		if (attackParameter_ >= kActionTime) {
+			attackPhase_ = AttackPhase::kRecovery;
+			attackParameter_ = 0; // パラメータをリセット
+		}
+
+		break;
+	}
 	case Player::AttackPhase::kRecovery: {
 		velocity = {};
 		float t = static_cast<float>(attackParameter_) / kRecoveryTime;
@@ -192,7 +207,7 @@ void Player::BehaviorAttackUpdata() {
 	// 衝突情報を初期化
 	CollisionMapInfo collisionMapInfo;
 	// 移動量に速度の値をコピー
-	collisionMapInfo.move = velocity_;
+	collisionMapInfo.move = velocity;
 	collisionMapInfo.landing = false;
 	collisionMapInfo.hitWall = false;
 
