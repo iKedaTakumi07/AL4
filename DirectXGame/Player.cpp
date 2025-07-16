@@ -26,78 +26,7 @@ void Player::Initialize(KamataEngine::Model* model, KamataEngine::Camera* camera
 	/*worldTransform_.translation_ = {1.0f, 1.0f, 0.0f};*/
 }
 
-void Player::Update() {
-
-	InputMove();
-
-	// 衝突情報を初期化
-	CollisionMapInfo collisionMapInfo;
-	// 移動量に速度の値をコピー
-	collisionMapInfo.move = velocity_;
-	/*collisionMapInfo.landing = false;
-	collisionMapInfo.hitWall = false;*/
-
-	// 衝突チェック
-	CheckMapCollision(collisionMapInfo);
-
-	worldTransform_.translation_ += collisionMapInfo.move;
-
-	if (collisionMapInfo.ceiling) {
-		velocity_.y = 0;
-	}
-
-	UpdateOnWall(collisionMapInfo);
-
-	UpDateOnGround(collisionMapInfo);
-
-	// 移動
-	/*worldTransform_.translation_ += velocity_;*/
-
-	// 着地フラグ
-	/*bool landing = false;*/
-
-	// 地面との当たり班{
-	/*if (velocity_.y < 0) {
-	    if (worldTransform_.translation_.y <= 1.0f) {
-	        landing = true;
-	    }
-}*/
-
-	// 設置判定
-	// if (onGround_) {
-	//	// ジャンプ開始
-	//	if (velocity_.y > 0.0f) {
-	//		onGround_ = false;
-	//	}
-
-	//} else {
-
-	//	// 着地
-	//	if (landing) {
-	//		// めり込み排除
-	//		worldTransform_.translation_.y = 1.0f;
-	//		// 摩擦で横方向速度が減衰
-	//		velocity_.x *= (1.0f - kAtteleration);
-	//		// 下方方向速度をリセット
-	//		velocity_.y = 0.0f;
-	//		onGround_ = true;
-	//	}
-	//}
-
-	// 旋回制限
-	if (turnTimer_ > 0.0f) {
-		turnTimer_ = std::max(turnTimer_ - (1.0f / 60.0f), 0.0f);
-
-		float destinationRotationYTable[] = {std::numbers::pi_v<float> / 2.0f, std::numbers::pi_v<float> * 3.0f / 2.0f};
-		// 状況に応じた角度を取得する
-		float destiationRotationY = destinationRotationYTable[static_cast<uint32_t>(lrDirection_)];
-		// 自キャラの角度を設定すル
-		worldTransform_.rotation_.y = easeInOutQuint(destiationRotationY, turnFirstRotationY_, turnTimer_ / kTimeTurn);
-	}
-
-	// 行列を定数バッファに転送
-	WolrdtransformUpdate(worldTransform_);
-}
+void Player::Update() { BehaviorRootUpdata(); }
 
 void Player::Draw() {
 
@@ -131,6 +60,45 @@ void Player::OnCollision(const Enemy* enemy) {
 
 	/*velocity_ += Vector3(0, kJumpAcceleration / 60.0f, 0);*/
 	isDead_ = true;
+}
+
+void Player::BehaviorRootUpdata() {
+
+	InputMove();
+
+	// 衝突情報を初期化
+	CollisionMapInfo collisionMapInfo;
+	// 移動量に速度の値をコピー
+	collisionMapInfo.move = velocity_;
+	collisionMapInfo.landing = false;
+	collisionMapInfo.hitWall = false;
+
+	// 衝突チェック
+	CheckMapCollision(collisionMapInfo);
+
+	worldTransform_.translation_ += collisionMapInfo.move;
+
+	if (collisionMapInfo.ceiling) {
+		velocity_.y = 0;
+	}
+
+	UpdateOnWall(collisionMapInfo);
+
+	UpDateOnGround(collisionMapInfo);
+
+	// 旋回制限
+	if (turnTimer_ > 0.0f) {
+		turnTimer_ = std::max(turnTimer_ - (1.0f / 60.0f), 0.0f);
+
+		float destinationRotationYTable[] = {std::numbers::pi_v<float> / 2.0f, std::numbers::pi_v<float> * 3.0f / 2.0f};
+		// 状況に応じた角度を取得する
+		float destiationRotationY = destinationRotationYTable[static_cast<uint32_t>(lrDirection_)];
+		// 自キャラの角度を設定すル
+		worldTransform_.rotation_.y = easeInOutQuint(destiationRotationY, turnFirstRotationY_, turnTimer_ / kTimeTurn);
+	}
+
+	// 行列を定数バッファに転送
+	WolrdtransformUpdate(worldTransform_);
 }
 
 void Player::InputMove() {

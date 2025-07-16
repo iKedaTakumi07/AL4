@@ -45,6 +45,10 @@ public:
 	// ですフラグのトリがー
 	bool IsDead() const { return isDead_; };
 
+	void BehaviorRootUpdata();
+
+	void BehaviorAttackUpdata();
+
 private:
 	// ワールド変換データ
 	WorldTransform worldTransform_;
