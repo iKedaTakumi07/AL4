@@ -145,6 +145,16 @@ void Player::BehaviorAttackUpdata() {
 		behaviorRequest_ = Behavior::kRoot;
 	}
 
+	switch (attackPhase_) {
+	case Player::AttackPhase::kAnticipation:
+		
+		break;
+	case Player::AttackPhase::kAction:
+		break;
+	case Player::AttackPhase::kRecovery:
+		break;
+	}
+
 	// 衝突情報を初期化
 	CollisionMapInfo collisionMapInfo;
 	// 移動量に速度の値をコピー

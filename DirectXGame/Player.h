@@ -16,6 +16,15 @@ public:
 		kAttack,
 	};
 
+	// 攻撃モーション
+	enum class AttackPhase {
+		kUnknown = -1,
+
+		kAnticipation,
+		kAction,
+		kRecovery,
+	};
+
 	// 左右
 	enum class LRDirection {
 		kRight,
@@ -143,4 +152,7 @@ private:
 
 	// 攻撃ギミックの経過時間カウンター
 	uint32_t attackParameter_ = 0;
+
+	// 攻撃モーション
+	AttackPhase attackPhase_ = AttackPhase::kUnknown;
 };
