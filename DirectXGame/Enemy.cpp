@@ -37,18 +37,48 @@ Vector3 Enemy::GetWorldPosition() {
 
 void Enemy::Update() {
 
-	// 移動
-	worldTransform_.translation_ += velocity_;
+	if (behaviorRequest_ != Behavior::kUnknown) {
+		behavior_ = behaviorRequest_;
 
-	// タイマーの更新
-	walkTimer_ += 1.0f / 60.0f;
+		switch (behavior_) {
+		case Enemy::Behavior::kDefeated:
+		default:
+			counter_ = 0;
+			break;
+		}
 
-	// 回転
-	// float param = std::sin()
-	worldTransform_.rotation_.x = std::sin(std::numbers::pi_v<float> * 2.0f * walkTimer_ / kWalkMotionTime);
+		behaviorRequest_ = Behavior::kUnknown;
+	}
 
-	// 更新
-	WorldtransformUpdate(worldTransform_);
+	switch (behavior_) {
+	case Enemy::Behavior::kWalk:
+
+		// 移動
+		worldTransform_.translation_ += velocity_;
+
+		// タイマーの更新
+		walkTimer_ += 1.0f / 60.0f;
+
+		// 回転
+		// float param = std::sin()
+		worldTransform_.rotation_.x = std::sin(std::numbers::pi_v<float> * 2.0f * walkTimer_ / kWalkMotionTime);
+
+		// 更新
+		WorldtransformUpdate(worldTransform_);
+		break;
+	case Enemy::Behavior::kDefeated:
+		counter_ += 1.0f / 60.0f;
+
+		worldTransform_.rotation_.y += 0.3f;
+		worldTransform_.rotation_.x = EaseOut(ToRadians(kDefeatedMotionAngleStaart), ToRadians(kDefeatedMotionAngleEnd), counter_ / kDefeatedTime);
+
+		WorldtransformUpdate(worldTransform_);
+		if (counter_ >= kDefeatedTime) {
+			isDead_ = true;
+		}
+
+		break;
+	}
 }
 
 void Enemy::Draw() {
@@ -72,5 +102,11 @@ void Enemy::OnCollision(const Player* player) {
 	isDead_ = true;
 
 	// ふふふ
-	
+	if (behavior_ == Behavior::kDefeated) {
+		return;
+	}
+
+	if (player->IsAttack()) {
+		behaviorRequest_ = Behavior::kDefeated;
+	}
 }

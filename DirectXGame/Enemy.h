@@ -8,6 +8,12 @@ class Player;
 
 class Enemy {
 public:
+	enum class Behavior {
+		kUnknown = -1,
+		kWalk,
+		kDefeated,
+	};
+
 	void Initialize(Model* model, Camera* camera, const Vector3& position);
 
 	void Update();
@@ -51,4 +57,12 @@ private:
 
 	// フラグ
 	bool isDead_ = false;
+
+	Behavior behavior_ = Behavior::kWalk;
+	Behavior behaviorRequest_ = Behavior::kUnknown;
+
+	static inline const float kDefeatedTime = 0.6f;
+	static inline const float kDefeatedMotionAngleStaart = 0.0f;
+	static inline const float kDefeatedMotionAngleEnd = -60.0f;
+	float counter_ = 0.0f;
 };
