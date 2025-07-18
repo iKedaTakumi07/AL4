@@ -162,6 +162,13 @@ void GameScene::ChangePhase() {
 
 void GameScene::Update() { /* 更新勝利を書く */
 
+	enemies_.remove_if([](Enemy* enemy) {
+		if (enemy->isDead()) {
+			delete enemy;
+			return true;
+		}
+	});
+
 	ChangePhase();
 
 	switch (phase_) {

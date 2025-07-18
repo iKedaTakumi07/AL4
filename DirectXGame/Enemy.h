@@ -1,6 +1,6 @@
 #pragma once
-#include <KamataEngine.h>
 #include "Math.h"
+#include <KamataEngine.h>
 
 using namespace KamataEngine;
 
@@ -19,6 +19,8 @@ public:
 	Vector3 GetWorldPosition();
 
 	void OnCollision(const Player* player);
+
+	bool isDead() const { return isDead_; }
 
 private:
 	// トランスフォーム
@@ -46,4 +48,7 @@ private:
 
 	static inline const float kWidth = 0.8f;
 	static inline const float kHeight = 0.8f;
+
+	// フラグ
+	bool isDead_ = false;
 };
