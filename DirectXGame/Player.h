@@ -69,6 +69,8 @@ public:
 
 	void BehaviorAttackUpdata();
 
+	bool IsAttack() const { return behavior_ == Behavior::kAttack && attackPhase_ == AttackPhase::kAction; }
+
 private:
 	// ワールド変換データ
 	WorldTransform worldTransform_;

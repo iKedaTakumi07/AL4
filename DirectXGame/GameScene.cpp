@@ -167,6 +167,7 @@ void GameScene::Update() { /* 更新勝利を書く */
 			delete enemy;
 			return true;
 		}
+		return false;
 	});
 
 	ChangePhase();

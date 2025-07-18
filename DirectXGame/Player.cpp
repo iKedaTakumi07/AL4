@@ -107,10 +107,14 @@ AABB Player::GetAABB() {
 }
 
 void Player::OnCollision(const Enemy* enemy) {
-	(void)enemy;
+	if (IsAttack()) {
+		return;
+	}
 
 	/*velocity_ += Vector3(0, kJumpAcceleration / 60.0f, 0);*/
 	isDead_ = true;
+
+	(void)enemy;
 }
 
 void Player::BehaviorRootInitialize() {}
