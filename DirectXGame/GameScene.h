@@ -2,13 +2,13 @@
 #include "CameraController.h"
 #include "DeathParticles.h"
 #include "Enemy.h"
+#include "Fade.h"
 #include "KamataEngine.h"
 #include "MapChipField.h"
 #include "Math.h"
 #include "Player.h"
 #include "Skydome.h"
 #include <vector>
-#include "Fade.h"
 
 using namespace KamataEngine;
 
@@ -43,6 +43,7 @@ public:
 
 	// 3Dモデル
 	Model* modelblock_ = nullptr;
+	Model* modelPlayerAttck_ = nullptr;
 	Model* modelSkydome_ = nullptr;
 	Model* modelPlayer_ = nullptr;
 	Model* modelEnemy_ = nullptr;

@@ -58,10 +58,11 @@ void GameScene::Initialize() { /*初期化を書く*/
 	player_ = new Player();
 
 	modelPlayer_ = Model::CreateFromOBJ("player");
+	modelPlayerAttck_ = Model::CreateFromOBJ("attack_effect");
 	Vector3 playerPosition = mapChipField_->GetMapChipPositionByIndex(2, 18);
 
 	player_->SetMapChipField(mapChipField_);
-	player_->Initialize(modelPlayer_, &camera_, playerPosition);
+	player_->Initialize(modelPlayer_, modelPlayerAttck_, &camera_, playerPosition);
 
 	// 追跡カメラ
 	CameraController_ = new CameraController();
@@ -226,10 +227,10 @@ void GameScene::Update() { /* 更新勝利を書く */
 
 //		UpdateCamera();
 #ifdef _DEBUG
-		//if (Input::GetInstance()->TriggerKey(DIK_SPACE)) {
+		// if (Input::GetInstance()->TriggerKey(DIK_SPACE)) {
 		//	// フラグをトグル
 		//	isDebugCameraActive_ = !isDebugCameraActive_;
-		//}
+		// }
 #endif
 
 		// カメラの処理

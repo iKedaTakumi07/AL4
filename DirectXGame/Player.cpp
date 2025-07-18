@@ -10,13 +10,14 @@
 
 using namespace KamataEngine;
 
-void Player::Initialize(KamataEngine::Model* model, KamataEngine::Camera* camera, const Vector3& position) {
+void Player::Initialize(KamataEngine::Model* model, Model* modelAttack, KamataEngine::Camera* camera, const Vector3& position) {
 
 	// nullポインタチェック
 	assert(model);
 
 	// 初期化
 	model_ = model;
+	modelAttack_ = modelAttack;
 	camera_ = camera;
 
 	// ワールド変換の初期アk
@@ -67,6 +68,21 @@ void Player::Draw() {
 
 	// 3Dモデルを描画
 	model_->Draw(worldTransform_, *camera_);
+
+	if (behavior_ == Behavior::kAttack) {
+
+		switch (attackPhase_) {
+
+		case Player::AttackPhase::kAnticipation:
+			break;
+		case Player::AttackPhase::kAction:
+			break;
+		case Player::AttackPhase::kRecovery:
+			modelAttack_->Draw(worldTransformAttack_, *camera_);
+
+			break;
+		}
+	}
 }
 
 Vector3 Player::GetWorldPosition() {

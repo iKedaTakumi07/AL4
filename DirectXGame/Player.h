@@ -40,7 +40,7 @@ public:
 		KNumCorner, // 要素数
 	};
 
-	void Initialize(Model* model, Camera* camera, const Vector3& position);
+	void Initialize(Model* model, Model* modelAttack, Camera* camera, const Vector3& position);
 
 	void Update();
 
@@ -97,6 +97,7 @@ private:
 
 	// モデル
 	Model* model_ = nullptr;
+	Model* modelAttack_ = nullptr;
 
 	// カメラ
 	Camera* camera_ = nullptr;
