@@ -99,7 +99,6 @@ AABB Enemy::GetAABB() {
 void Enemy::OnCollision(const Player* player) {
 	(void)player;
 	//
-	isDead_ = true;
 
 	// ふふふ
 	if (behavior_ == Behavior::kDefeated) {
@@ -108,5 +107,7 @@ void Enemy::OnCollision(const Player* player) {
 
 	if (player->IsAttack()) {
 		behaviorRequest_ = Behavior::kDefeated;
+
+		isCollisionDisabled_ = true;
 	}
 }

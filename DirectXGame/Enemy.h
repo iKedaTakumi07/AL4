@@ -28,6 +28,8 @@ public:
 
 	bool isDead() const { return isDead_; }
 
+	bool IsCollisionDisabled() const { return isCollisionDisabled_; };
+
 private:
 	// トランスフォーム
 	WorldTransform worldTransform_;
@@ -65,4 +67,8 @@ private:
 	static inline const float kDefeatedMotionAngleStaart = 0.0f;
 	static inline const float kDefeatedMotionAngleEnd = -60.0f;
 	float counter_ = 0.0f;
+
+	bool isCollisionDisabled_ = false;
+
+	
 };

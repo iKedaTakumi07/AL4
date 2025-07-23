@@ -126,6 +126,9 @@ void GameScene::CheckAllCollisions() {
 		aabb1 = player_->GetAABB();
 
 		for (Enemy* enemy : enemies_) {
+			if (enemy->IsCollisionDisabled())
+				continue;
+
 			aabb2 = enemy->GetAABB();
 
 			// AABB同士の交差判定
