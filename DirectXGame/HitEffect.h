@@ -12,6 +12,10 @@ public:
 
 	void Draw();
 
+	static void SetModel(Model* model) { model_ = model; };
+
+	static void SetCamera(Camera* camera) { camera_ = camera; };
+
 private:
 	static Model* model_;
 

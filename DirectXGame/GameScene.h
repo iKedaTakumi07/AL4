@@ -48,6 +48,7 @@ public:
 	Model* modelPlayer_ = nullptr;
 	Model* modelEnemy_ = nullptr;
 	Model* modelDeathParticles_ = nullptr;
+	Model* modelHitEffect = nullptr;
 
 	// 背景
 	Skydome* skydome_ = nullptr;

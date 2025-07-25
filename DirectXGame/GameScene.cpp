@@ -1,5 +1,6 @@
 #include "GameScene.h"
 #include "Math.h"
+#include "HitEffect.h"
 
 using namespace KamataEngine;
 
@@ -89,6 +90,10 @@ void GameScene::Initialize() { /*初期化を書く*/
 	fade_ = new Fade();
 	fade_->Initialize();
 	fade_->Start(Fade::Status::FadeIn, 1.0f);
+
+	modelHitEffect = Model::CreateFromOBJ("attack_effect");
+	HitEffect::SetModel(modelHitEffect);
+	HitEffect::SetCamera(&camera_);
 }
 
 void GameScene::GenerateBlocks() {
