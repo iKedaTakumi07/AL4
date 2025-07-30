@@ -1,6 +1,7 @@
 #define NOMINMAX
 
 #include "Enemy.h"
+#include "GameScene.h"
 #include "Math.h"
 #include "Player.h"
 #include <cassert>
@@ -106,6 +107,18 @@ void Enemy::OnCollision(const Player* player) {
 	}
 
 	if (player->IsAttack()) {
+		if (gameScene_) {
+
+			Vector3 pos = player->GetWorldPosition();
+
+			Vector3 effectPos;
+
+			effectPos.x = (GetWorldPosition() + pos).x / 2.0f;
+			effectPos.y = (GetWorldPosition() + pos).y / 2.0f;
+			effectPos.z = (GetWorldPosition() + pos).z / 2.0f;
+			gameScene_->CreateEffect(effectPos);
+		}
+
 		behaviorRequest_ = Behavior::kDefeated;
 
 		isCollisionDisabled_ = true;

@@ -1,6 +1,6 @@
 #include "GameScene.h"
-#include "Math.h"
 #include "HitEffect.h"
+#include "Math.h"
 
 using namespace KamataEngine;
 
@@ -28,6 +28,10 @@ GameScene::~GameScene() {
 
 	delete modelDeathParticles_;
 	delete deathParticles_;
+
+	for (HitEffect* hitEffect : hitEffects_) {
+		delete hitEffect;
+	}
 }
 
 void GameScene::Initialize() { /*初期化を書く*/
@@ -168,6 +172,12 @@ void GameScene::ChangePhase() {
 	}
 }
 
+void GameScene::CreateEffect(const Vector3& position) {
+	HitEffect* newHitEffect = HitEffect::Create(position);
+
+	hitEffects_.push_back(newHitEffect);
+}
+
 void GameScene::Update() { /* 更新勝利を書く */
 
 	enemies_.remove_if([](Enemy* enemy) {
@@ -239,6 +249,10 @@ void GameScene::Update() { /* 更新勝利を書く */
 
 		for (Enemy* enemy : enemies_) {
 			enemy->Update();
+		}
+
+		for (HitEffect* hitEffect : hitEffects_) {
+			hitEffect->Update();
 		}
 
 //		UpdateCamera();
@@ -343,6 +357,11 @@ void GameScene::Draw() {
 	if (deathParticles_) {
 		deathParticles_->Draw();
 	}
+
+	for (HitEffect* hitEffect : hitEffects_) {
+		hitEffect->Draw();
+	}
+
 	Model::PostDraw();
 
 	// スプライト描画前処理

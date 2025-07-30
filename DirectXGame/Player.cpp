@@ -85,7 +85,7 @@ void Player::Draw() {
 	}
 }
 
-Vector3 Player::GetWorldPosition() {
+Vector3 Player::GetWorldPosition() const {
 	// ワールド座標を取得
 	Vector3 WorldPos;
 	WorldPos.x = worldTransform_.translation_.x;

@@ -5,6 +5,7 @@
 using namespace KamataEngine;
 
 class Player;
+class GameScene;
 
 class Enemy {
 public:
@@ -70,5 +71,5 @@ private:
 
 	bool isCollisionDisabled_ = false;
 
-	
+	GameScene* gameScene_ = nullptr;
 };

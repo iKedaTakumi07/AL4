@@ -9,6 +9,7 @@
 #include "Player.h"
 #include "Skydome.h"
 #include <vector>
+#include "HitEffect.h"
 
 using namespace KamataEngine;
 
@@ -37,6 +38,8 @@ public:
 	void ChangePhase();
 
 	bool isFinished() const { return finished_; };
+
+	void CreateEffect(const Vector3& position);
 
 public:
 	std::vector<std::vector<WorldTransform*>> worldTransformBlocks_;
@@ -89,4 +92,6 @@ public:
 	Fade* fade_ = nullptr;
 
 	bool finished_ = false;
+
+	std::list<HitEffect*> hitEffects_;
 };

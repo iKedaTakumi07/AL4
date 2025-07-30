@@ -6,7 +6,7 @@ using namespace KamataEngine;
 
 class HitEffect {
 public:
-	void Initialize();
+	void Initialize(const Vector3 &position);
 
 	void Update();
 
@@ -16,8 +16,16 @@ public:
 
 	static void SetCamera(Camera* camera) { camera_ = camera; };
 
+	static HitEffect* Create(const Vector3& position);
+
+
+
 private:
 	static Model* model_;
 
 	static Camera* camera_;
+
+	WorldTransform circleWorldTransform_;
+
+	ObjectColor objectColor_;
 };
