@@ -31,6 +31,8 @@ public:
 
 	bool IsCollisionDisabled() const { return isCollisionDisabled_; };
 
+	void SetGameScene(GameScene* gameScene) { gameScene_ = gameScene; }
+
 private:
 	// トランスフォーム
 	WorldTransform worldTransform_;

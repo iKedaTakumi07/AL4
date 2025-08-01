@@ -20,7 +20,12 @@ void HitEffect::Initialize(const Vector3& position) {
 
 void HitEffect::Update() { WorldtransformUpdate(circleWorldTransform_); }
 
-void HitEffect::Draw() { model_->Draw(circleWorldTransform_, *camera_, &objectColor_); }
+void HitEffect::Draw() {
+	assert(model_);
+	assert(camera_);
+
+	model_->Draw(circleWorldTransform_, *camera_, &objectColor_);
+}
 
 HitEffect* HitEffect::Create(const Vector3& position) {
 

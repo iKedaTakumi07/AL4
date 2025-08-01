@@ -84,7 +84,7 @@ void GameScene::Initialize() { /*初期化を書く*/
 		Enemy* newEnemy = new Enemy();
 		Vector3 enemyPosition = mapChipField_->GetMapChipPositionByIndex(11 + i * 2, 18);
 		newEnemy->Initialize(modelEnemy_, &camera_, enemyPosition);
-
+		newEnemy->SetGameScene(this);
 		enemies_.push_back(newEnemy);
 	}
 
@@ -95,7 +95,7 @@ void GameScene::Initialize() { /*初期化を書く*/
 	fade_->Initialize();
 	fade_->Start(Fade::Status::FadeIn, 1.0f);
 
-	modelHitEffect = Model::CreateFromOBJ("attack_effect");
+	modelHitEffect = Model::CreateFromOBJ("particle");
 	HitEffect::SetModel(modelHitEffect);
 	HitEffect::SetCamera(&camera_);
 }
