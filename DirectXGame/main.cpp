@@ -1,16 +1,19 @@
 #include "GameScene.h"
 #include "KamataEngine.h"
+#include "SelectGame.h"
 #include "TitleScene.h"
 #include <Windows.h>
 
 TitleScene* titleScene = nullptr;
 GameScene* gameScene = nullptr;
+SelectGame* selectScene = nullptr;
 using namespace KamataEngine;
 
 enum class Scene {
 	kunknown = 0,
 
 	kTitle,
+	kSelect,
 	kGame,
 };
 
@@ -22,14 +25,24 @@ void ChangeScene() {
 
 	case Scene::kTitle:
 		if (titleScene->isFinished()) {
-			scene = Scene::kGame;
+			scene = Scene::kSelect;
 			delete titleScene;
 			titleScene = nullptr;
-			gameScene = new GameScene;
-			gameScene->Initialize();
+			selectScene = new SelectGame;
+			selectScene->Initialize();
 		}
 
 		break;
+	case Scene::kSelect:
+		if (titleScene->isFinished()) {
+			scene = Scene::kGame;
+			delete selectScene;
+			selectScene = nullptr;
+			gameScene = new GameScene;
+			gameScene->Initialize();
+		}
+		break;
+
 	case Scene::kGame:
 		if (gameScene->isFinished()) {
 			scene = Scene::kTitle;
@@ -49,6 +62,9 @@ void UpdateScene() {
 		titleScene->Update();
 
 		break;
+	case Scene::kSelect:
+		selectScene->Update();
+		break;
 	case Scene::kGame:
 		gameScene->Update();
 		break;
@@ -60,6 +76,9 @@ void DrawScene() {
 	case Scene::kTitle:
 		titleScene->Draw();
 
+		break;
+	case Scene::kSelect:
+		selectScene->Draw();
 		break;
 	case Scene::kGame:
 		gameScene->Draw();
@@ -123,6 +142,7 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 
 	// ゲームシーンの解放
 	delete titleScene;
+	delete selectScene;
 	delete gameScene;
 
 	// nullptrの代入
