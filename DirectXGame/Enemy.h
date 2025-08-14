@@ -1,4 +1,5 @@
 #pragma once
+
 #include "Math.h"
 #include <KamataEngine.h>
 
@@ -6,6 +7,7 @@ using namespace KamataEngine;
 
 class Player;
 class GameScene;
+class MapChipField;
 
 class Enemy {
 public:
@@ -13,6 +15,21 @@ public:
 		kUnknown = -1,
 		kWalk,
 		kDefeated,
+	};
+
+	// 左右
+	enum class LRDirection {
+		kRight,
+		kleft,
+	};
+
+	enum Corner {
+		kRightBottom,
+		kLeftBottom,
+		kRightTop,
+		KLeftTop,
+
+		KNumCorner, // 要素数
 	};
 
 	void Initialize(Model* model, Camera* camera, const Vector3& position);
@@ -30,6 +47,8 @@ public:
 	bool isDead() const { return isDead_; }
 
 	bool IsCollisionDisabled() const { return isCollisionDisabled_; };
+
+	void SetMapChipField(MapChipField* mapChipField) { mapChipFeild_ = mapChipField; };
 
 	void SetGameScene(GameScene* gameScene) { gameScene_ = gameScene; }
 
@@ -74,4 +93,44 @@ private:
 	bool isCollisionDisabled_ = false;
 
 	GameScene* gameScene_ = nullptr;
+
+	struct CollisionMapInfo {
+		bool ceiling = false;
+		bool landing = false;
+		bool hitWall = false;
+		Vector3 move;
+	};
+
+	void CheckMapCollision(CollisionMapInfo& info);
+
+	// 指定した角の計算
+	Vector3 CornerPosition(const Vector3& center, Corner Corner);
+
+	// 全方向
+	void CheckMapCollisionUP(CollisionMapInfo& info);
+	void CheckMapCollisionDown(CollisionMapInfo& info);
+	void CheckMapCollisionRight(CollisionMapInfo& info);
+	void CheckMapCollisionLeft(CollisionMapInfo& info);
+
+	// マップチップによるフィールド
+	MapChipField* mapChipFeild_ = nullptr;
+
+	static inline const float kBlank = 0.04f;
+
+	// 着地時の速度軽減率
+	static inline const float kAttenuationLanding = 0.1f;
+	// 微小な数値
+	static inline const float kGroundSearchHeight = 0.06f;
+	// 速度減衰率
+	static inline const float kAttenuationWall = 0.2f;
+
+	// 衝突判定
+	void UpdateOnWall(const CollisionMapInfo& info);
+
+	// 左右向き/角度/タイマー/旋回時間
+	LRDirection lrDirection_ = LRDirection::kleft;
+	float turnFirstRotationY_ = 0.0f;
+	float turnTimer_ = 0.0f;
+	// 旋回時間
+	static inline const float kTimeTurn = 0.5f;
 };

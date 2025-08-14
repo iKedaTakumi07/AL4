@@ -1,8 +1,8 @@
-#include "SelectGame.h"
+#include "SelectScene.h"
 #include "Math.h"
 #include <numbers>
 using namespace KamataEngine;
-void SelectGame::Initialize() {
+void SelectScene::Initialize() {
 
 	camera_.Initialize();
 
@@ -11,23 +11,23 @@ void SelectGame::Initialize() {
 	fade_->Start(Fade::Status::FadeIn, 1.0f);
 }
 
-void SelectGame::Update() {
+void SelectScene::Update() {
 
 	switch (phase_) {
-	case SelectGame::Phase::kFadeIn:
+	case SelectScene::Phase::kFadeIn:
 		fade_->Update();
 
 		if (fade_->IsFinished()) {
 			phase_ = Phase::kMain;
 		}
 		break;
-	case SelectGame::Phase::kMain:
+	case SelectScene::Phase::kMain:
 		if (Input::GetInstance()->PushKey(DIK_SPACE)) {
 			fade_->Start(Fade::Status::FadeOut, 1.0f);
 			phase_ = Phase::kFadeOut;
 		}
 		break;
-	case SelectGame::Phase::kFadeOut:
+	case SelectScene::Phase::kFadeOut:
 		fade_->Update();
 		if (fade_->IsFinished()) {
 			finished_ = true;
@@ -39,7 +39,7 @@ void SelectGame::Update() {
 	camera_.TransferMatrix();
 }
 
-void SelectGame::Draw() {
+void SelectScene::Draw() {
 	// directXCommonインスタンスの取得
 	DirectXCommon* dxCommon = DirectXCommon::GetInstance();
 
@@ -51,7 +51,7 @@ void SelectGame::Draw() {
 	Model::PostDraw();
 }
 
-SelectGame::~SelectGame() {
+SelectScene::~SelectScene() {
 	//
 	delete fade_;
 }

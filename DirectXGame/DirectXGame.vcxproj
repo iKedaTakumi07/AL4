@@ -115,7 +115,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MapChipField.cpp" />
     <ClCompile Include="Player.cpp" />
-    <ClCompile Include="SelectGame.cpp" />
+    <ClCompile Include="SelectScene.cpp" />
     <ClCompile Include="Skydome.cpp" />
     <ClCompile Include="Math.cpp" />
     <ClCompile Include="TitleScene.cpp" />
@@ -204,7 +204,7 @@
     <ClInclude Include="HitEffect.h" />
     <ClInclude Include="MapChipField.h" />
     <ClInclude Include="Player.h" />
-    <ClInclude Include="SelectGame.h" />
+    <ClInclude Include="SelectScene.h" />
     <ClInclude Include="Skydome.h" />
     <ClInclude Include="Math.h" />
     <ClInclude Include="TitleScene.h" />

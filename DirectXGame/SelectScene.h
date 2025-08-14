@@ -3,7 +3,7 @@
 #include "KamataEngine.h"
 using namespace KamataEngine;
 
-class SelectGame {
+class SelectScene {
 public:
 	enum class Phase {
 		kFadeIn, // フェードイン
@@ -17,7 +17,7 @@ public:
 
 	void Draw();
 
-	~SelectGame();
+	~SelectScene();
 
 	bool isFinished() const { return finished_; };
 

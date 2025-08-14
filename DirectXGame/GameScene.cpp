@@ -80,9 +80,10 @@ void GameScene::Initialize() { /*初期化を書く*/
 
 	// 敵
 	modelEnemy_ = Model::CreateFromOBJ("enemy");
-	for (int32_t i = 0; i < 3; ++i) {
+	for (int32_t i = 0; i < 1; ++i) {
 		Enemy* newEnemy = new Enemy();
-		Vector3 enemyPosition = mapChipField_->GetMapChipPositionByIndex(11 + i * 10, 18);
+		Vector3 enemyPosition = mapChipField_->GetMapChipPositionByIndex(25, 18);
+		newEnemy->SetMapChipField(mapChipField_);
 		newEnemy->Initialize(modelEnemy_, &camera_, enemyPosition);
 		newEnemy->SetGameScene(this);
 		enemies_.push_back(newEnemy);

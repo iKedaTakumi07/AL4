@@ -2,8 +2,10 @@
 
 #include "Enemy.h"
 #include "GameScene.h"
+#include "MapChipField.h"
 #include "Math.h"
 #include "Player.h"
+#include <algorithm>
 #include <cassert>
 #include <numbers>
 
@@ -51,11 +53,18 @@ void Enemy::Update() {
 		behaviorRequest_ = Behavior::kUnknown;
 	}
 
+	CollisionMapInfo collisionMapInfo;
+	collisionMapInfo.move = velocity_;
+
 	switch (behavior_) {
 	case Enemy::Behavior::kWalk:
 
 		// 移動
 		worldTransform_.translation_ += velocity_;
+
+		CheckMapCollision(collisionMapInfo);
+
+		UpdateOnWall(collisionMapInfo);
 
 		// タイマーの更新
 		walkTimer_ += 1.0f / 60.0f;
@@ -68,6 +77,11 @@ void Enemy::Update() {
 		WorldtransformUpdate(worldTransform_);
 		break;
 	case Enemy::Behavior::kDefeated:
+
+		CheckMapCollision(collisionMapInfo);
+
+		UpdateOnWall(collisionMapInfo);
+
 		counter_ += 1.0f / 60.0f;
 
 		worldTransform_.rotation_.y += 0.3f;
@@ -79,6 +93,160 @@ void Enemy::Update() {
 		}
 
 		break;
+	}
+
+	// 旋回制限
+	if (turnTimer_ > 0.0f) {
+		turnTimer_ = std::max(turnTimer_ - (1.0f / 60.0f), 0.0f);
+
+		float destinationRotationYTable[] = {std::numbers::pi_v<float> / 2.0f, std::numbers::pi_v<float> * 3.0f / 2.0f};
+		// 状況に応じた角度を取得する
+		float destiationRotationY = destinationRotationYTable[static_cast<uint32_t>(lrDirection_)];
+		// 自キャラの角度を設定すル
+		worldTransform_.rotation_.y = easeInOutQuint(destiationRotationY, turnFirstRotationY_, turnTimer_ / kTimeTurn);
+	}
+}
+
+void Enemy::CheckMapCollision(CollisionMapInfo& info) {
+
+	CheckMapCollisionRight(info);
+	CheckMapCollisionLeft(info);
+}
+
+Vector3 Enemy::CornerPosition(const Vector3& center, Corner corner) {
+	Vector3 offsetTable[KNumCorner] = {
+	    {+kWidth / 2.0f, -kHeight / 2.0f, 0},
+        {-kWidth / 2.0f, -kHeight / 2.0f, 0},
+        {+kWidth / 2.0f, +kHeight / 2.0f, 0},
+        {-kWidth / 2.0f, +kHeight / 2.0f, 0}
+    };
+
+	return center + offsetTable[static_cast<uint32_t>(corner)];
+}
+
+void Enemy::UpdateOnWall(const CollisionMapInfo& info) {
+
+	if (info.hitWall) {
+		velocity_.x *= -1.0f;
+	}
+}
+
+void Enemy::CheckMapCollisionRight(CollisionMapInfo& info) {
+
+	// 右移動あり?
+	if (info.move.x <= 0) {
+		return;
+	}
+
+	std::array<Vector3, KNumCorner> positionNew;
+
+	for (uint32_t i = 0; i < positionNew.size(); ++i) {
+		positionNew[i] = CornerPosition(worldTransform_.translation_ + info.move, static_cast<Corner>(i));
+	}
+
+	MapChipType mapChipType;
+	MapChipType mapChipTypeNext;
+
+	// 真下の当たり班テオ
+	bool hit = false;
+
+	// 右上の判定
+	MapChipField::IndexSet indexSet;
+	indexSet = mapChipFeild_->GetMapChipIndexSetByPosition(positionNew[kRightTop]);
+	mapChipType = mapChipFeild_->GetMapChipTypeByIndex(indexSet.xindex, indexSet.yindex);
+	mapChipTypeNext = mapChipFeild_->GetMapChipTypeByIndex(indexSet.xindex - 1, indexSet.yindex);
+	if (mapChipType == MapChipType::kBlock && mapChipTypeNext != MapChipType::kBlock) {
+		hit = true;
+	}
+	// 右下点の判定
+
+	indexSet = mapChipFeild_->GetMapChipIndexSetByPosition(positionNew[kRightBottom]);
+	mapChipType = mapChipFeild_->GetMapChipTypeByIndex(indexSet.xindex, indexSet.yindex);
+	mapChipTypeNext = mapChipFeild_->GetMapChipTypeByIndex(indexSet.xindex - 1, indexSet.yindex);
+	if (mapChipType == MapChipType::kBlock && mapChipTypeNext != MapChipType::kBlock) {
+		hit = true;
+	}
+
+	if (hit) {
+		MapChipField::IndexSet indexSetNow;
+		indexSetNow = mapChipFeild_->GetMapChipIndexSetByPosition(worldTransform_.translation_ + Vector3(+kWidth / 2.0f, 0, 0));
+		if (indexSetNow.xindex != indexSet.xindex) {
+
+			// めり込み排除
+			indexSet = mapChipFeild_->GetMapChipIndexSetByPosition(worldTransform_.translation_ + info.move + Vector3(+kWidth / 2.0f, 0, 0));
+			MapChipField::Rect rect = mapChipFeild_->GetRectByindex(indexSet.xindex, indexSet.yindex);
+			info.move.x = std::max(0.0f, rect.left - worldTransform_.translation_.x - (kWidth / 2.0f + kBlank));
+			// 壁に当たったことを判定結果に記録
+			info.hitWall = true;
+		}
+
+		// 向き
+		if (lrDirection_ != LRDirection::kleft) {
+			lrDirection_ = LRDirection::kleft;
+
+			// 旋回時の向き/旋回タイマー
+			turnFirstRotationY_ = worldTransform_.rotation_.y;
+			turnTimer_ = kTimeTurn;
+		}
+	}
+}
+
+void Enemy::CheckMapCollisionLeft(CollisionMapInfo& info) {
+	// 左移動あり?
+	if (info.move.x >= 0) {
+		return;
+	}
+
+	std::array<Vector3, KNumCorner> positionNew;
+
+	for (uint32_t i = 0; i < positionNew.size(); ++i) {
+		positionNew[i] = CornerPosition(worldTransform_.translation_ + info.move, static_cast<Corner>(i));
+	}
+
+	MapChipType mapChipType;
+	MapChipType mapChipTypeNext;
+
+	// 真下の当たり班テオ
+	bool hit = false;
+
+	// 左上の判定
+	MapChipField::IndexSet indexSet;
+	indexSet = mapChipFeild_->GetMapChipIndexSetByPosition(positionNew[KLeftTop]);
+	mapChipType = mapChipFeild_->GetMapChipTypeByIndex(indexSet.xindex, indexSet.yindex);
+	mapChipTypeNext = mapChipFeild_->GetMapChipTypeByIndex(indexSet.xindex + 1, indexSet.yindex);
+	if (mapChipType == MapChipType::kBlock && mapChipTypeNext != MapChipType::kBlock) {
+		hit = true;
+	}
+	// 左下点の判定
+
+	indexSet = mapChipFeild_->GetMapChipIndexSetByPosition(positionNew[kLeftBottom]);
+	mapChipType = mapChipFeild_->GetMapChipTypeByIndex(indexSet.xindex, indexSet.yindex);
+	mapChipTypeNext = mapChipFeild_->GetMapChipTypeByIndex(indexSet.xindex + 1, indexSet.yindex);
+	if (mapChipType == MapChipType::kBlock && mapChipTypeNext != MapChipType::kBlock) {
+		hit = true;
+	}
+
+	if (hit) {
+
+		MapChipField::IndexSet indexSetNow;
+		indexSetNow = mapChipFeild_->GetMapChipIndexSetByPosition(worldTransform_.translation_ + Vector3(-kWidth / 2.0f, 0, 0));
+
+		if (indexSetNow.xindex != indexSet.xindex) {
+			// めり込み排除
+			indexSet = mapChipFeild_->GetMapChipIndexSetByPosition(worldTransform_.translation_ + info.move + Vector3(-kWidth / 2.0f, 0, 0));
+			MapChipField::Rect rect = mapChipFeild_->GetRectByindex(indexSet.xindex, indexSet.yindex);
+			info.move.x = std::max(0.0f, rect.left - worldTransform_.translation_.x - (kWidth / 2.0f + kBlank));
+			// 壁に当たったことを判定結果に記録
+			info.hitWall = true;
+
+			if (lrDirection_ != LRDirection::kRight) {
+				lrDirection_ = LRDirection::kRight;
+
+				// 旋回時の向き/旋回タイマー
+				turnFirstRotationY_ = worldTransform_.rotation_.y;
+				turnTimer_ = kTimeTurn;
+			}
+		}
 	}
 }
 

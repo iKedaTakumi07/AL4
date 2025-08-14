@@ -1,12 +1,12 @@
 #include "GameScene.h"
 #include "KamataEngine.h"
-#include "SelectGame.h"
+#include "SelectScene.h"
 #include "TitleScene.h"
 #include <Windows.h>
 
 TitleScene* titleScene = nullptr;
 GameScene* gameScene = nullptr;
-SelectGame* selectScene = nullptr;
+SelectScene* selectScene = nullptr;
 using namespace KamataEngine;
 
 enum class Scene {
@@ -28,13 +28,13 @@ void ChangeScene() {
 			scene = Scene::kSelect;
 			delete titleScene;
 			titleScene = nullptr;
-			selectScene = new SelectGame;
+			selectScene = new SelectScene();
 			selectScene->Initialize();
 		}
 
 		break;
 	case Scene::kSelect:
-		if (titleScene->isFinished()) {
+		if (selectScene->isFinished()) {
 			scene = Scene::kGame;
 			delete selectScene;
 			selectScene = nullptr;
@@ -147,6 +147,7 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 
 	// nullptrの代入
 	gameScene = nullptr;
+
 	// エンジンの終了
 	KamataEngine::Finalize();
 	return 0;
