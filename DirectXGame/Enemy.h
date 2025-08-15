@@ -124,8 +124,18 @@ private:
 	// 速度減衰率
 	static inline const float kAttenuationWall = 0.2f;
 
+	// 着地状態フラグ
+	bool onGround_ = true;
+
+	// 重力加速度/最大落下速度/ジャンプ初速
+	static inline const float kGravityAcceleration = 0.98f;
+	static inline const float kLimitFallSpeed = 0.5f;
+	static inline const float kJumpAcceleration = 20.0f;
+
 	// 衝突判定
 	void UpdateOnWall(const CollisionMapInfo& info);
+	// 設置状態の切り替え
+	void UpDateOnGround(const CollisionMapInfo& info);
 
 	// 左右向き/角度/タイマー/旋回時間
 	LRDirection lrDirection_ = LRDirection::kleft;
