@@ -1,3 +1,4 @@
+#include "CleraScene.h"
 #include "GameScene.h"
 #include "KamataEngine.h"
 #include "SelectScene.h"
@@ -7,6 +8,7 @@
 TitleScene* titleScene = nullptr;
 GameScene* gameScene = nullptr;
 SelectScene* selectScene = nullptr;
+CleraScene* cleraScene = nullptr;
 using namespace KamataEngine;
 
 enum class Scene {
@@ -15,6 +17,7 @@ enum class Scene {
 	kTitle,
 	kSelect,
 	kGame,
+	kClera,
 };
 
 // ゲームスクリーン
@@ -50,9 +53,26 @@ void ChangeScene() {
 			gameScene = nullptr;
 			titleScene = new TitleScene();
 			titleScene->Initialize();
-
-			break;
 		}
+		if (gameScene->isCleraed()) {
+			scene = Scene::kClera;
+			delete gameScene;
+			gameScene = nullptr;
+			cleraScene = new CleraScene();
+			cleraScene->Initialize();
+		}
+
+		break;
+	case Scene::kClera:
+		if (cleraScene->isFinished()) {
+			scene = Scene::kSelect;
+			delete cleraScene;
+			cleraScene = nullptr;
+			selectScene = new SelectScene;
+			selectScene->Initialize();
+		}
+
+		break;
 	}
 }
 
@@ -68,6 +88,9 @@ void UpdateScene() {
 	case Scene::kGame:
 		gameScene->Update();
 		break;
+	case Scene::kClera:
+		cleraScene->Update();
+		break;
 	}
 }
 
@@ -82,6 +105,9 @@ void DrawScene() {
 		break;
 	case Scene::kGame:
 		gameScene->Draw();
+		break;
+	case Scene::kClera:
+		cleraScene->Draw();
 		break;
 	}
 }
@@ -144,6 +170,7 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 	delete titleScene;
 	delete selectScene;
 	delete gameScene;
+	delete cleraScene;
 
 	// nullptrの代入
 	gameScene = nullptr;

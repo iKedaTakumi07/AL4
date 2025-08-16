@@ -3,13 +3,14 @@
 #include "DeathParticles.h"
 #include "Enemy.h"
 #include "Fade.h"
+#include "Goal.h"
+#include "HitEffect.h"
 #include "KamataEngine.h"
 #include "MapChipField.h"
 #include "Math.h"
 #include "Player.h"
 #include "Skydome.h"
 #include <vector>
-#include "HitEffect.h"
 
 using namespace KamataEngine;
 
@@ -39,6 +40,8 @@ public:
 
 	bool isFinished() const { return finished_; };
 
+	bool isCleraed() const { return isGoal_; };
+
 	void CreateEffect(const Vector3& position);
 
 public:
@@ -52,6 +55,7 @@ public:
 	Model* modelEnemy_ = nullptr;
 	Model* modelDeathParticles_ = nullptr;
 	Model* modelHitEffect = nullptr;
+	Model* goalmodel_ = nullptr;
 
 	// 背景
 	Skydome* skydome_ = nullptr;
@@ -92,6 +96,10 @@ public:
 	Fade* fade_ = nullptr;
 
 	bool finished_ = false;
+
+	Goal* goal = nullptr;
+
+	bool isGoal_ = false;
 
 	std::list<HitEffect*> hitEffects_;
 };

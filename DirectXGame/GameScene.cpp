@@ -32,6 +32,10 @@ GameScene::~GameScene() {
 	for (HitEffect* hitEffect : hitEffects_) {
 		delete hitEffect;
 	}
+
+	delete fade_;
+	delete goal;
+	delete goalmodel_;
 }
 
 void GameScene::Initialize() { /*初期化を書く*/
@@ -99,6 +103,13 @@ void GameScene::Initialize() { /*初期化を書く*/
 	modelHitEffect = Model::CreateFromOBJ("particle");
 	HitEffect::SetModel(modelHitEffect);
 	HitEffect::SetCamera(&camera_);
+
+	// ゴール
+	goal = new Goal();
+
+	goalmodel_ = Model::CreateFromOBJ("enemy");
+	Vector3 goalPosition = mapChipField_->GetMapChipPositionByIndex(4, 18);
+	goal->Initialize(goalmodel_, &camera_, goalPosition);
 }
 
 void GameScene::GenerateBlocks() {
@@ -131,7 +142,7 @@ void GameScene::CheckAllCollisions() {
 
 #pragma region
 	{
-		AABB aabb1, aabb2;
+		AABB aabb1, aabb2, aabb3;
 
 		aabb1 = player_->GetAABB();
 
@@ -149,6 +160,12 @@ void GameScene::CheckAllCollisions() {
 				// 敵キャラの衝突判定を呼び出す
 				enemy->OnCollision(player_);
 			}
+		}
+
+		aabb3 = goal->GetAABB();
+
+		if (IsCollision(aabb1, aabb3)) {
+			isGoal_ = true;
 		}
 	}
 }
@@ -204,6 +221,8 @@ void GameScene::Update() { /* 更新勝利を書く */
 
 		// 自キャラの更新
 		player_->Update();
+
+		goal->Update();
 
 		for (Enemy* enemy : enemies_) {
 			enemy->Update();
@@ -338,6 +357,8 @@ void GameScene::Draw() {
 
 	// 背景
 	skydome_->Draw();
+
+	goal->Draw();
 
 	// 敵
 	for (Enemy* enemy : enemies_) {
