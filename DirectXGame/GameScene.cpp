@@ -61,7 +61,12 @@ void GameScene::Initialize() { /*初期化を書く*/
 
 	// マップチップ
 	mapChipField_ = new MapChipField;
-	mapChipField_->LoadMapChipCsv("Resources/map.csv");
+
+	if (stageid_ == 0) {
+		mapChipField_->LoadMapChipCsv("Resources/map.csv");
+	} else if (stageid_ == 1) {
+		mapChipField_->LoadMapChipCsv("Resources/map2.csv");
+	}
 	GenerateBlocks();
 
 	// プレイヤー

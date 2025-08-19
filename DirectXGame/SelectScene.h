@@ -11,7 +11,8 @@ public:
 		kFadeOut // フェードアウト
 	};
 
-	enum class Stage {
+	enum Stage {
+		ksousa,
 		k1_1,
 		k1_2,
 
@@ -27,6 +28,8 @@ public:
 
 	bool isFinished() const { return finished_; };
 
+	int GetStageNumber() { return stageNumber_; };
+
 private:
 	// カメラ
 	Camera camera_;
@@ -39,5 +42,7 @@ private:
 
 	Phase phase_ = Phase::kFadeIn;
 
-	Stage stagenumber = Stage::k1_1;
+	Stage Stage_ = Stage::k1_1;
+
+	int stageNumber_;
 };

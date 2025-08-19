@@ -22,10 +22,41 @@ void SelectScene::Update() {
 		}
 		break;
 	case SelectScene::Phase::kMain:
-		if (Input::GetInstance()->PushKey(DIK_SPACE)) {
-			fade_->Start(Fade::Status::FadeOut, 1.0f);
-			phase_ = Phase::kFadeOut;
+
+		switch (Stage_) {
+		case SelectScene::ksousa:
+			if (Input::GetInstance()->PushKey(DIK_D)) {
+				Stage_ = SelectScene::k1_1;
+			}
+			break;
+		case SelectScene::k1_1:
+			if (Input::GetInstance()->PushKey(DIK_A)) {
+				Stage_ = SelectScene::ksousa;
+			}
+
+			if (Input::GetInstance()->PushKey(DIK_SPACE)) {
+				stageNumber_ = 0;
+				fade_->Start(Fade::Status::FadeOut, 1.0f);
+				phase_ = Phase::kFadeOut;
+			}
+			if (Input::GetInstance()->PushKey(DIK_D)) {
+				Stage_ = SelectScene::k1_2;
+			}
+
+			break;
+		case SelectScene::k1_2:
+
+			if (Input::GetInstance()->PushKey(DIK_A)) {
+				Stage_ = SelectScene::k1_1;
+			}
+			if (Input::GetInstance()->PushKey(DIK_SPACE)) {
+				stageNumber_ = 1;
+				fade_->Start(Fade::Status::FadeOut, 1.0f);
+				phase_ = Phase::kFadeOut;
+			}
+			break;
 		}
+
 		break;
 	case SelectScene::Phase::kFadeOut:
 		fade_->Update();

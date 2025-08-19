@@ -23,6 +23,9 @@ enum class Scene {
 // ゲームスクリーン
 Scene scene = Scene::kunknown;
 
+// ステージナンバー(解決策を見つけろ)
+int number = 0;
+
 void ChangeScene() {
 	switch (scene) {
 
@@ -38,10 +41,13 @@ void ChangeScene() {
 		break;
 	case Scene::kSelect:
 		if (selectScene->isFinished()) {
+			number = selectScene->GetStageNumber();
+
 			scene = Scene::kGame;
 			delete selectScene;
 			selectScene = nullptr;
 			gameScene = new GameScene;
+			gameScene->SetStage(number);
 			gameScene->Initialize();
 		}
 		break;

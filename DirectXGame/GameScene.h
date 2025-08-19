@@ -46,6 +46,8 @@ public:
 
 	void CreateEffect(const Vector3& position);
 
+	void SetStage(int stageid) { stageid_ = stageid; };
+
 public:
 	std::vector<std::vector<WorldTransform*>> worldTransformBlocks_;
 
@@ -105,22 +107,21 @@ public:
 
 	std::list<HitEffect*> hitEffects_;
 
-	/*int stageid_;
-	Vector3 playerPosition;*/
+	int stageid_;
+	/*Vector3 playerPosition;*/
 
-	//struct EnemyInfo {
+	// struct EnemyInfo {
 	//	std::string type;
 	//	Vector3 position;
-	//};
+	// };
 
-	//struct StageInfo {
+	// struct StageInfo {
 	//	Vector3 PlayerSpawnPos;
 	//	std::vector<EnemyInfo> enemies;
-	//};
+	// };
 
-	//std::vector<StageInfo> stages = {
- //   {{2.0f,0.0f,18.0f}, {{"EnemyA",{25.0f,0.0f,2.0f,}},{"EnemyA",{40.0f,0.0f,2.0f}}}},/*1-1*/
- //   {{2.0f,0.0f,18.0f}, {{"EnemyA",{25.0f,0.0f,2.0f,}},{"EnemyA",{40.0f,0.0f,2.0f}}}},
- //   };
-
+	// std::vector<StageInfo> stages = {
+	//   {{2.0f,0.0f,18.0f}, {{"EnemyA",{25.0f,0.0f,2.0f,}},{"EnemyA",{40.0f,0.0f,2.0f}}}},/*1-1*/
+	//   {{2.0f,0.0f,18.0f}, {{"EnemyA",{25.0f,0.0f,2.0f,}},{"EnemyA",{40.0f,0.0f,2.0f}}}},
+	//   };
 };
