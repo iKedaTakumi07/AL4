@@ -3,6 +3,7 @@
 #include "Math.h"
 
 using namespace KamataEngine;
+class Player;
 
 class Goal {
 public:
@@ -20,6 +21,8 @@ public:
 	Vector3 GetWorldPosition() const;
 
 	bool isCleraed() const { return isGoal_; };
+
+	void OnCollision(const Player* enemy);
 
 private:
 	// トランスフォーム

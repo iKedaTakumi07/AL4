@@ -38,6 +38,8 @@ GameScene::~GameScene() {
 	delete goalmodel_;
 }
 
+// void GameScene::IntStage(int stageId) {}
+
 void GameScene::Initialize() { /*初期化を書く*/
 
 	// ゲームプレイフェーズから開始
@@ -165,7 +167,7 @@ void GameScene::CheckAllCollisions() {
 		aabb3 = goal->GetAABB();
 
 		if (IsCollision(aabb1, aabb3)) {
-			isGoal_ = true;
+			goal->OnCollision(player_);
 		}
 	}
 }
@@ -182,6 +184,9 @@ void GameScene::ChangePhase() {
 
 			deathParticles_ = new DeathParticles;
 			deathParticles_->Initialize(modelDeathParticles_, &camera_, dethParticlesPosition);
+		}
+		if (goal->isCleraed()) {
+			phase_ = Phase::kFadeOut;
 		}
 
 		break;
@@ -295,8 +300,8 @@ void GameScene::Update() { /* 更新勝利を書く */
 			camera_.UpdateMatrix();
 		}
 
-		//		UpdateBlocks();
-		// ブロックの更新
+		// UpdateBlocks();
+		//  ブロックの更新
 		for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) {
 			for (WorldTransform*& worldTransformBlock : worldTransformBlockLine) {
 
@@ -329,7 +334,10 @@ void GameScene::Update() { /* 更新勝利を書く */
 		break;
 	case Phase::kFadeOut:
 		fade_->Update();
-		if (fade_->IsFinished()) {
+		if (fade_->IsFinished() && goal->isCleraed()) {
+			isGoal_ = true;
+		}
+		if (fade_->IsFinished() && player_->IsDead()) {
 			finished_ = true;
 		}
 

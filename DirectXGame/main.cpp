@@ -53,8 +53,7 @@ void ChangeScene() {
 			gameScene = nullptr;
 			titleScene = new TitleScene();
 			titleScene->Initialize();
-		}
-		if (gameScene->isCleraed()) {
+		} else if (gameScene->isCleraed()) {
 			scene = Scene::kClera;
 			delete gameScene;
 			gameScene = nullptr;

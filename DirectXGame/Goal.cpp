@@ -1,4 +1,6 @@
 #include "Goal.h"
+#include "Player.h"
+#include <cassert>
 
 void Goal::Initialize(Model* model, Camera* camera, const Vector3& position) {
 	// nullポインタチェック
@@ -42,3 +44,9 @@ void Goal::Draw() {
 	// 描画
 	model_->Draw(worldTransform_, *camera_);
 }
+
+void Goal::OnCollision(const Player* enemy) {
+	isGoal_ = true;
+
+	(void)enemy;
+};
