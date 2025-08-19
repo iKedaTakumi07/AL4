@@ -48,11 +48,11 @@ void ChangeScene() {
 
 	case Scene::kGame:
 		if (gameScene->isFinished()) {
-			scene = Scene::kTitle;
+			scene = Scene::kGame;
 			delete gameScene;
 			gameScene = nullptr;
-			titleScene = new TitleScene();
-			titleScene->Initialize();
+			gameScene = new GameScene();
+			gameScene->Initialize();
 		} else if (gameScene->isCleraed()) {
 			scene = Scene::kClera;
 			delete gameScene;
