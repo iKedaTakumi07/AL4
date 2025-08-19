@@ -11,6 +11,12 @@ public:
 		kFadeOut // フェードアウト
 	};
 
+	enum class Stage {
+		k1_1,
+		k1_2,
+
+	};
+
 	void Initialize();
 
 	void Update();
@@ -32,4 +38,6 @@ private:
 	Fade* fade_ = nullptr;
 
 	Phase phase_ = Phase::kFadeIn;
+
+	Stage stagenumber = Stage::k1_1;
 };

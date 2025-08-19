@@ -23,7 +23,7 @@ public:
 	// 初期化
 	void Initialize();
 
-	void IntStage(int stageId);
+	/*void IntStage(int stageId);*/
 
 	// 更新
 	void Update();
@@ -105,19 +105,22 @@ public:
 
 	std::list<HitEffect*> hitEffects_;
 
-	struct EnemyInfo {
-		std::string type;
-		Vector3 position;
-	};
+	/*int stageid_;
+	Vector3 playerPosition;*/
 
-	struct StageInfo {
-		Vector3 PlayerSpawnPos;
-		std::vector<EnemyInfo> enemies;
-	};
+	//struct EnemyInfo {
+	//	std::string type;
+	//	Vector3 position;
+	//};
 
-	std::vector<StageInfo> stages = {
-    {{2.0f,0.0f,18.0f}, {{"EnemyA",{25.0f,0.0f,2.0f,}},{"EnemyA",{40.0f,0.0f,2.0f}}}},/*1-1*/
-    {{2.0f,0.0f,18.0f}, {{"EnemyA",{25.0f,0.0f,2.0f,}},{"EnemyA",{40.0f,0.0f,2.0f}}}},
-    };
+	//struct StageInfo {
+	//	Vector3 PlayerSpawnPos;
+	//	std::vector<EnemyInfo> enemies;
+	//};
+
+	//std::vector<StageInfo> stages = {
+ //   {{2.0f,0.0f,18.0f}, {{"EnemyA",{25.0f,0.0f,2.0f,}},{"EnemyA",{40.0f,0.0f,2.0f}}}},/*1-1*/
+ //   {{2.0f,0.0f,18.0f}, {{"EnemyA",{25.0f,0.0f,2.0f,}},{"EnemyA",{40.0f,0.0f,2.0f}}}},
+ //   };
 
 };

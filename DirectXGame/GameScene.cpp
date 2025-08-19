@@ -1,6 +1,7 @@
 #include "GameScene.h"
 #include "HitEffect.h"
 #include "Math.h"
+#include <cassert>
 
 using namespace KamataEngine;
 
@@ -37,8 +38,6 @@ GameScene::~GameScene() {
 	delete goal;
 	delete goalmodel_;
 }
-
-// void GameScene::IntStage(int stageId) {}
 
 void GameScene::Initialize() { /*初期化を書く*/
 
