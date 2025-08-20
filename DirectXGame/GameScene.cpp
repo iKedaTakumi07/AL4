@@ -90,11 +90,35 @@ void GameScene::Initialize() { /*初期化を書く*/
 
 	// 敵
 	modelEnemy_ = Model::CreateFromOBJ("enemy");
-	for (int32_t i = 0; i < 1; ++i) {
+
+	std::vector<Vector3>* enemyPosition = nullptr;
+	switch (stageid_) {
+	case 0:
+		enemyPosition = &stage1Enemies;
+		break;
+	case 1:
+		enemyPosition = &stage2Enemies;
+		break;
+	//default:
+	//	assert(enemyPosition);
+	//	enemyPosition = &stage1Enemies;
+		break;
+	}
+
+	/*for (int32_t i = 0; i < 1; ++i) {
+	    Enemy* newEnemy = new Enemy();
+	    Vector3 enemyPosition = mapChipField_->GetMapChipPositionByIndex(25, 2);
+	    newEnemy->SetMapChipField(mapChipField_);
+	    newEnemy->Initialize(modelEnemy_, &camera_, enemyPosition);
+	    newEnemy->SetGameScene(this);
+	    enemies_.push_back(newEnemy);
+	}*/
+
+	for (auto& pos : *enemyPosition) {
 		Enemy* newEnemy = new Enemy();
-		Vector3 enemyPosition = mapChipField_->GetMapChipPositionByIndex(25, 2);
+		Vector3 spawnPos = mapChipField_->GetMapChipPositionByIndex(static_cast<uint32_t>(pos.x), static_cast<uint32_t>(pos.y));
 		newEnemy->SetMapChipField(mapChipField_);
-		newEnemy->Initialize(modelEnemy_, &camera_, enemyPosition);
+		newEnemy->Initialize(modelEnemy_, &camera_, spawnPos);
 		newEnemy->SetGameScene(this);
 		enemies_.push_back(newEnemy);
 	}
