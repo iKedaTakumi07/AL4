@@ -54,9 +54,6 @@ void Enemy::Update() {
 	}
 
 	CollisionMapInfo collisionMapInfo;
-	collisionMapInfo.move = velocity_;
-	collisionMapInfo.landing = false;
-	collisionMapInfo.hitWall = false;
 
 	switch (behavior_) {
 	case Enemy::Behavior::kWalk:
@@ -66,15 +63,19 @@ void Enemy::Update() {
 			// 移動
 			worldTransform_.translation_ += velocity_;
 		} else {
+
 			// 空中
+			// 移動
+			worldTransform_.translation_ += velocity_;
 			// 落下速度
 			velocity_.y += -kGravityAcceleration / 60.0f;
 			// 落下速度制限
 			velocity_.y = std::max(velocity_.y, -kLimitFallSpeed);
-
-			// 移動
-			worldTransform_.translation_ += velocity_;
 		}
+
+		collisionMapInfo.move = velocity_;
+		collisionMapInfo.landing = false;
+		collisionMapInfo.hitWall = false;
 
 		CheckMapCollision(collisionMapInfo);
 
@@ -93,6 +94,10 @@ void Enemy::Update() {
 		WorldtransformUpdate(worldTransform_);
 		break;
 	case Enemy::Behavior::kDefeated:
+
+		collisionMapInfo.move = velocity_;
+		collisionMapInfo.landing = false;
+		collisionMapInfo.hitWall = false;
 
 		CheckMapCollision(collisionMapInfo);
 

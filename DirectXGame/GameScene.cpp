@@ -74,7 +74,7 @@ void GameScene::Initialize() { /*初期化を書く*/
 
 	modelPlayer_ = Model::CreateFromOBJ("player");
 	modelPlayerAttck_ = Model::CreateFromOBJ("attack_effect");
-	Vector3 playerPosition = mapChipField_->GetMapChipPositionByIndex(2, 18);
+	Vector3 playerPosition = mapChipField_->GetMapChipPositionByIndex(2, 13);
 
 	player_->SetMapChipField(mapChipField_);
 	player_->Initialize(modelPlayer_, modelPlayerAttck_, &camera_, playerPosition);
