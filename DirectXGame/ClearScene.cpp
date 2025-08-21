@@ -3,14 +3,17 @@
 #include <numbers>
 
 using namespace KamataEngine;
+
 void ClearScene::Initialize() {
 
-	modelClearFont_ = Model::CreateFromOBJ("titleFont", true);
+	modelClearFont_ = Model::CreateFromOBJ("ClearFont");
 
 	camera_.Initialize();
 
 	worldTransformClearFont_.Initialize();
+
 	const float kClearScale = 2.0f;
+
 	worldTransformClearFont_.scale_ = {kClearScale, kClearScale, kClearScale};
 	worldTransformClearFont_.translation_.y = 0.95f * std::numbers::pi_v<float>;
 
@@ -62,7 +65,7 @@ void ClearScene::Draw() {
 	Model::PreDraw(dxCommon->GetCommandList());
 
 	// 描画
-	// modelClearFont_->Draw(worldTransformClearFont_, camera_);
+	modelClearFont_->Draw(worldTransformClearFont_, camera_);
 
 	fade_->Draw();
 

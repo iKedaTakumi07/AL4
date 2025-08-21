@@ -7,7 +7,7 @@ using namespace KamataEngine;
 void TitleScene::Initialize() {
 	// モデル
 	modelTitle_ = Model::CreateFromOBJ("titleFont", true);
-	modelPlayer_ = Model::CreateFromOBJ("player");
+	modelPlayer_ = Model::CreateFromOBJ("newplayer");
 
 	camera_.Initialize();
 

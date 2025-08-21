@@ -34,7 +34,7 @@ void ChangeScene() {
 			scene = Scene::kSelect;
 			delete titleScene;
 			titleScene = nullptr;
-			selectScene = new SelectScene;
+			selectScene = new SelectScene();
 			selectScene->Initialize();
 		}
 
@@ -46,7 +46,7 @@ void ChangeScene() {
 			scene = Scene::kGame;
 			delete selectScene;
 			selectScene = nullptr;
-			gameScene = new GameScene;
+			gameScene = new GameScene();
 			gameScene->SetStage(number);
 			gameScene->Initialize();
 		}
@@ -57,14 +57,15 @@ void ChangeScene() {
 			scene = Scene::kGame;
 			delete gameScene;
 			gameScene = nullptr;
-			gameScene = new GameScene;
+			gameScene = new GameScene();
 			gameScene->SetStage(number);
 			gameScene->Initialize();
-		} else if (gameScene->isCleraed()) {
+		} 
+		if (gameScene->isCleraed()) {
 			scene = Scene::kClera;
 			delete gameScene;
 			gameScene = nullptr;
-			cleraScene = new ClearScene;
+			cleraScene = new ClearScene();
 			cleraScene->Initialize();
 		}
 
@@ -104,7 +105,6 @@ void DrawScene() {
 	switch (scene) {
 	case Scene::kTitle:
 		titleScene->Draw();
-
 		break;
 	case Scene::kSelect:
 		selectScene->Draw();

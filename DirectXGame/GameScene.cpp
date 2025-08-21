@@ -72,7 +72,7 @@ void GameScene::Initialize() { /*初期化を書く*/
 	// プレイヤー
 	player_ = new Player();
 
-	modelPlayer_ = Model::CreateFromOBJ("player");
+	modelPlayer_ = Model::CreateFromOBJ("newplayer");
 	modelPlayerAttck_ = Model::CreateFromOBJ("attack_effect");
 	Vector3 playerPosition = mapChipField_->GetMapChipPositionByIndex(2, 13);
 
@@ -99,9 +99,9 @@ void GameScene::Initialize() { /*初期化を書く*/
 	case 1:
 		enemyPosition = &stage2Enemies;
 		break;
-	//default:
-	//	assert(enemyPosition);
-	//	enemyPosition = &stage1Enemies;
+	default:
+		assert(enemyPosition);
+		enemyPosition = &stage1Enemies;
 		break;
 	}
 
