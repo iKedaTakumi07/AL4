@@ -1,4 +1,4 @@
-#include "CleraScene.h"
+#include "ClearScene.h"
 #include "GameScene.h"
 #include "KamataEngine.h"
 #include "SelectScene.h"
@@ -8,7 +8,7 @@
 TitleScene* titleScene = nullptr;
 GameScene* gameScene = nullptr;
 SelectScene* selectScene = nullptr;
-CleraScene* cleraScene = nullptr;
+ClearScene* cleraScene = nullptr;
 using namespace KamataEngine;
 
 enum class Scene {
@@ -34,7 +34,7 @@ void ChangeScene() {
 			scene = Scene::kSelect;
 			delete titleScene;
 			titleScene = nullptr;
-			selectScene = new SelectScene();
+			selectScene = new SelectScene;
 			selectScene->Initialize();
 		}
 
@@ -57,14 +57,14 @@ void ChangeScene() {
 			scene = Scene::kGame;
 			delete gameScene;
 			gameScene = nullptr;
-			gameScene = new GameScene();
+			gameScene = new GameScene;
 			gameScene->SetStage(number);
 			gameScene->Initialize();
 		} else if (gameScene->isCleraed()) {
 			scene = Scene::kClera;
 			delete gameScene;
 			gameScene = nullptr;
-			cleraScene = new CleraScene();
+			cleraScene = new ClearScene;
 			cleraScene->Initialize();
 		}
 

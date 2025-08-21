@@ -1,10 +1,11 @@
 #pragma once
+#pragma once
 #include "Fade.h"
 #include "KamataEngine.h"
 
 using namespace KamataEngine;
 
-class CleraScene {
+class ClearScene {
 public:
 	enum class Phase {
 		kFadeIn, // フェードイン
@@ -18,7 +19,7 @@ public:
 
 	void Draw();
 
-	~CleraScene();
+	~ClearScene();
 
 	bool isFinished() const { return finished_; };
 
