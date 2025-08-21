@@ -23,10 +23,17 @@ public:
 	bool isFinished() const { return finished_; };
 
 private:
+	// 3Dモデル
+	Model* modelClearFont_ = nullptr;
+
+	WorldTransform worldTransformClearFont_;
+
 	// カメラ
 	Camera camera_;
 
 	float counter_ = 0.0f;
+
+	static inline const float kTimeClearFontMove = 2.0f;
 
 	bool finished_ = false;
 
