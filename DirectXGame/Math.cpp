@@ -189,3 +189,5 @@ Vector3 Transform(const Vector3& vector, const Matrix4x4& matrix) {
 	result.z /= w;
 	return result;
 }
+
+float EaseInQuint(float t) { return t * t * t * t * t; }

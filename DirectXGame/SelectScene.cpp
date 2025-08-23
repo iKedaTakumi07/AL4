@@ -1,25 +1,24 @@
 #include "SelectScene.h"
 #include "Math.h"
 #include <numbers>
+
 using namespace KamataEngine;
 void SelectScene::Initialize() {
 
-	modelnumber1_ = Model::CreateFromOBJ("number1");
-	modelnumber2_ = Model::CreateFromOBJ("number1");
+	models_.push_back(Model::CreateFromOBJ("number1")); // 操作説明
+	models_.push_back(Model::CreateFromOBJ("number1")); // ステージ順に↓
+	models_.push_back(Model::CreateFromOBJ("number1"));
 
-	const float kScale = 2.0f;
+	const float kScale = 10.0f;
 
-	worldTransformmodelnumber1_.Initialize();
-	worldTransformmodelnumber1_.scale_ = {kScale, kScale, kScale};
-	worldTransformmodelnumber1_.rotation_.y = 0.95f * std::numbers::pi_v<float>;
-	worldTransformmodelnumber1_.translation_.y = -6.0f;
-	worldTransformmodelnumber1_.translation_.x = 10.0f;
-
-	worldTransformmodelnumber2_.Initialize();
-	worldTransformmodelnumber2_.scale_ = {kScale, kScale, kScale};
-	worldTransformmodelnumber2_.rotation_.y = 0.95f * std::numbers::pi_v<float>;
-	worldTransformmodelnumber2_.translation_.y = -6.0f;
-	worldTransformmodelnumber1_.translation_.x = 20.0f;
+	for (int i = 0; i < models_.size(); i++) {
+		WorldTransform* wt = new WorldTransform();
+		wt->Initialize();
+		wt->scale_ = {kScale, kScale, kScale};
+		wt->translation_.x = i * slideStepX_;
+		wt->translation_.y = -2.0f;
+		worldTransforms_.push_back(wt);
+	}
 
 	camera_.Initialize();
 
@@ -39,32 +38,44 @@ void SelectScene::Update() {
 		}
 		break;
 	case SelectScene::Phase::kMain:
-
 		switch (Stage_) {
-		case SelectScene::ksousa:
-			if (Input::GetInstance()->PushKey(DIK_D)) {
-				Stage_ = SelectScene::k1_1;
+		case ksousa:
+			if (!slideAnim_.isPlaying && Input::GetInstance()->PushKey(DIK_D)) {
+				slideAnim_.isPlaying = true;
+				slideAnim_.timer = 0.0f;
+				slideAnim_.startOffsetX = slideOffsetX_;
+				slideAnim_.endOffsetX = slideOffsetX_ - slideStepX_;
+				Stage_ = k1_1;
 			}
 			break;
-		case SelectScene::k1_1:
-			if (Input::GetInstance()->PushKey(DIK_A)) {
-				Stage_ = SelectScene::ksousa;
+		case k1_1:
+			if (!slideAnim_.isPlaying && Input::GetInstance()->PushKey(DIK_A)) {
+				slideAnim_.isPlaying = true;
+				slideAnim_.timer = 0.0f;
+				slideAnim_.startOffsetX = slideOffsetX_;
+				slideAnim_.endOffsetX = slideOffsetX_ + slideStepX_;
+				Stage_ = ksousa;
 			}
-
 			if (Input::GetInstance()->PushKey(DIK_SPACE)) {
 				stageNumber_ = 0;
 				fade_->Start(Fade::Status::FadeOut, 1.0f);
 				phase_ = Phase::kFadeOut;
 			}
-			if (Input::GetInstance()->PushKey(DIK_D)) {
-				Stage_ = SelectScene::k1_2;
+			if (!slideAnim_.isPlaying && Input::GetInstance()->PushKey(DIK_D)) {
+				slideAnim_.isPlaying = true;
+				slideAnim_.timer = 0.0f;
+				slideAnim_.startOffsetX = slideOffsetX_;
+				slideAnim_.endOffsetX = slideOffsetX_ - slideStepX_;
+				Stage_ = k1_2;
 			}
-
 			break;
-		case SelectScene::k1_2:
-
-			if (Input::GetInstance()->PushKey(DIK_A)) {
-				Stage_ = SelectScene::k1_1;
+		case k1_2:
+			if (!slideAnim_.isPlaying && Input::GetInstance()->PushKey(DIK_A)) {
+				slideAnim_.isPlaying = true;
+				slideAnim_.timer = 0.0f;
+				slideAnim_.startOffsetX = slideOffsetX_;
+				slideAnim_.endOffsetX = slideOffsetX_ + slideStepX_;
+				Stage_ = k1_1;
 			}
 			if (Input::GetInstance()->PushKey(DIK_SPACE)) {
 				stageNumber_ = 1;
@@ -74,6 +85,17 @@ void SelectScene::Update() {
 			break;
 		}
 
+		// スライドアニメーション更新
+		if (slideAnim_.isPlaying) {
+			slideAnim_.timer += 1.0f / 60.0f;
+			float t = slideAnim_.timer / slideAnim_.duration;
+			if (t >= 1.0f) {
+				t = 1.0f;
+				slideAnim_.isPlaying = false;
+			}
+			float eased = EaseInQuint(t);
+			slideOffsetX_ = slideAnim_.startOffsetX + (slideAnim_.endOffsetX - slideAnim_.startOffsetX) * eased;
+		}
 		break;
 	case SelectScene::Phase::kFadeOut:
 		fade_->Update();
@@ -84,8 +106,11 @@ void SelectScene::Update() {
 		break;
 	}
 
-	WorldtransformUpdate(worldTransformmodelnumber1_);
-	WorldtransformUpdate(worldTransformmodelnumber2_);
+	// モデル位置更新
+	for (int i = 0; i < models_.size(); i++) {
+		worldTransforms_[i]->translation_.x = (i * slideStepX_) + slideOffsetX_;
+		WorldtransformUpdate(*worldTransforms_[i]);
+	}
 
 	camera_.TransferMatrix();
 }
@@ -97,18 +122,21 @@ void SelectScene::Draw() {
 	Model::PreDraw(dxCommon->GetCommandList());
 
 	// 描画
+	for (int i = 0; i < models_.size(); i++) {
 
+		models_[i]->Draw(*worldTransforms_[i], camera_);
+	}
 	fade_->Draw();
-	modelnumber1_->Draw(worldTransformmodelnumber1_, camera_);
-	modelnumber2_->Draw(worldTransformmodelnumber2_, camera_);
 
 	Model::PostDraw();
 }
 
 SelectScene::~SelectScene() {
 	//
-	delete modelnumber1_;
-	delete modelnumber2_;
+	for (auto* m : models_)
+		delete m;
+	for (auto* w : worldTransforms_)
+		delete w;
 
 	delete fade_;
 }

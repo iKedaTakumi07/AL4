@@ -1,6 +1,7 @@
 #pragma once
 #include "Fade.h"
 #include "KamataEngine.h"
+#include <vector>
 using namespace KamataEngine;
 
 class SelectScene {
@@ -31,12 +32,10 @@ public:
 	int GetStageNumber() { return stageNumber_; };
 
 private:
-	// モデル
-	Model* modelnumber1_ = nullptr;
-	Model* modelnumber2_ = nullptr;
+	// 数字モデル
+	std::vector<Model*> models_;
+	std::vector<WorldTransform*> worldTransforms_;
 
-	WorldTransform worldTransformmodelnumber1_;
-	WorldTransform worldTransformmodelnumber2_;
 
 	// カメラ
 	Camera camera_;
@@ -49,7 +48,23 @@ private:
 
 	Phase phase_ = Phase::kFadeIn;
 
-	Stage Stage_ = Stage::k1_1;
+	Stage Stage_ = Stage::ksousa;
 
 	int stageNumber_;
+
+	// スライドアニメーション管理
+	struct Animation {
+		bool isPlaying = false;
+		float timer = 0.0f;
+		float duration = 0.5f;
+		float startOffsetX = 0.0f;
+		float endOffsetX = 0.0f;
+	};
+	Animation slideAnim_;
+
+	// 全体オフセット
+	float slideOffsetX_ = 0.0f;
+
+	// 移動量（1回の移動でずれる距離）
+	float slideStepX_ = 30.0f;
 };
