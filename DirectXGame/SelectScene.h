@@ -31,6 +31,13 @@ public:
 	int GetStageNumber() { return stageNumber_; };
 
 private:
+	// モデル
+	Model* modelnumber1_ = nullptr;
+	Model* modelnumber2_ = nullptr;
+
+	WorldTransform worldTransformmodelnumber1_;
+	WorldTransform worldTransformmodelnumber2_;
+
 	// カメラ
 	Camera camera_;
 

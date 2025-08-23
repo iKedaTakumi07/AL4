@@ -4,6 +4,23 @@
 using namespace KamataEngine;
 void SelectScene::Initialize() {
 
+	modelnumber1_ = Model::CreateFromOBJ("numberFont/number1");
+	modelnumber2_ = Model::CreateFromOBJ("numberFont/number1");
+
+	const float kScale = 2.0f;
+
+	worldTransformmodelnumber1_.Initialize();
+	worldTransformmodelnumber1_.scale_ = {kScale, kScale, kScale};
+	worldTransformmodelnumber1_.rotation_.y = 0.95f * std::numbers::pi_v<float>;
+	worldTransformmodelnumber1_.translation_.y = -6.0f;
+	worldTransformmodelnumber1_.translation_.x = 10.0f;
+
+	worldTransformmodelnumber2_.Initialize();
+	worldTransformmodelnumber2_.scale_ = {kScale, kScale, kScale};
+	worldTransformmodelnumber2_.rotation_.y = 0.95f * std::numbers::pi_v<float>;
+	worldTransformmodelnumber2_.translation_.y = -6.0f;
+	worldTransformmodelnumber1_.translation_.x = 20.0f;
+
 	camera_.Initialize();
 
 	fade_ = new Fade;
@@ -67,6 +84,9 @@ void SelectScene::Update() {
 		break;
 	}
 
+	WorldtransformUpdate(worldTransformmodelnumber1_);
+	WorldtransformUpdate(worldTransformmodelnumber2_);
+
 	camera_.TransferMatrix();
 }
 
@@ -77,12 +97,18 @@ void SelectScene::Draw() {
 	Model::PreDraw(dxCommon->GetCommandList());
 
 	// 描画
+
 	fade_->Draw();
+	modelnumber1_->Draw(worldTransformmodelnumber1_, camera_);
+	modelnumber2_->Draw(worldTransformmodelnumber2_, camera_);
 
 	Model::PostDraw();
 }
 
 SelectScene::~SelectScene() {
 	//
+	delete modelnumber1_;
+	delete modelnumber2_;
+
 	delete fade_;
 }
