@@ -66,7 +66,10 @@ void GameScene::Initialize() { /*初期化を書く*/
 		mapChipField_->LoadMapChipCsv("Resources/map.csv");
 	} else if (stageid_ == 1) {
 		mapChipField_->LoadMapChipCsv("Resources/map2.csv");
+	} else if (stageid_ == 2) {
+		mapChipField_->LoadMapChipCsv("Resources/map3.csv");
 	}
+
 	GenerateBlocks();
 
 	// プレイヤー
@@ -98,6 +101,9 @@ void GameScene::Initialize() { /*初期化を書く*/
 		break;
 	case 1:
 		enemyPosition = &stage2Enemies;
+		break;
+	case 2:
+		enemyPosition = &stage3Enemies;
 		break;
 	default:
 		assert(enemyPosition);
@@ -138,7 +144,7 @@ void GameScene::Initialize() { /*初期化を書く*/
 	goal = new Goal();
 
 	goalmodel_ = Model::CreateFromOBJ("enemy");
-	Vector3 goalPosition = mapChipField_->GetMapChipPositionByIndex(4, 18);
+	Vector3 goalPosition = mapChipField_->GetMapChipPositionByIndex(static_cast<uint32_t>(StageGoals_[stageid_].goalX), static_cast<uint32_t>(StageGoals_[stageid_].goalY));
 	goal->Initialize(goalmodel_, &camera_, goalPosition);
 }
 

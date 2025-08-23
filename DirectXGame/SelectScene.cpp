@@ -8,6 +8,7 @@ void SelectScene::Initialize() {
 	models_.push_back(Model::CreateFromOBJ("number1")); // 操作説明
 	models_.push_back(Model::CreateFromOBJ("number1")); // ステージ順に↓
 	models_.push_back(Model::CreateFromOBJ("number1"));
+	models_.push_back(Model::CreateFromOBJ("number1"));
 
 	const float kScale = 10.0f;
 
@@ -77,8 +78,29 @@ void SelectScene::Update() {
 				slideAnim_.endOffsetX = slideOffsetX_ + slideStepX_;
 				Stage_ = k1_1;
 			}
+			if (!slideAnim_.isPlaying && Input::GetInstance()->PushKey(DIK_D)) {
+				slideAnim_.isPlaying = true;
+				slideAnim_.timer = 0.0f;
+				slideAnim_.startOffsetX = slideOffsetX_;
+				slideAnim_.endOffsetX = slideOffsetX_ - slideStepX_;
+				Stage_ = k1_3;
+			}
 			if (Input::GetInstance()->PushKey(DIK_SPACE)) {
 				stageNumber_ = 1;
+				fade_->Start(Fade::Status::FadeOut, 1.0f);
+				phase_ = Phase::kFadeOut;
+			}
+			break;
+		case k1_3:
+			if (!slideAnim_.isPlaying && Input::GetInstance()->PushKey(DIK_A)) {
+				slideAnim_.isPlaying = true;
+				slideAnim_.timer = 0.0f;
+				slideAnim_.startOffsetX = slideOffsetX_;
+				slideAnim_.endOffsetX = slideOffsetX_ + slideStepX_;
+				Stage_ = k1_2;
+			}
+			if (Input::GetInstance()->PushKey(DIK_SPACE)) {
+				stageNumber_ = 2;
 				fade_->Start(Fade::Status::FadeOut, 1.0f);
 				phase_ = Phase::kFadeOut;
 			}

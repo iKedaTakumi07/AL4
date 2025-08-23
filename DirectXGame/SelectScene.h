@@ -16,7 +16,7 @@ public:
 		ksousa,
 		k1_1,
 		k1_2,
-
+		k1_3
 	};
 
 	void Initialize();
