@@ -4,8 +4,8 @@
 using namespace KamataEngine;
 void SelectScene::Initialize() {
 
-	modelnumber1_ = Model::CreateFromOBJ("numberFont/number1");
-	modelnumber2_ = Model::CreateFromOBJ("numberFont/number1");
+	modelnumber1_ = Model::CreateFromOBJ("number1");
+	modelnumber2_ = Model::CreateFromOBJ("number1");
 
 	const float kScale = 2.0f;
 
