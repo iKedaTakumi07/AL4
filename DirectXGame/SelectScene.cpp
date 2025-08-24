@@ -7,7 +7,7 @@ void SelectScene::Initialize() {
 
 	models_.push_back(Model::CreateFromOBJ("number1")); // 操作説明
 	models_.push_back(Model::CreateFromOBJ("number1")); // ステージ順に↓
-	models_.push_back(Model::CreateFromOBJ("number1"));
+	models_.push_back(Model::CreateFromOBJ("number2"));
 	models_.push_back(Model::CreateFromOBJ("number1"));
 
 	const float kScale = 10.0f;
