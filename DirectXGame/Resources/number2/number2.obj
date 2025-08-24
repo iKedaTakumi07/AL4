@@ -1,6 +1,6 @@
 # Blender 4.4.1
 # www.blender.org
-mtllib AL3_number.mtl
+mtllib number2.mtl
 o number2
 v 0.150581 -0.363207 -0.100000
 v -0.107039 -0.363207 -0.100000
