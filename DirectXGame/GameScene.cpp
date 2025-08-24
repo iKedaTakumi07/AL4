@@ -37,6 +37,9 @@ GameScene::~GameScene() {
 	delete fade_;
 	delete goal;
 	delete goalmodel_;
+
+	delete modelcheese_;
+	delete Cheese_;
 }
 
 void GameScene::Initialize() { /*初期化を書く*/
@@ -146,6 +149,12 @@ void GameScene::Initialize() { /*初期化を書く*/
 	goalmodel_ = Model::CreateFromOBJ("enemy");
 	Vector3 goalPosition = mapChipField_->GetMapChipPositionByIndex(static_cast<uint32_t>(StageGoals_[stageid_].goalX), static_cast<uint32_t>(StageGoals_[stageid_].goalY));
 	goal->Initialize(goalmodel_, &camera_, goalPosition);
+
+	// スターコイン(チーズ)
+	Cheese_ = new cheese();
+	modelcheese_ = Model::CreateFromOBJ("enemy");
+	Vector3 cheesePosition = mapChipField_->GetMapChipPositionByIndex(4, 18);
+	Cheese_->Initialize(modelcheese_, &camera_, cheesePosition);
 }
 
 void GameScene::GenerateBlocks() {
@@ -178,7 +187,7 @@ void GameScene::CheckAllCollisions() {
 
 #pragma region
 	{
-		AABB aabb1, aabb2, aabb3;
+		AABB aabb1, aabb2, aabb3, aabb4;
 
 		aabb1 = player_->GetAABB();
 
@@ -203,6 +212,15 @@ void GameScene::CheckAllCollisions() {
 		if (IsCollision(aabb1, aabb3)) {
 			goal->OnCollision(player_);
 		}
+
+		/*if (Cheese_->IsCollisionDisabled()) {*/
+		/*continue;*/
+
+		aabb4 = Cheese_->GetAABB();
+		if (IsCollision(aabb1, aabb4)) {
+			Cheese_->OnCollision();
+		}
+		/*}*/
 	}
 }
 
@@ -245,6 +263,10 @@ void GameScene::Update() { /* 更新勝利を書く */
 		return false;
 	});
 
+	/*if (Cheese_->isDead()) {
+	    delete Cheese_;
+	};*/
+
 	ChangePhase();
 
 	switch (phase_) {
@@ -266,6 +288,8 @@ void GameScene::Update() { /* 更新勝利を書く */
 		for (Enemy* enemy : enemies_) {
 			enemy->Update();
 		}
+
+		Cheese_->Update();
 
 		// UpdateCamera();
 #ifdef _DEBUG
@@ -313,7 +337,9 @@ void GameScene::Update() { /* 更新勝利を書く */
 		for (HitEffect* hitEffect : hitEffects_) {
 			hitEffect->Update();
 		}
+		goal->Update();
 
+		Cheese_->Update();
 //		UpdateCamera();
 #ifdef _DEBUG
 		// if (Input::GetInstance()->TriggerKey(DIK_SPACE)) {
@@ -377,6 +403,9 @@ void GameScene::Update() { /* 更新勝利を書く */
 
 		skydome_->Update();
 		CameraController_->Update();
+		goal->Update();
+
+		Cheese_->Update();
 
 		for (Enemy* enemy : enemies_) {
 			enemy->Update();
@@ -401,6 +430,7 @@ void GameScene::Draw() {
 	skydome_->Draw();
 
 	goal->Draw();
+	Cheese_->Draw();
 
 	// 敵
 	for (Enemy* enemy : enemies_) {

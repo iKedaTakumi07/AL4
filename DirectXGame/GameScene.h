@@ -10,6 +10,7 @@
 #include "Math.h"
 #include "Player.h"
 #include "Skydome.h"
+#include "cheese.h"
 #include <vector>
 
 using namespace KamataEngine;
@@ -60,6 +61,7 @@ public:
 	Model* modelDeathParticles_ = nullptr;
 	Model* modelHitEffect = nullptr;
 	Model* goalmodel_ = nullptr;
+	Model* modelcheese_ = nullptr;
 
 	// 背景
 	Skydome* skydome_ = nullptr;
@@ -75,6 +77,9 @@ public:
 
 	// カメラ
 	Camera camera_;
+
+	// スターコイン(チーズ)
+	cheese* Cheese_;
 
 	// デバックカメラ有効
 	bool isDebugCameraActive_ = false;
