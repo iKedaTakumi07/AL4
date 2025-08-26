@@ -45,6 +45,9 @@ public:
 
 	bool isCleraed() const { return isGoal_; };
 
+	bool isBack() const { return isBack_; };
+	bool isBackSelect() const { return isBackSelect_; };
+
 	void CreateEffect(const Vector3& position);
 
 	void SetStage(int stageid) { stageid_ = stageid; };
@@ -62,6 +65,9 @@ public:
 	Model* modelHitEffect = nullptr;
 	Model* goalmodel_ = nullptr;
 	Model* modelcheese_ = nullptr;
+	Model* tutorialFont_ = nullptr;
+
+	WorldTransform tutorialWorldTransform_;
 
 	// 背景
 	Skydome* skydome_ = nullptr;
@@ -109,6 +115,8 @@ public:
 	Goal* goal = nullptr;
 
 	bool isGoal_ = false;
+	bool isBack_ = false;
+	bool isBackSelect_ = false;
 
 	std::list<HitEffect*> hitEffects_;
 

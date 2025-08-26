@@ -60,13 +60,23 @@ void ChangeScene() {
 			gameScene = new GameScene();
 			gameScene->SetStage(number);
 			gameScene->Initialize();
-		} 
+			break;
+		}
 		if (gameScene->isCleraed()) {
 			scene = Scene::kClera;
 			delete gameScene;
 			gameScene = nullptr;
 			cleraScene = new ClearScene();
 			cleraScene->Initialize();
+			break;
+		}
+		if (gameScene->isBackSelect()) {
+			scene = Scene::kSelect;
+			delete gameScene;
+			gameScene = nullptr;
+			selectScene = new SelectScene();
+			selectScene->Initialize();
+			break;
 		}
 
 		break;

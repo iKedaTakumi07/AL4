@@ -8,9 +8,11 @@ using namespace KamataEngine;
 GameScene::~GameScene() {
 	// ですトラ
 	delete modelblock_;
+
 	delete skydome_;
 	delete modelPlayer_;
 	delete player_;
+	delete tutorialFont_;
 
 	for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) {
 		for (WorldTransform* worldTransformBlock : worldTransformBlockLine) {
@@ -73,6 +75,13 @@ void GameScene::Initialize() { /*初期化を書く*/
 	} else if (stageid_ == 3) {
 		mapChipField_->LoadMapChipCsv("Resources/map3.csv");
 	}
+
+	tutorialFont_ = Model::CreateFromOBJ("tutorialFont");
+	tutorialWorldTransform_.Initialize();
+	float tutorialFont = 3.0f;
+	tutorialWorldTransform_.scale_ = {tutorialFont, tutorialFont, tutorialFont};
+	tutorialWorldTransform_.translation_ = {5.0f, 5.0f, 0.0f};
+	WorldtransformUpdate(tutorialWorldTransform_);
 
 	GenerateBlocks();
 
@@ -244,7 +253,10 @@ void GameScene::ChangePhase() {
 		if (goal->isCleraed()) {
 			phase_ = Phase::kFadeOut;
 		}
-
+		if (Input::GetInstance()->PushKey(DIK_BACKSPACE)) {
+			phase_ = Phase::kFadeOut;
+			isBack_ = true;
+		}
 		break;
 	case GameScene::Phase::kDeath:
 		break;
@@ -297,10 +309,10 @@ void GameScene::Update() { /* 更新勝利を書く */
 
 		// UpdateCamera();
 #ifdef _DEBUG
-		// if (Input::GetInstance()->TriggerKey(DIK_SPACE)) {
+		//if (Input::GetInstance()->TriggerKey(DIK_SPACE)) {
 		//	// フラグをトグル
 		//	isDebugCameraActive_ = !isDebugCameraActive_;
-		// }
+		//}
 #endif
 
 		// カメラの処理
@@ -328,6 +340,7 @@ void GameScene::Update() { /* 更新勝利を書く */
 		}
 		break;
 	case Phase::kPlay:
+
 		skydome_->Update();
 		CameraController_->Update();
 
@@ -346,10 +359,10 @@ void GameScene::Update() { /* 更新勝利を書く */
 		Cheese_->Update();
 //		UpdateCamera();
 #ifdef _DEBUG
-		// if (Input::GetInstance()->TriggerKey(DIK_SPACE)) {
-		//	// フラグをトグル
-		//	isDebugCameraActive_ = !isDebugCameraActive_;
-		// }
+		if (Input::GetInstance()->TriggerKey(DIK_SPACE)) {
+			// フラグをトグル
+			isDebugCameraActive_ = !isDebugCameraActive_;
+		}
 #endif
 
 		// カメラの処理
@@ -403,6 +416,9 @@ void GameScene::Update() { /* 更新勝利を書く */
 		}
 		if (fade_->IsFinished() && player_->IsDead()) {
 			finished_ = true;
+		}
+		if (fade_->IsFinished() && isBack_) {
+			isBackSelect_ = true;
 		}
 
 		skydome_->Update();
@@ -458,6 +474,10 @@ void GameScene::Draw() {
 
 	for (HitEffect* hitEffect : hitEffects_) {
 		hitEffect->Draw();
+	}
+
+	if (stageid_ == 0) {
+		tutorialFont_->Draw(tutorialWorldTransform_, camera_);
 	}
 
 	Model::PostDraw();

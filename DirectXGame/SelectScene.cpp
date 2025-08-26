@@ -41,7 +41,7 @@ void SelectScene::Update() {
 	case SelectScene::Phase::kMain:
 		switch (Stage_) {
 		case ksousa:
-			if (!slideAnim_.isPlaying && Input::GetInstance()->PushKey(DIK_D)) {
+			if (!slideAnim_.isPlaying && Input::GetInstance()->PushKey(DIK_RIGHT)) {
 				slideAnim_.isPlaying = true;
 				slideAnim_.timer = 0.0f;
 				slideAnim_.startOffsetX = slideOffsetX_;
@@ -55,7 +55,7 @@ void SelectScene::Update() {
 			}
 			break;
 		case k1_1:
-			if (!slideAnim_.isPlaying && Input::GetInstance()->PushKey(DIK_A)) {
+			if (!slideAnim_.isPlaying && Input::GetInstance()->PushKey(DIK_LEFT)) {
 				slideAnim_.isPlaying = true;
 				slideAnim_.timer = 0.0f;
 				slideAnim_.startOffsetX = slideOffsetX_;
@@ -67,7 +67,7 @@ void SelectScene::Update() {
 				fade_->Start(Fade::Status::FadeOut, 1.0f);
 				phase_ = Phase::kFadeOut;
 			}
-			if (!slideAnim_.isPlaying && Input::GetInstance()->PushKey(DIK_D)) {
+			if (!slideAnim_.isPlaying && Input::GetInstance()->PushKey(DIK_RIGHT)) {
 				slideAnim_.isPlaying = true;
 				slideAnim_.timer = 0.0f;
 				slideAnim_.startOffsetX = slideOffsetX_;
@@ -76,14 +76,14 @@ void SelectScene::Update() {
 			}
 			break;
 		case k1_2:
-			if (!slideAnim_.isPlaying && Input::GetInstance()->PushKey(DIK_A)) {
+			if (!slideAnim_.isPlaying && Input::GetInstance()->PushKey(DIK_LEFT)) {
 				slideAnim_.isPlaying = true;
 				slideAnim_.timer = 0.0f;
 				slideAnim_.startOffsetX = slideOffsetX_;
 				slideAnim_.endOffsetX = slideOffsetX_ + slideStepX_;
 				Stage_ = k1_1;
 			}
-			if (!slideAnim_.isPlaying && Input::GetInstance()->PushKey(DIK_D)) {
+			if (!slideAnim_.isPlaying && Input::GetInstance()->PushKey(DIK_RIGHT)) {
 				slideAnim_.isPlaying = true;
 				slideAnim_.timer = 0.0f;
 				slideAnim_.startOffsetX = slideOffsetX_;
@@ -97,7 +97,7 @@ void SelectScene::Update() {
 			}
 			break;
 		case k1_3:
-			if (!slideAnim_.isPlaying && Input::GetInstance()->PushKey(DIK_A)) {
+			if (!slideAnim_.isPlaying && Input::GetInstance()->PushKey(DIK_LEFT)) {
 				slideAnim_.isPlaying = true;
 				slideAnim_.timer = 0.0f;
 				slideAnim_.startOffsetX = slideOffsetX_;
