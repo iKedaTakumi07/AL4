@@ -12,12 +12,7 @@ public:
 		kFadeOut // フェードアウト
 	};
 
-	enum Stage {
-		ksousa,
-		k1_1,
-		k1_2,
-		k1_3
-	};
+	enum Stage { ksousa, k1_1, k1_2, k1_3 };
 
 	void Initialize();
 
@@ -36,6 +31,13 @@ private:
 	std::vector<Model*> models_;
 	std::vector<WorldTransform*> worldTransforms_;
 
+	Model* SelectModel_;
+
+	WorldTransform SelectTransform_;
+
+	Model* SelectkeyModel_;
+
+	WorldTransform SelectkeyTransform_;
 
 	// カメラ
 	Camera camera_;

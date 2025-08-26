@@ -5,7 +5,7 @@
 using namespace KamataEngine;
 void SelectScene::Initialize() {
 
-	models_.push_back(Model::CreateFromOBJ("number1")); // 操作説明
+	models_.push_back(Model::CreateFromOBJ("number0")); // 操作説明
 	models_.push_back(Model::CreateFromOBJ("number1")); // ステージ順に↓
 	models_.push_back(Model::CreateFromOBJ("number2"));
 	models_.push_back(Model::CreateFromOBJ("number3"));
@@ -22,6 +22,20 @@ void SelectScene::Initialize() {
 	}
 
 	camera_.Initialize();
+
+	SelectModel_ = Model::CreateFromOBJ("SelectFont");
+	float kscar = 3.0f;
+	SelectTransform_.Initialize();
+	SelectTransform_.scale_ = {kscar, kscar, kscar};
+	SelectTransform_.translation_ = {0.0f, 14.0f, 0.0f};
+	WorldtransformUpdate(SelectTransform_);
+
+	SelectkeyModel_ = Model::CreateFromOBJ("Selectkye");
+	float kscale = 10.0f;
+	SelectkeyTransform_.Initialize();
+	SelectkeyTransform_.scale_ = {kscale, kscale, kscale};
+	SelectkeyTransform_.translation_ = {-25.0f, -25.0f, 0.0f};
+	WorldtransformUpdate(SelectkeyTransform_);
 
 	fade_ = new Fade;
 	fade_->Initialize();
@@ -153,6 +167,10 @@ void SelectScene::Draw() {
 
 		models_[i]->Draw(*worldTransforms_[i], camera_);
 	}
+
+	SelectModel_->Draw(SelectTransform_, camera_);
+	SelectkeyModel_->Draw(SelectkeyTransform_, camera_);
+
 	fade_->Draw();
 
 	Model::PostDraw();
@@ -166,4 +184,5 @@ SelectScene::~SelectScene() {
 		delete w;
 
 	delete fade_;
+	delete SelectModel_;
 }
