@@ -48,6 +48,11 @@ void SelectScene::Update() {
 				slideAnim_.endOffsetX = slideOffsetX_ - slideStepX_;
 				Stage_ = k1_1;
 			}
+			if (Input::GetInstance()->PushKey(DIK_SPACE)) {
+				stageNumber_ = 0;
+				fade_->Start(Fade::Status::FadeOut, 1.0f);
+				phase_ = Phase::kFadeOut;
+			}
 			break;
 		case k1_1:
 			if (!slideAnim_.isPlaying && Input::GetInstance()->PushKey(DIK_A)) {
@@ -58,7 +63,7 @@ void SelectScene::Update() {
 				Stage_ = ksousa;
 			}
 			if (Input::GetInstance()->PushKey(DIK_SPACE)) {
-				stageNumber_ = 0;
+				stageNumber_ = 1;
 				fade_->Start(Fade::Status::FadeOut, 1.0f);
 				phase_ = Phase::kFadeOut;
 			}
@@ -86,7 +91,7 @@ void SelectScene::Update() {
 				Stage_ = k1_3;
 			}
 			if (Input::GetInstance()->PushKey(DIK_SPACE)) {
-				stageNumber_ = 1;
+				stageNumber_ = 2;
 				fade_->Start(Fade::Status::FadeOut, 1.0f);
 				phase_ = Phase::kFadeOut;
 			}
@@ -100,7 +105,7 @@ void SelectScene::Update() {
 				Stage_ = k1_2;
 			}
 			if (Input::GetInstance()->PushKey(DIK_SPACE)) {
-				stageNumber_ = 2;
+				stageNumber_ = 3;
 				fade_->Start(Fade::Status::FadeOut, 1.0f);
 				phase_ = Phase::kFadeOut;
 			}

@@ -64,12 +64,13 @@ void GameScene::Initialize() { /*初期化を書く*/
 
 	// マップチップ
 	mapChipField_ = new MapChipField;
-
 	if (stageid_ == 0) {
-		mapChipField_->LoadMapChipCsv("Resources/map.csv");
+		mapChipField_->LoadMapChipCsv("Resources/tutorial.csv");
 	} else if (stageid_ == 1) {
-		mapChipField_->LoadMapChipCsv("Resources/map2.csv");
+		mapChipField_->LoadMapChipCsv("Resources/map.csv");
 	} else if (stageid_ == 2) {
+		mapChipField_->LoadMapChipCsv("Resources/map2.csv");
+	} else if (stageid_ == 3) {
 		mapChipField_->LoadMapChipCsv("Resources/map3.csv");
 	}
 
@@ -95,17 +96,20 @@ void GameScene::Initialize() { /*初期化を書く*/
 	CameraController_->SetMovableArea(cameraArea);
 
 	// 敵
-	modelEnemy_ = Model::CreateFromOBJ("enemy");
+	modelEnemy_ = Model::CreateFromOBJ("newEnemy");
 
 	std::vector<Vector3>* enemyPosition = nullptr;
 	switch (stageid_) {
 	case 0:
-		enemyPosition = &stage1Enemies;
+		enemyPosition = &stage0Enemies;
 		break;
 	case 1:
-		enemyPosition = &stage2Enemies;
+		enemyPosition = &stage1Enemies;
 		break;
 	case 2:
+		enemyPosition = &stage2Enemies;
+		break;
+	case 3:
 		enemyPosition = &stage3Enemies;
 		break;
 	default:
@@ -146,13 +150,13 @@ void GameScene::Initialize() { /*初期化を書く*/
 	// ゴール
 	goal = new Goal();
 
-	goalmodel_ = Model::CreateFromOBJ("enemy");
+	goalmodel_ = Model::CreateFromOBJ("goal");
 	Vector3 goalPosition = mapChipField_->GetMapChipPositionByIndex(static_cast<uint32_t>(StageGoals_[stageid_].goalX), static_cast<uint32_t>(StageGoals_[stageid_].goalY));
 	goal->Initialize(goalmodel_, &camera_, goalPosition);
 
 	// スターコイン(チーズ)
 	Cheese_ = new cheese();
-	modelcheese_ = Model::CreateFromOBJ("enemy");
+	modelcheese_ = Model::CreateFromOBJ("cheese");
 	Vector3 cheesePosition = mapChipField_->GetMapChipPositionByIndex(4, 18);
 	Cheese_->Initialize(modelcheese_, &camera_, cheesePosition);
 }

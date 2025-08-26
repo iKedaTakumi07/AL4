@@ -114,6 +114,10 @@ public:
 
 	int stageid_;
 
+	std::vector<Vector3> stage0Enemies = {
+	    {38.0f, 7.0f, 0.0f},
+	};
+
 	std::vector<Vector3> stage1Enemies = {
 	    {25.0f, 2.0f, 0.0f},
         {30.0f, 5.0f, 0.0f},
@@ -143,8 +147,9 @@ public:
 		int goalY;
 	};
 
-	StageGoal StageGoals_[3] = {
-	    {62, 15},
+	StageGoal StageGoals_[4] = {
+	    {45, 16},
+        {62, 15},
         {97, 8 },
         {97, 18}
     };
