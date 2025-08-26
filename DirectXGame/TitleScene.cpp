@@ -8,6 +8,7 @@ void TitleScene::Initialize() {
 	// モデル
 	modelTitle_ = Model::CreateFromOBJ("titleFont", true);
 	modelPlayer_ = Model::CreateFromOBJ("newplayer");
+	modelStart_ = Model::CreateFromOBJ("startFont");
 
 	camera_.Initialize();
 
@@ -25,7 +26,15 @@ void TitleScene::Initialize() {
 	worldTransformplayer_.scale_ = {kplayerScale, kplayerScale, kplayerScale};
 	worldTransformplayer_.rotation_.y = 0.95f * std::numbers::pi_v<float>;
 	worldTransformplayer_.translation_.x = -2.0f;
-	worldTransformplayer_.translation_.y = -10.0f;
+	worldTransformplayer_.translation_.y = -5.0f;
+
+	worldTransformStart_.Initialize();
+
+	const float kStartScale = 2.0f;
+
+	worldTransformStart_.scale_ = {kStartScale, kStartScale, kStartScale};
+	worldTransformStart_.translation_.x = -0.0f;
+	worldTransformStart_.translation_.y = -14.0f;
 
 	fade_ = new Fade;
 	fade_->Initialize();
@@ -66,8 +75,8 @@ void TitleScene::Update() {
 	camera_.TransferMatrix();
 
 	WorldtransformUpdate(worldTransformplayer_);
-
 	WorldtransformUpdate(worldTransformTitle_);
+	WorldtransformUpdate(worldTransformStart_);
 }
 
 void TitleScene::Draw() {
@@ -80,6 +89,7 @@ void TitleScene::Draw() {
 	// 描画
 	modelPlayer_->Draw(worldTransformplayer_, camera_);
 	modelTitle_->Draw(worldTransformTitle_, camera_);
+	modelStart_->Draw(worldTransformStart_, camera_);
 
 	fade_->Draw();
 

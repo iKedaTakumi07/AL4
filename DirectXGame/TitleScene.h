@@ -25,9 +25,11 @@ private:
 	// 3Dモデル
 	Model* modelTitle_ = nullptr;
 	Model* modelPlayer_ = nullptr;
+	Model* modelStart_ = nullptr;
 
 	WorldTransform worldTransformTitle_;
 	WorldTransform worldTransformplayer_;
+	WorldTransform worldTransformStart_;
 
 	// カメラ
 	Camera camera_;
