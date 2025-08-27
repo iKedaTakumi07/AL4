@@ -1,6 +1,7 @@
 #pragma once
 #include "Fade.h"
 #include "KamataEngine.h"
+#include "Skydome.h"
 #include <vector>
 using namespace KamataEngine;
 
@@ -32,10 +33,13 @@ private:
 	std::vector<WorldTransform*> worldTransforms_;
 
 	Model* SelectModel_;
+	Model* modelSkydome_ = nullptr;
 
 	WorldTransform SelectTransform_;
 
 	Model* SelectkeyModel_;
+	// 背景
+	Skydome* skydome_ = nullptr;
 
 	WorldTransform SelectkeyTransform_;
 

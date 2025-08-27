@@ -10,6 +10,12 @@ void SelectScene::Initialize() {
 	models_.push_back(Model::CreateFromOBJ("number2"));
 	models_.push_back(Model::CreateFromOBJ("number3"));
 
+	// 天球
+	skydome_ = new Skydome();
+
+	modelSkydome_ = Model::CreateFromOBJ("skydome", true);
+	skydome_->Initialize(modelSkydome_, &camera_);
+
 	const float kScale = 10.0f;
 
 	for (int i = 0; i < models_.size(); i++) {
@@ -43,6 +49,8 @@ void SelectScene::Initialize() {
 }
 
 void SelectScene::Update() {
+
+	skydome_->Update();
 
 	switch (phase_) {
 	case SelectScene::Phase::kFadeIn:
@@ -168,6 +176,8 @@ void SelectScene::Draw() {
 		models_[i]->Draw(*worldTransforms_[i], camera_);
 	}
 
+	skydome_->Draw();
+
 	SelectModel_->Draw(SelectTransform_, camera_);
 	SelectkeyModel_->Draw(SelectkeyTransform_, camera_);
 
@@ -185,4 +195,6 @@ SelectScene::~SelectScene() {
 
 	delete fade_;
 	delete SelectModel_;
+	delete skydome_;
+	delete modelSkydome_;
 }
