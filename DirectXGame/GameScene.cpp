@@ -46,6 +46,8 @@ GameScene::~GameScene() {
 
 void GameScene::Initialize() { /*初期化を書く*/
 
+	soundBGM = Audio::GetInstance()->LoadWave("stage.wav");
+
 	// ゲームプレイフェーズから開始
 	phase_ = Phase::kFadeIn;
 
@@ -166,7 +168,7 @@ void GameScene::Initialize() { /*初期化を書く*/
 	// スターコイン(チーズ)
 	Cheese_ = new cheese();
 	modelcheese_ = Model::CreateFromOBJ("cheese");
-	Vector3 cheesePosition = mapChipField_->GetMapChipPositionByIndex(4, 18);
+	Vector3 cheesePosition = mapChipField_->GetMapChipPositionByIndex(static_cast<uint32_t>(Stagecheese_[stageid_].goalX), static_cast<uint32_t>(Stagecheese_[stageid_].goalY));
 	Cheese_->Initialize(modelcheese_, &camera_, cheesePosition);
 }
 
@@ -271,6 +273,11 @@ void GameScene::CreateEffect(const Vector3& position) {
 
 void GameScene::Update() { /* 更新勝利を書く */
 
+	// bgm
+	if (!Audio::GetInstance()->IsPlaying(voiceHAndel)) {
+		voiceHAndel = Audio::GetInstance()->PlayWave(soundBGM, true, 0.5f);
+	}
+
 	enemies_.remove_if([](Enemy* enemy) {
 		if (enemy->isDead()) {
 			delete enemy;
@@ -309,10 +316,10 @@ void GameScene::Update() { /* 更新勝利を書く */
 
 		// UpdateCamera();
 #ifdef _DEBUG
-		//if (Input::GetInstance()->TriggerKey(DIK_SPACE)) {
+		// if (Input::GetInstance()->TriggerKey(DIK_SPACE)) {
 		//	// フラグをトグル
 		//	isDebugCameraActive_ = !isDebugCameraActive_;
-		//}
+		// }
 #endif
 
 		// カメラの処理
@@ -413,12 +420,15 @@ void GameScene::Update() { /* 更新勝利を書く */
 		fade_->Update();
 		if (fade_->IsFinished() && goal->isCleraed()) {
 			isGoal_ = true;
+			Audio::GetInstance()->StopWave(voiceHAndel);
 		}
 		if (fade_->IsFinished() && player_->IsDead()) {
 			finished_ = true;
+			Audio::GetInstance()->StopWave(voiceHAndel);
 		}
 		if (fade_->IsFinished() && isBack_) {
 			isBackSelect_ = true;
+			Audio::GetInstance()->StopWave(voiceHAndel);
 		}
 
 		skydome_->Update();

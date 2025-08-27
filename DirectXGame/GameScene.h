@@ -53,6 +53,10 @@ public:
 	void SetStage(int stageid) { stageid_ = stageid; };
 
 public:
+	// bgm
+	uint32_t soundBGM;
+	uint32_t voiceHAndel;
+
 	std::vector<std::vector<WorldTransform*>> worldTransformBlocks_;
 
 	// 3Dモデル
@@ -160,5 +164,12 @@ public:
         {62, 15},
         {97, 8 },
         {97, 18}
+    };
+
+	StageGoal Stagecheese_[4] = {
+	    {16, 15},
+        {17, 13},
+        {5,  10},
+        {29, 8}
     };
 };

@@ -6,7 +6,10 @@ using namespace KamataEngine;
 
 void ClearScene::Initialize() {
 
+	soundBGM = Audio::GetInstance()->LoadWave("clearSe.wav");
+
 	modelClearFont_ = Model::CreateFromOBJ("ClearFont");
+	modelStart_ = Model::CreateFromOBJ("SelectSpaceFont");
 
 	camera_.Initialize();
 
@@ -16,6 +19,19 @@ void ClearScene::Initialize() {
 
 	worldTransformClearFont_.scale_ = {kClearScale, kClearScale, kClearScale};
 	worldTransformClearFont_.translation_.y = 0.95f * std::numbers::pi_v<float>;
+
+	worldTransformStart_.Initialize();
+
+	const float kStartScale = 2.0f;
+
+	worldTransformStart_.scale_ = {kStartScale, kStartScale, kStartScale};
+	worldTransformStart_.translation_.x = -0.0f;
+	worldTransformStart_.translation_.y = -14.0f;
+
+	// bgm
+	if (!Audio::GetInstance()->IsPlaying(voiceHAndel)) {
+		voiceHAndel = Audio::GetInstance()->PlayWave(soundBGM, false, 0.5f);
+	}
 
 	fade_ = new Fade;
 	fade_->Initialize();
@@ -41,6 +57,7 @@ void ClearScene::Update() {
 	case ClearScene::Phase::kFadeOut:
 		fade_->Update();
 		if (fade_->IsFinished()) {
+			Audio::GetInstance()->StopWave(voiceHAndel);
 			finished_ = true;
 		}
 
@@ -54,6 +71,7 @@ void ClearScene::Update() {
 	worldTransformClearFont_.translation_.y = std::sin(angle) + 10.0f;
 
 	WorldtransformUpdate(worldTransformClearFont_);
+	WorldtransformUpdate(worldTransformStart_);
 
 	camera_.TransferMatrix();
 }
@@ -66,6 +84,7 @@ void ClearScene::Draw() {
 
 	// 描画
 	modelClearFont_->Draw(worldTransformClearFont_, camera_);
+	modelStart_->Draw(worldTransformStart_, camera_);
 
 	fade_->Draw();
 

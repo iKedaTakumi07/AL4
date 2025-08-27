@@ -23,10 +23,15 @@ public:
 	bool isFinished() const { return finished_; };
 
 private:
+	// bgm
+	uint32_t soundBGM;
+	uint32_t voiceHAndel;
 	// 3Dモデル
 	Model* modelClearFont_ = nullptr;
+	Model* modelStart_ = nullptr;
 
 	WorldTransform worldTransformClearFont_;
+	WorldTransform worldTransformStart_;
 
 	// カメラ
 	Camera camera_;
