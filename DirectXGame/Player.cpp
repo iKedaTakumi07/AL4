@@ -313,6 +313,17 @@ void Player::InputMove() {
 
 	} else {
 
+		// スペースジャンプ(2弾ジャンプ)
+		if (Input::GetInstance()->TriggerKey(DIK_UP)) {
+			if (!isSpaceJump) {
+				isSpaceJump = true;
+
+				// 落下速度をリセットする必要あり
+				velocity_.y = 0.0f;
+				velocity_.y += kSpaceJumpAcceleration / 60.0f;
+			}
+		}
+
 		// 落下速度
 		velocity_.y += -kGravityAcceleration / 60.0f;
 		// 落下速度制限
@@ -594,6 +605,8 @@ void Player::UpDateOnGround(const CollisionMapInfo& info) {
 	} else {
 		if (info.landing) {
 			onGround_ = true;
+			isSpaceJump = false;
+
 			velocity_.x *= (1.0f - kAttenuationLanding);
 			velocity_.y = 0.0f;
 		}

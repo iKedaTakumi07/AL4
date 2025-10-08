@@ -78,7 +78,7 @@ private:
 	// 座標
 	Vector3 velocity_{};
 	// 加速/減速/最大速度
-	static inline const float kAcceleration = 0.005f;
+	static inline const float kAcceleration = 0.01f;
 	static inline const float kAtteleration = 0.1f;
 	static inline const float kLimitRunSpeed = 0.15f;
 
@@ -91,11 +91,14 @@ private:
 
 	// 着地状態フラグ
 	bool onGround_ = true;
+	// 2段ジャンプ
+	bool isSpaceJump = false;
 
-	// 重力加速度/最大落下速度/ジャンプ初速
+	// 重力加速度/最大落下速度/ジャンプ初速/2段ジャンプ初速
 	static inline const float kGravityAcceleration = 0.98f;
 	static inline const float kLimitFallSpeed = 0.5f;
 	static inline const float kJumpAcceleration = 20.0f;
+	static inline const float kSpaceJumpAcceleration = 15.0f;
 
 	// モデル
 	Model* model_ = nullptr;
@@ -120,6 +123,7 @@ private:
 
 	void InputMove();
 
+	// 当たり判定
 	void CheckMapCollision(CollisionMapInfo& info);
 
 	// 全方向

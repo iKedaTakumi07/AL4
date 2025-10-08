@@ -7,6 +7,14 @@
 
 using namespace KamataEngine;
 
+/// メモ
+///
+/// 今の予定
+/// プレイヤーのアクションを増やす
+/// 2段ジャンプ
+/// 射撃
+/// マウスカーソルを使ったエイム
+
 enum class Scene {
 	kunknown = 0,
 
