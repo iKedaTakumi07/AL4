@@ -23,12 +23,8 @@ public:
 
 	// 初期化
 	void Initialize();
-
-	/*void IntStage(int stageId);*/
-
 	// 更新
 	void Update();
-
 	// 描画
 	void Draw();
 
@@ -45,19 +41,20 @@ public:
 
 	bool isCleraed() const { return isGoal_; };
 
-	bool isBack() const { return isBack_; };
-	bool isBackSelect() const { return isBackSelect_; };
-
 	void CreateEffect(const Vector3& position);
-
-	void SetStage(int stageid) { stageid_ = stageid; };
 
 public:
 	// bgm
 	uint32_t soundBGM;
 	uint32_t voiceHAndel;
 
-	std::vector<std::vector<WorldTransform*>> worldTransformBlocks_;
+	// カメラ
+	Camera camera_;
+	// 追跡カメラ
+	CameraController* CameraController_ = nullptr;
+	// デバックカメラ
+	DebugCamera* debugCamera_ = nullptr;
+	bool isDebugCameraActive_ = false;
 
 	// 3Dモデル
 	Model* modelblock_ = nullptr;
@@ -69,9 +66,10 @@ public:
 	Model* modelHitEffect = nullptr;
 	Model* goalmodel_ = nullptr;
 	Model* modelcheese_ = nullptr;
-	Model* tutorialFont_ = nullptr;
 
+	// 座標
 	WorldTransform tutorialWorldTransform_;
+	std::vector<std::vector<WorldTransform*>> worldTransformBlocks_;
 
 	// 背景
 	Skydome* skydome_ = nullptr;
@@ -79,53 +77,36 @@ public:
 	// プレイヤー
 	Player* player_ = nullptr;
 
-	// 追跡カメラ
-	CameraController* CameraController_ = nullptr;
-
 	// マップチップフィールド
 	MapChipField* mapChipField_;
 
-	// カメラ
-	Camera camera_;
-
-	// スターコイン(チーズ)
+	// スターコイン(チーズ)→パワーアップアイテムに変更予定
 	cheese* Cheese_;
-
-	// デバックカメラ有効
-	bool isDebugCameraActive_ = false;
-
-	// デバックカメラ
-	DebugCamera* debugCamera_ = nullptr;
 
 	// 敵
 	std::list<Enemy*> enemies_;
 
 	// ですパーティクル
 	DeathParticles* deathParticles_ = nullptr;
+	std::list<HitEffect*> hitEffects_;
 
+	// フェード
 	enum class Phase {
 		kFadeIn,
 		kPlay,
 		kDeath,
 		kFadeOut,
 	};
-
 	Phase phase_;
-
 	Fade* fade_ = nullptr;
-
-	bool finished_ = false;
 
 	Goal* goal = nullptr;
 
+	// フラグ
+	bool finished_ = false;
 	bool isGoal_ = false;
-	bool isBack_ = false;
-	bool isBackSelect_ = false;
 
-	std::list<HitEffect*> hitEffects_;
-
-	int stageid_;
-
+	// 敵配置→josnとかにしたい
 	std::vector<Vector3> stage0Enemies = {
 	    {38.0f, 7.0f, 0.0f},
 	};
@@ -170,6 +151,6 @@ public:
 	    {16, 15},
         {17, 13},
         {5,  10},
-        {29, 8}
+        {29, 8 }
     };
 };

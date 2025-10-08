@@ -5,10 +5,6 @@
 #include "TitleScene.h"
 #include <Windows.h>
 
-TitleScene* titleScene = nullptr;
-GameScene* gameScene = nullptr;
-SelectScene* selectScene = nullptr;
-ClearScene* cleraScene = nullptr;
 using namespace KamataEngine;
 
 enum class Scene {
@@ -18,38 +14,39 @@ enum class Scene {
 	kSelect,
 	kGame,
 	kClera,
+	kOver,
 };
 
 // ゲームスクリーン
-Scene scene = Scene::kunknown;
+TitleScene* titleScene = nullptr;
+GameScene* gameScene = nullptr;
+// SelectScene* selectScene = nullptr;
+ClearScene* cleraScene = nullptr;
 
-// ステージナンバー(解決策を見つけろ)
-int number = 0;
+Scene scene = Scene::kunknown;
 
 void ChangeScene() {
 	switch (scene) {
-
 	case Scene::kTitle:
 		if (titleScene->isFinished()) {
-			scene = Scene::kSelect;
+			scene = Scene::kGame;
 			delete titleScene;
 			titleScene = nullptr;
-			selectScene = new SelectScene();
-			selectScene->Initialize();
+			/*selectScene = new SelectScene();
+			selectScene->Initialize();*/
+			gameScene = new GameScene();
+			gameScene->Initialize();
 		}
 
 		break;
 	case Scene::kSelect:
-		if (selectScene->isFinished()) {
-			number = selectScene->GetStageNumber();
-
-			scene = Scene::kGame;
-			delete selectScene;
-			selectScene = nullptr;
-			gameScene = new GameScene();
-			gameScene->SetStage(number);
-			gameScene->Initialize();
-		}
+		/*if (selectScene->isFinished()) {
+		    scene = Scene::kGame;
+		    delete selectScene;
+		    selectScene = nullptr;
+		    gameScene = new GameScene();
+		    gameScene->Initialize();
+		}*/
 		break;
 
 	case Scene::kGame:
@@ -58,7 +55,6 @@ void ChangeScene() {
 			delete gameScene;
 			gameScene = nullptr;
 			gameScene = new GameScene();
-			gameScene->SetStage(number);
 			gameScene->Initialize();
 			break;
 		}
@@ -70,24 +66,20 @@ void ChangeScene() {
 			cleraScene->Initialize();
 			break;
 		}
-		if (gameScene->isBackSelect()) {
-			scene = Scene::kSelect;
-			delete gameScene;
-			gameScene = nullptr;
-			selectScene = new SelectScene();
-			selectScene->Initialize();
-			break;
-		}
 
 		break;
 	case Scene::kClera:
 		if (cleraScene->isFinished()) {
-			scene = Scene::kSelect;
+			scene = Scene::kTitle;
 			delete cleraScene;
 			cleraScene = nullptr;
-			selectScene = new SelectScene;
-			selectScene->Initialize();
+			/*selectScene = new SelectScene;
+			selectScene->Initialize();*/
+			titleScene = new TitleScene;
+			titleScene->Initialize();
 		}
+		break;
+	case Scene::kOver:
 
 		break;
 	}
@@ -100,13 +92,16 @@ void UpdateScene() {
 
 		break;
 	case Scene::kSelect:
-		selectScene->Update();
+		/*selectScene->Update();*/
 		break;
 	case Scene::kGame:
 		gameScene->Update();
 		break;
 	case Scene::kClera:
 		cleraScene->Update();
+		break;
+	case Scene::kOver:
+
 		break;
 	}
 }
@@ -117,13 +112,16 @@ void DrawScene() {
 		titleScene->Draw();
 		break;
 	case Scene::kSelect:
-		selectScene->Draw();
+		/*selectScene->Draw();*/
 		break;
 	case Scene::kGame:
 		gameScene->Draw();
 		break;
 	case Scene::kClera:
 		cleraScene->Draw();
+		break;
+	case Scene::kOver:
+
 		break;
 	}
 }
@@ -184,7 +182,7 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 
 	// ゲームシーンの解放
 	delete titleScene;
-	delete selectScene;
+	/*delete selectScene;*/
 	delete gameScene;
 	delete cleraScene;
 

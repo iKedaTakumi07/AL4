@@ -12,7 +12,6 @@ GameScene::~GameScene() {
 	delete skydome_;
 	delete modelPlayer_;
 	delete player_;
-	delete tutorialFont_;
 
 	for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) {
 		for (WorldTransform* worldTransformBlock : worldTransformBlockLine) {
@@ -68,23 +67,7 @@ void GameScene::Initialize() { /*初期化を書く*/
 
 	// マップチップ
 	mapChipField_ = new MapChipField;
-	if (stageid_ == 0) {
-		mapChipField_->LoadMapChipCsv("Resources/tutorial.csv");
-	} else if (stageid_ == 1) {
-		mapChipField_->LoadMapChipCsv("Resources/map.csv");
-	} else if (stageid_ == 2) {
-		mapChipField_->LoadMapChipCsv("Resources/map2.csv");
-	} else if (stageid_ == 3) {
-		mapChipField_->LoadMapChipCsv("Resources/map3.csv");
-	}
-
-	tutorialFont_ = Model::CreateFromOBJ("tutorialFont");
-	tutorialWorldTransform_.Initialize();
-	float tutorialFont = 3.0f;
-	tutorialWorldTransform_.scale_ = {tutorialFont, tutorialFont, tutorialFont};
-	tutorialWorldTransform_.translation_ = {5.0f, 5.0f, 0.0f};
-	WorldtransformUpdate(tutorialWorldTransform_);
-
+	mapChipField_->LoadMapChipCsv("Resources/map3.csv");
 	GenerateBlocks();
 
 	// プレイヤー
@@ -110,24 +93,7 @@ void GameScene::Initialize() { /*初期化を書く*/
 	modelEnemy_ = Model::CreateFromOBJ("newEnemy");
 
 	std::vector<Vector3>* enemyPosition = nullptr;
-	switch (stageid_) {
-	case 0:
-		enemyPosition = &stage0Enemies;
-		break;
-	case 1:
-		enemyPosition = &stage1Enemies;
-		break;
-	case 2:
-		enemyPosition = &stage2Enemies;
-		break;
-	case 3:
-		enemyPosition = &stage3Enemies;
-		break;
-	default:
-		assert(enemyPosition);
-		enemyPosition = &stage1Enemies;
-		break;
-	}
+	enemyPosition = &stage3Enemies;
 
 	/*for (int32_t i = 0; i < 1; ++i) {
 	    Enemy* newEnemy = new Enemy();
@@ -162,14 +128,8 @@ void GameScene::Initialize() { /*初期化を書く*/
 	goal = new Goal();
 
 	goalmodel_ = Model::CreateFromOBJ("goal");
-	Vector3 goalPosition = mapChipField_->GetMapChipPositionByIndex(static_cast<uint32_t>(StageGoals_[stageid_].goalX), static_cast<uint32_t>(StageGoals_[stageid_].goalY));
+	Vector3 goalPosition = mapChipField_->GetMapChipPositionByIndex(static_cast<uint32_t>(StageGoals_[3].goalX), static_cast<uint32_t>(StageGoals_[3].goalY));
 	goal->Initialize(goalmodel_, &camera_, goalPosition);
-
-	// スターコイン(チーズ)
-	Cheese_ = new cheese();
-	modelcheese_ = Model::CreateFromOBJ("cheese");
-	Vector3 cheesePosition = mapChipField_->GetMapChipPositionByIndex(static_cast<uint32_t>(Stagecheese_[stageid_].goalX), static_cast<uint32_t>(Stagecheese_[stageid_].goalY));
-	Cheese_->Initialize(modelcheese_, &camera_, cheesePosition);
 }
 
 void GameScene::GenerateBlocks() {
@@ -202,7 +162,7 @@ void GameScene::CheckAllCollisions() {
 
 #pragma region
 	{
-		AABB aabb1, aabb2, aabb3, aabb4;
+		AABB aabb1, aabb2, aabb3;
 
 		aabb1 = player_->GetAABB();
 
@@ -227,15 +187,6 @@ void GameScene::CheckAllCollisions() {
 		if (IsCollision(aabb1, aabb3)) {
 			goal->OnCollision(player_);
 		}
-
-		/*if (Cheese_->IsCollisionDisabled()) {*/
-		/*continue;*/
-
-		aabb4 = Cheese_->GetAABB();
-		if (IsCollision(aabb1, aabb4)) {
-			Cheese_->OnCollision();
-		}
-		/*}*/
 	}
 }
 
@@ -255,10 +206,7 @@ void GameScene::ChangePhase() {
 		if (goal->isCleraed()) {
 			phase_ = Phase::kFadeOut;
 		}
-		if (Input::GetInstance()->PushKey(DIK_BACKSPACE)) {
-			phase_ = Phase::kFadeOut;
-			isBack_ = true;
-		}
+
 		break;
 	case GameScene::Phase::kDeath:
 		break;
@@ -273,10 +221,17 @@ void GameScene::CreateEffect(const Vector3& position) {
 
 void GameScene::Update() { /* 更新勝利を書く */
 
-	// bgm
-	if (!Audio::GetInstance()->IsPlaying(voiceHAndel)) {
-		voiceHAndel = Audio::GetInstance()->PlayWave(soundBGM, true, 0.5f);
+#ifdef _DEBUG
+	if (Input::GetInstance()->TriggerKey(DIK_SPACE)) {
+		// フラグをトグル
+		isDebugCameraActive_ = !isDebugCameraActive_;
 	}
+#endif
+
+	// bgm
+	/*if (!Audio::GetInstance()->IsPlaying(voiceHAndel)) {
+	    voiceHAndel = Audio::GetInstance()->PlayWave(soundBGM, true, 0.5f);
+	}*/
 
 	enemies_.remove_if([](Enemy* enemy) {
 		if (enemy->isDead()) {
@@ -285,10 +240,6 @@ void GameScene::Update() { /* 更新勝利を書く */
 		}
 		return false;
 	});
-
-	/*if (Cheese_->isDead()) {
-	    delete Cheese_;
-	};*/
 
 	ChangePhase();
 
@@ -311,16 +262,6 @@ void GameScene::Update() { /* 更新勝利を書く */
 		for (Enemy* enemy : enemies_) {
 			enemy->Update();
 		}
-
-		Cheese_->Update();
-
-		// UpdateCamera();
-#ifdef _DEBUG
-		// if (Input::GetInstance()->TriggerKey(DIK_SPACE)) {
-		//	// フラグをトグル
-		//	isDebugCameraActive_ = !isDebugCameraActive_;
-		// }
-#endif
 
 		// カメラの処理
 		if (isDebugCameraActive_) {
@@ -362,15 +303,6 @@ void GameScene::Update() { /* 更新勝利を書く */
 			hitEffect->Update();
 		}
 		goal->Update();
-
-		Cheese_->Update();
-//		UpdateCamera();
-#ifdef _DEBUG
-		if (Input::GetInstance()->TriggerKey(DIK_SPACE)) {
-			// フラグをトグル
-			isDebugCameraActive_ = !isDebugCameraActive_;
-		}
-#endif
 
 		// カメラの処理
 		if (isDebugCameraActive_) {
@@ -426,16 +358,10 @@ void GameScene::Update() { /* 更新勝利を書く */
 			finished_ = true;
 			Audio::GetInstance()->StopWave(voiceHAndel);
 		}
-		if (fade_->IsFinished() && isBack_) {
-			isBackSelect_ = true;
-			Audio::GetInstance()->StopWave(voiceHAndel);
-		}
 
 		skydome_->Update();
 		CameraController_->Update();
 		goal->Update();
-
-		Cheese_->Update();
 
 		for (Enemy* enemy : enemies_) {
 			enemy->Update();
@@ -460,7 +386,6 @@ void GameScene::Draw() {
 	skydome_->Draw();
 
 	goal->Draw();
-	Cheese_->Draw();
 
 	// 敵
 	for (Enemy* enemy : enemies_) {
@@ -484,10 +409,6 @@ void GameScene::Draw() {
 
 	for (HitEffect* hitEffect : hitEffects_) {
 		hitEffect->Draw();
-	}
-
-	if (stageid_ == 0) {
-		tutorialFont_->Draw(tutorialWorldTransform_, camera_);
 	}
 
 	Model::PostDraw();
