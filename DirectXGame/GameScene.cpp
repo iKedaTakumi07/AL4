@@ -222,11 +222,23 @@ void GameScene::CreateEffect(const Vector3& position) {
 void GameScene::Update() { /* 更新勝利を書く */
 
 #ifdef _DEBUG
-	if (Input::GetInstance()->TriggerKey(DIK_SPACE)) {
-		// フラグをトグル
-		isDebugCameraActive_ = !isDebugCameraActive_;
-	}
+	// if (Input::GetInstance()->TriggerKey(DIK_SPACE)) {
+	//	// フラグをトグル
+	//	isDebugCameraActive_ = !isDebugCameraActive_;
+	// }
 #endif
+
+	// カメラの処理
+	if (isDebugCameraActive_) {
+		/*debugCamera_->Update();*/
+		camera_.matView = debugCamera_->GetCamera().matView;
+		camera_.matProjection = debugCamera_->GetCamera().matProjection;
+		// ビュープロジェクション行列の転送
+		camera_.TransferMatrix();
+	} else {
+		// ビュープロジェクション行列の更新と転送
+		camera_.UpdateMatrix();
+	}
 
 	// bgm
 	/*if (!Audio::GetInstance()->IsPlaying(voiceHAndel)) {
@@ -263,18 +275,6 @@ void GameScene::Update() { /* 更新勝利を書く */
 			enemy->Update();
 		}
 
-		// カメラの処理
-		if (isDebugCameraActive_) {
-			/*debugCamera_->Update();*/
-			camera_.matView = debugCamera_->GetCamera().matView;
-			camera_.matProjection = debugCamera_->GetCamera().matProjection;
-			// ビュープロジェクション行列の転送
-			camera_.TransferMatrix();
-		} else {
-			// ビュープロジェクション行列の更新と転送
-			camera_.UpdateMatrix();
-		}
-
 		// ブロックの更新
 		for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) {
 			for (WorldTransform*& worldTransformBlock : worldTransformBlockLine) {
@@ -304,19 +304,6 @@ void GameScene::Update() { /* 更新勝利を書く */
 		}
 		goal->Update();
 
-		// カメラの処理
-		if (isDebugCameraActive_) {
-			debugCamera_->Update();
-			camera_.matView = debugCamera_->GetCamera().matView;
-			camera_.matProjection = debugCamera_->GetCamera().matProjection;
-			// ビュープロジェクション行列の転送
-			camera_.TransferMatrix();
-		} else {
-			// ビュープロジェクション行列の更新と転送
-			camera_.UpdateMatrix();
-		}
-
-		// UpdateBlocks();
 		//  ブロックの更新
 		for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) {
 			for (WorldTransform*& worldTransformBlock : worldTransformBlockLine) {

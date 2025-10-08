@@ -257,12 +257,12 @@ void Player::InputMove() {
 	// 左右移動操作
 	if (onGround_) {
 
-		if (Input::GetInstance()->PushKey(DIK_RIGHT) || Input::GetInstance()->PushKey(DIK_LEFT)) {
+		if (Input::GetInstance()->PushKey(DIK_A) || Input::GetInstance()->PushKey(DIK_D)) {
 
 			// 左右加速
 			Vector3 acceleration = {};
 
-			if (Input::GetInstance()->PushKey(DIK_RIGHT)) {
+			if (Input::GetInstance()->PushKey(DIK_D)) {
 				// 左移動中の右入力
 				if (velocity_.x < 0.0f) {
 					// ブレーキ
@@ -278,7 +278,7 @@ void Player::InputMove() {
 					turnTimer_ = kTimeTurn;
 				}
 
-			} else if (Input::GetInstance()->PushKey(DIK_LEFT)) {
+			} else if (Input::GetInstance()->PushKey(DIK_A)) {
 				// 右移動中の左入力
 				if (velocity_.x > 0.0f) {
 					// ブレーキ
@@ -305,7 +305,7 @@ void Player::InputMove() {
 			velocity_.x *= (1.0f - kAtteleration);
 		}
 
-		if (Input::GetInstance()->PushKey(DIK_UP)) {
+		if (Input::GetInstance()->TriggerKey(DIK_W)) {
 
 			// ジャンプ初速
 			velocity_.y += kJumpAcceleration / 60.0f;
@@ -314,7 +314,7 @@ void Player::InputMove() {
 	} else {
 
 		// スペースジャンプ(2弾ジャンプ)
-		if (Input::GetInstance()->TriggerKey(DIK_UP)) {
+		if (Input::GetInstance()->TriggerKey(DIK_W)) {
 			if (!isSpaceJump) {
 				isSpaceJump = true;
 
