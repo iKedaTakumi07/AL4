@@ -52,7 +52,7 @@ public:
 
 	void SetMapChipField(MapChipField* mapChipField) { mapChipFeild_ = mapChipField; };
 
-	Vector3 GetWorldPosition()const;
+	Vector3 GetWorldPosition() const;
 
 	AABB GetAABB();
 
@@ -78,9 +78,9 @@ private:
 	// 座標
 	Vector3 velocity_{};
 	// 加速/減速/最大速度
-	static inline const float kAcceleration = 0.01f;
-	static inline const float kAtteleration = 0.05f;
-	static inline const float kLimitRunSpeed = 0.3f;
+	static inline const float kAcceleration = 0.005f;
+	static inline const float kAtteleration = 0.1f;
+	static inline const float kLimitRunSpeed = 0.15f;
 
 	// 左右向き/角度/タイマー/旋回時間
 	LRDirection lrDirection_ = LRDirection::kRight;
@@ -137,11 +137,9 @@ private:
 	static inline const float kBlank = 0.04f;
 	// 設置状態の切り替え
 	void UpDateOnGround(const CollisionMapInfo& info);
-	// 着地時の速度軽減率
-	static inline const float kAttenuationLanding = 0.1f;
-	// 微小な数値
+	// 着地時の速度軽減率/微小な数値/速度減衰率
+	static inline const float kAttenuationLanding = 0.9f;
 	static inline const float kGroundSearchHeight = 0.06f;
-	// 速度減衰率
 	static inline const float kAttenuationWall = 0.2f;
 
 	// ですフラグ
