@@ -1,4 +1,5 @@
 #pragma once
+#include "Bullet.h"
 #include "KamataEngine.h"
 #include "Math.h"
 
@@ -168,4 +169,7 @@ private:
 	// 余韻動作の時間
 	static inline const uint32_t kRecoveryTime = 12;
 	WorldTransform worldTransformAttack_;
+
+	// 弾
+	std::list<Bullet*> bullet;
 };
