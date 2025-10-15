@@ -1,4 +1,5 @@
 #pragma once
+#include "Bullet.h"
 #include "CameraController.h"
 #include "DeathParticles.h"
 #include "Enemy.h"
@@ -11,7 +12,6 @@
 #include "Player.h"
 #include "Skydome.h"
 #include "cheese.h"
-#include "Bullet.h"
 #include <vector>
 
 using namespace KamataEngine;
@@ -60,9 +60,10 @@ public:
 
 	// 3Dモデル
 	Model* modelblock_ = nullptr;
-	Model* modelPlayerAttck_ = nullptr;
 	Model* modelSkydome_ = nullptr;
 	Model* modelPlayer_ = nullptr;
+	Model* modelPlayerAttck_ = nullptr;
+	Model* modelBullet_ = nullptr;
 	Model* modelEnemy_ = nullptr;
 	Model* modelDeathParticles_ = nullptr;
 	Model* modelHitEffect = nullptr;

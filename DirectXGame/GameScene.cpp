@@ -79,6 +79,7 @@ void GameScene::Initialize() { /*初期化を書く*/
 
 	modelPlayer_ = Model::CreateFromOBJ("newplayer");
 	modelPlayerAttck_ = Model::CreateFromOBJ("attack_effect");
+	modelBullet_ = Model::CreateFromOBJ("bullet");
 	Vector3 playerPosition = mapChipField_->GetMapChipPositionByIndex(2, 13);
 
 	player_->SetMapChipField(mapChipField_);
@@ -166,7 +167,7 @@ void GameScene::CheckAllCollisions() {
 
 #pragma region
 	{
-		AABB aabb1, aabb2, aabb3;
+		AABB aabb1, aabb2, aabb3 /*, aabb4*/;
 
 		aabb1 = player_->GetAABB();
 
@@ -184,6 +185,8 @@ void GameScene::CheckAllCollisions() {
 				// 敵キャラの衝突判定を呼び出す
 				enemy->OnCollision(player_);
 			}
+
+			// 弾と敵の当たり判定
 		}
 
 		aabb3 = goal->GetAABB();
@@ -302,6 +305,23 @@ void GameScene::Update() { /* 更新勝利を書く */
 		}
 		goal->Update();
 
+		if (Input::GetInstance()->TriggerKey(DIK_SPACE)) {
+			// ここに弾を生成する(予定)
+
+			// プレイヤー位置を基準に弾をスポーン
+			Vector3 spawnPos = player_->GetWorldPosition();
+			// プレイヤーの向きがわかればそれに合わせる
+
+			Bullet* newBullet = new Bullet();
+			newBullet->Initialize(modelBullet_, &camera_, spawnPos);
+
+			PlayerBullet_.push_back(newBullet);
+		}
+
+		for (Bullet* bullet : PlayerBullet_) {
+			bullet->Update();
+		}
+
 		CheckAllCollisions();
 		break;
 	case Phase::kDeath:
@@ -350,6 +370,10 @@ void GameScene::Draw() {
 	// 敵
 	for (Enemy* enemy : enemies_) {
 		enemy->Draw();
+	}
+
+	for (Bullet* bullet : PlayerBullet_) {
+		bullet->Draw();
 	}
 
 	// ブロックの描画
