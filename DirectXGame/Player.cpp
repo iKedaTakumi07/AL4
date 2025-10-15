@@ -111,7 +111,6 @@ void Player::OnCollision(const Enemy* enemy) {
 		return;
 	}
 
-	/*velocity_ += Vector3(0, kJumpAcceleration / 60.0f, 0);*/
 	isDead_ = true;
 
 	(void)enemy;
@@ -154,9 +153,13 @@ void Player::BehaviorRootUpdata() {
 		worldTransform_.rotation_.y = easeInOutQuint(destiationRotationY, turnFirstRotationY_, turnTimer_ / kTimeTurn);
 	}
 
-	if (Input::GetInstance()->TriggerKey(DIK_SPACE)) {
+	if (Input::GetInstance()->TriggerKey(DIK_E)) {
 		behaviorRequest_ = Behavior::kAttack;
 	}
+
+	/*if (Input::GetInstance()->TriggerKey(DIK_SPACE)){
+	    behaviorRequest_ = Behavior::kshoot;
+	}*/
 }
 
 void Player::BehaviorAttackInitialize() {

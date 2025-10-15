@@ -11,9 +11,11 @@
 #include "Player.h"
 #include "Skydome.h"
 #include "cheese.h"
+#include "Bullet.h"
 #include <vector>
 
 using namespace KamataEngine;
+using namespace std;
 
 // ゲームシーン
 class GameScene {
@@ -85,6 +87,9 @@ public:
 
 	// 敵
 	std::list<Enemy*> enemies_;
+
+	// プレイヤーの球
+	list<Bullet*> PlayerBullet_;
 
 	// ですパーティクル
 	DeathParticles* deathParticles_ = nullptr;

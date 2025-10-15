@@ -1,5 +1,4 @@
 #pragma once
-#include "Bullet.h"
 #include "KamataEngine.h"
 #include "Math.h"
 
@@ -15,6 +14,7 @@ public:
 		kUnknown = -1,
 		kRoot,
 		kAttack,
+		kshoot,
 	};
 
 	// 攻撃モーション
@@ -170,6 +170,5 @@ private:
 	static inline const uint32_t kRecoveryTime = 12;
 	WorldTransform worldTransformAttack_;
 
-	// 弾
-	std::list<Bullet*> bullet;
+
 };

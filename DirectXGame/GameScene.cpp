@@ -20,6 +20,10 @@ GameScene::~GameScene() {
 	}
 	worldTransformBlocks_.clear();
 
+	for (Bullet* bullet : PlayerBullet_) {
+		delete bullet;
+	}
+
 	delete debugCamera_;
 	delete modelSkydome_;
 	delete mapChipField_;
@@ -253,6 +257,25 @@ void GameScene::Update() { /* 更新勝利を書く */
 		return false;
 	});
 
+	skydome_->Update();
+	CameraController_->Update();
+
+	// ブロックの更新
+	for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) {
+		for (WorldTransform*& worldTransformBlock : worldTransformBlockLine) {
+
+			if (!worldTransformBlock)
+				continue;
+
+			// アフィン変換～DirectXに転送
+			WorldtransformUpdate(*worldTransformBlock);
+		}
+	}
+
+	for (Enemy* enemy : enemies_) {
+		enemy->Update();
+	}
+
 	ChangePhase();
 
 	switch (phase_) {
@@ -263,71 +286,27 @@ void GameScene::Update() { /* 更新勝利を書く */
 			phase_ = Phase::kPlay;
 		}
 
-		skydome_->Update();
-		CameraController_->Update();
-
 		// 自キャラの更新
 		player_->Update();
 
 		goal->Update();
 
-		for (Enemy* enemy : enemies_) {
-			enemy->Update();
-		}
-
-		// ブロックの更新
-		for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) {
-			for (WorldTransform*& worldTransformBlock : worldTransformBlockLine) {
-
-				if (!worldTransformBlock)
-					continue;
-
-				// アフィン変換～DirectXに転送
-				WorldtransformUpdate(*worldTransformBlock);
-			}
-		}
 		break;
 	case Phase::kPlay:
 
-		skydome_->Update();
-		CameraController_->Update();
-
 		// 自キャラの更新
 		player_->Update();
-
-		for (Enemy* enemy : enemies_) {
-			enemy->Update();
-		}
 
 		for (HitEffect* hitEffect : hitEffects_) {
 			hitEffect->Update();
 		}
 		goal->Update();
 
-		//  ブロックの更新
-		for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) {
-			for (WorldTransform*& worldTransformBlock : worldTransformBlockLine) {
-
-				if (!worldTransformBlock)
-					continue;
-
-				// アフィン変換～DirectXに転送
-				WorldtransformUpdate(*worldTransformBlock);
-			}
-		}
-
 		CheckAllCollisions();
 		break;
 	case Phase::kDeath:
 		if (deathParticles_ && deathParticles_->IsFinished()) {
 			phase_ = Phase::kFadeOut;
-		}
-
-		skydome_->Update();
-		CameraController_->Update();
-
-		for (Enemy* enemy : enemies_) {
-			enemy->Update();
 		}
 
 		if (deathParticles_) {
@@ -346,13 +325,7 @@ void GameScene::Update() { /* 更新勝利を書く */
 			Audio::GetInstance()->StopWave(voiceHAndel);
 		}
 
-		skydome_->Update();
-		CameraController_->Update();
 		goal->Update();
-
-		for (Enemy* enemy : enemies_) {
-			enemy->Update();
-		}
 
 		break;
 	}
