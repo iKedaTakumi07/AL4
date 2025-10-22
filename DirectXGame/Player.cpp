@@ -575,8 +575,6 @@ Vector3 Player::CornerPosition(const Vector3& center, Corner corner) {
 
 void Player::UpDateOnGround(const CollisionMapInfo& info) {
 
-	info;
-
 	if (onGround_) {
 		if (velocity_.y > 0.0f) {
 			onGround_ = false;

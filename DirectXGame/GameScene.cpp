@@ -187,6 +187,9 @@ void GameScene::CheckAllCollisions() {
 			}
 
 			for (Bullet* bullet : PlayerBullet_) {
+				if (bullet->isDead())
+					continue;
+
 				aabb4 = bullet->GetAABB();
 
 				// 弾と敵の当たり判定
@@ -267,6 +270,14 @@ void GameScene::Update() { /* 更新勝利を書く */
 		return false;
 	});
 
+	PlayerBullet_.remove_if([](Bullet* bullet) {
+		if (bullet->isDead()) {
+			delete bullet;
+			return true;
+		}
+		return false;
+	});
+
 	skydome_->Update();
 	CameraController_->Update();
 
@@ -323,6 +334,7 @@ void GameScene::Update() { /* 更新勝利を書く */
 			Bullet* newBullet = new Bullet();
 			newBullet->Initialize(modelBullet_, &camera_, spawnPos);
 			newBullet->Setdirection(direction);
+			newBullet->SetMapChipField(mapChipField_);
 
 			PlayerBullet_.push_back(newBullet);
 		}

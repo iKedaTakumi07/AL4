@@ -5,13 +5,18 @@
 using namespace KamataEngine;
 
 class Player;
+class MapChipField;
 
 class Bullet {
 public:
 	// 左右
-	enum class LRDirection {
-		kRight,
-		kleft,
+	enum Corner {
+		kRightBottom,
+		kLeftBottom,
+		kRightTop,
+		KLeftTop,
+
+		KNumCorner, // 要素数
 	};
 
 	void Initialize(Model* model, Camera* camera, const Vector3& position);
@@ -26,9 +31,11 @@ public:
 
 	void Setdirection(Vector3 direction) { kBulletdirection = direction; };
 
+	void SetMapChipField(MapChipField* mapChipField) { mapChipFeild_ = mapChipField; };
+
 	// void OnCollision(const Player* player);
 
-	// bool isDead() const { return isDead_; };
+	 bool isDead() const { return isDead_; };
 	// bool IsCollisionDisabled() const { return isCollisionDisabled_; };
 
 private:
@@ -51,6 +58,8 @@ private:
 	void CheckMapCollisionRight(CollisionMapInfo& info);
 	void CheckMapCollisionLeft(CollisionMapInfo& info);
 
+	void isHit(const CollisionMapInfo& info);
+
 	// 速度
 	Vector3 velocity_ = {};
 
@@ -70,7 +79,13 @@ private:
 	bool isDead_ = false;
 
 	// キャラクターの当たり判定サイズ
-	static inline const float kWidth = 0.8f;
-	static inline const float kHeight = 0.8f;
+	static inline const float kWidth = 0.6f;
+	static inline const float kHeight = 0.6f;
 	/*bool isCollisionDisabled_ = false;*/
+
+	// マップチップによるフィールド
+	MapChipField* mapChipFeild_ = nullptr;
+	// 指定した角の計算
+	Vector3 CornerPosition(const Vector3& center, Corner Corner);
+	static inline const float kBlank = 0.04f;
 };
