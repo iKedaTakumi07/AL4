@@ -326,8 +326,17 @@ void GameScene::Update() { /* 更新勝利を書く */
 		goal->Update();
 
 		if (Input::GetInstance()->TriggerKey(DIK_SPACE)) {
-			// ここに弾を生成する(予定)
-			// 2.5以上 = 左。以下 =右
+			// ここに弾を生成する(今は仮の生成コード)
+			//
+			// プレイヤーの座標
+			// マウスの座標
+			// 内積か外積を利用して方向を割り出す
+			//
+			// // ↓これを使て発射位置を調整?
+			// Input::GetInstance()->GetMousePosition();
+			// set関数で方向を指定
+			//
+			//
 			// プレイヤー位置を基準に弾をスポーン
 			Vector3 spawnPos = player_->GetWorldPosition();
 			Vector3 direction = player_->Getdirection();
