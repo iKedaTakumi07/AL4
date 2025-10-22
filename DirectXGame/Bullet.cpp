@@ -219,6 +219,8 @@ void Bullet::CheckMapCollisionRight(CollisionMapInfo& info) {
 	}
 }
 
+void Bullet::OnCollision() { isDead_ = true; }
+
 void Bullet::CheckMapCollisionLeft(CollisionMapInfo& info) {
 	// 左移動あり?
 	if (info.move.x >= 0) {

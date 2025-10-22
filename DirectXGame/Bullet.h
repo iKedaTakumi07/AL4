@@ -4,7 +4,7 @@
 
 using namespace KamataEngine;
 
-class Player;
+class Enemy;
 class MapChipField;
 
 class Bullet {
@@ -33,9 +33,9 @@ public:
 
 	void SetMapChipField(MapChipField* mapChipField) { mapChipFeild_ = mapChipField; };
 
-	// void OnCollision(const Player* player);
+	void OnCollision();
 
-	 bool isDead() const { return isDead_; };
+	bool isDead() const { return isDead_; };
 	// bool IsCollisionDisabled() const { return isCollisionDisabled_; };
 
 private:

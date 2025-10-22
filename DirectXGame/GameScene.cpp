@@ -195,6 +195,8 @@ void GameScene::CheckAllCollisions() {
 				// 弾と敵の当たり判定
 				if (IsCollision(aabb2, aabb4)) {
 					enemy->OnCollision();
+
+					bullet->OnCollision();
 				}
 			}
 		}
