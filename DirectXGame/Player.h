@@ -54,6 +54,10 @@ public:
 	void SetMapChipField(MapChipField* mapChipField) { mapChipFeild_ = mapChipField; };
 
 	Vector3 GetWorldPosition() const;
+	Vector3 GetWorldRotation() const;
+
+	Vector3 Getdirection() { return worldTransform_.rotation_; };
+	LRDirection GetLRDirection() { return lrDirection_; };
 
 	AABB GetAABB();
 
@@ -169,6 +173,4 @@ private:
 	// 余韻動作の時間
 	static inline const uint32_t kRecoveryTime = 12;
 	WorldTransform worldTransformAttack_;
-
-
 };

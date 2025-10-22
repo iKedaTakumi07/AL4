@@ -1,6 +1,7 @@
 #define NOMINMAX
 
 #include "Enemy.h"
+#include "Bullet.h"
 #include "GameScene.h"
 #include "MapChipField.h"
 #include "Math.h"
@@ -417,6 +418,28 @@ void Enemy::OnCollision(const Player* player) {
 
 		isCollisionDisabled_ = true;
 	}
+}
+
+void Enemy::OnCollision() {
+
+	// ふふふ
+	if (behavior_ == Behavior::kDefeated) {
+		return;
+	}
+
+	if (gameScene_) {
+
+		Vector3 effectPos;
+
+		effectPos.x = (GetWorldPosition()).x;
+		effectPos.y = (GetWorldPosition()).y;
+		effectPos.z = (GetWorldPosition()).z;
+		gameScene_->CreateEffect(effectPos);
+	}
+
+	behaviorRequest_ = Behavior::kDefeated;
+
+	isCollisionDisabled_ = true;
 }
 
 void Enemy::UpDateOnGround(const CollisionMapInfo& info) {

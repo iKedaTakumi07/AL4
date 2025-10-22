@@ -167,7 +167,7 @@ void GameScene::CheckAllCollisions() {
 
 #pragma region
 	{
-		AABB aabb1, aabb2, aabb3 /*, aabb4*/;
+		AABB aabb1, aabb2, aabb3, aabb4;
 
 		aabb1 = player_->GetAABB();
 
@@ -186,7 +186,14 @@ void GameScene::CheckAllCollisions() {
 				enemy->OnCollision(player_);
 			}
 
-			// 弾と敵の当たり判定
+			for (Bullet* bullet : PlayerBullet_) {
+				aabb4 = bullet->GetAABB();
+
+				// 弾と敵の当たり判定
+				if (IsCollision(aabb2, aabb4)) {
+					enemy->OnCollision();
+				}
+			}
 		}
 
 		aabb3 = goal->GetAABB();
@@ -307,13 +314,15 @@ void GameScene::Update() { /* 更新勝利を書く */
 
 		if (Input::GetInstance()->TriggerKey(DIK_SPACE)) {
 			// ここに弾を生成する(予定)
-
+			// 2.5以上 = 左。以下 =右
 			// プレイヤー位置を基準に弾をスポーン
 			Vector3 spawnPos = player_->GetWorldPosition();
+			Vector3 direction = player_->Getdirection();
 			// プレイヤーの向きがわかればそれに合わせる
 
 			Bullet* newBullet = new Bullet();
 			newBullet->Initialize(modelBullet_, &camera_, spawnPos);
+			newBullet->Setdirection(direction);
 
 			PlayerBullet_.push_back(newBullet);
 		}

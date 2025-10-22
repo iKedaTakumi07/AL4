@@ -8,6 +8,7 @@ using namespace KamataEngine;
 class Player;
 class GameScene;
 class MapChipField;
+class Bullet;
 
 class Enemy {
 public:
@@ -43,6 +44,7 @@ public:
 	Vector3 GetWorldPosition();
 
 	void OnCollision(const Player* player);
+	void OnCollision();
 
 	bool isDead() const { return isDead_; }
 

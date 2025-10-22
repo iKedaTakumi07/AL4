@@ -8,15 +8,6 @@ class Player;
 
 class Bullet {
 public:
-	enum Corner {
-		kRightBottom,
-		kLeftBottom,
-		kRightTop,
-		KLeftTop,
-
-		KNumCorner, // 要素数
-	};
-
 	// 左右
 	enum class LRDirection {
 		kRight,
@@ -33,9 +24,10 @@ public:
 
 	Vector3 GetWorldPosition() const;
 
-	/*Vector3 Setdirection(Player* direction) {};*/
+	void Setdirection(Vector3 direction) { kBulletdirection = direction; };
 
 	// void OnCollision(const Player* player);
+
 	// bool isDead() const { return isDead_; };
 	// bool IsCollisionDisabled() const { return isCollisionDisabled_; };
 
@@ -43,10 +35,28 @@ private:
 	// トランスフォーム
 	WorldTransform worldTransform_;
 
+	struct CollisionMapInfo {
+		bool ceiling = false;
+		bool landing = false;
+		bool hitWall = false;
+		Vector3 move;
+	};
+
+	// 当たり判定
+	void CheckMapCollision(CollisionMapInfo& info);
+
+	// 全方向
+	void CheckMapCollisionUP(CollisionMapInfo& info);
+	void CheckMapCollisionDown(CollisionMapInfo& info);
+	void CheckMapCollisionRight(CollisionMapInfo& info);
+	void CheckMapCollisionLeft(CollisionMapInfo& info);
+
 	// 速度
 	Vector3 velocity_ = {};
+
 	// 弾の速さ
-	static inline const float kbulletSpeed = 0.3f;
+	static inline const float kbulletSpeed = 0.1f;
+	static inline const float kLimitRunSpeed = 0.15f;
 	// 向き
 	Vector3 kBulletdirection = {};
 

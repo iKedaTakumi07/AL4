@@ -95,6 +95,15 @@ Vector3 Player::GetWorldPosition() const {
 	return WorldPos;
 }
 
+Vector3 Player::GetWorldRotation() const {
+	Vector3 WorldRotation;
+	WorldRotation.x = worldTransform_.rotation_.x;
+	WorldRotation.y = worldTransform_.rotation_.y;
+	WorldRotation.z = worldTransform_.rotation_.z;
+
+	return WorldRotation;
+}
+
 AABB Player::GetAABB() {
 
 	Vector3 worldPos = GetWorldPosition();
