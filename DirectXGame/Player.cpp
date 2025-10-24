@@ -59,6 +59,14 @@ void Player::Update() {
 		break;
 	}
 
+	if (isinvincible) {
+		invincibilityTimer -= 1.0f / 60.0f;
+		count++;
+		if (invincibilityTimer <= 0) {
+			isinvincible = false;
+		}
+	}
+
 	// 行列を定数バッファに転送
 	WorldtransformUpdate(worldTransform_);
 	WorldtransformUpdate(worldTransformAttack_);
@@ -67,7 +75,13 @@ void Player::Update() {
 void Player::Draw() {
 
 	// 3Dモデルを描画
-	model_->Draw(worldTransform_, *camera_);
+	if (isinvincible) {
+		if (count % 2 == 0) {
+			model_->Draw(worldTransform_, *camera_);
+		}
+	} else {
+		model_->Draw(worldTransform_, *camera_);
+	}
 
 	if (behavior_ == Behavior::kAttack) {
 
@@ -115,12 +129,31 @@ AABB Player::GetAABB() {
 	return aabb;
 }
 
-void Player::OnCollision(const Enemy* enemy) {
-	if (IsAttack()) {
+void Player::OnCollision(const Enemy* enemy, AABB pos, AABB pos2) {
+	if (IsAttack() || isinvincible) {
 		return;
 	}
 
-	isDead_ = true;
+	// 敵のいる方向と逆方向に飛ばす。&2弾ジャンプロック
+	if (pos.max.x < pos2.max.x) {
+		velocity_ = Vector3(0.0f, 0.0f, 0.0f);
+		knockbackvelocity_ = Vector3(knockback, kJumpknockback / 60.0f, 0.0f);
+		isSpaceJump = true;
+
+	} else {
+		velocity_ = Vector3(0.0f, 0.0f, 0.0f);
+		knockbackvelocity_ = Vector3(-knockback, kJumpknockback / 60.0f, 0.0f);
+		isSpaceJump = true;
+	}
+
+	// 体力関連
+	health--;
+	isinvincible = true;
+	invincibilityTimer = invincibilityTime;
+	count = 0;
+	if (health <= 0) {
+		isDead_ = true;
+	}
 
 	(void)enemy;
 }
@@ -134,7 +167,7 @@ void Player::BehaviorRootUpdata() {
 	// 衝突情報を初期化
 	CollisionMapInfo collisionMapInfo;
 	// 移動量に速度の値をコピー
-	collisionMapInfo.move = velocity_;
+	collisionMapInfo.move = velocity_ + knockbackvelocity_;
 	collisionMapInfo.landing = false;
 	collisionMapInfo.hitWall = false;
 
@@ -165,10 +198,6 @@ void Player::BehaviorRootUpdata() {
 	if (Input::GetInstance()->TriggerKey(DIK_E)) {
 		behaviorRequest_ = Behavior::kAttack;
 	}
-
-	/*if (Input::GetInstance()->TriggerKey(DIK_SPACE)){
-	    behaviorRequest_ = Behavior::kshoot;
-	}*/
 }
 
 void Player::BehaviorAttackInitialize() {
@@ -427,6 +456,7 @@ void Player::CheckMapCollisionDown(CollisionMapInfo& info) {
 	mapChipTypeNext = mapChipFeild_->GetMapChipTypeByIndex(indexSet.xindex, indexSet.yindex - 1);
 	if (mapChipType == MapChipType::kBlock && mapChipTypeNext != MapChipType::kBlock) {
 		hit = true;
+		knockbackvelocity_ = Vector3(0.0f, 0.0f, 0.0f);
 	}
 
 	// 右下点の判定
@@ -436,6 +466,7 @@ void Player::CheckMapCollisionDown(CollisionMapInfo& info) {
 	mapChipTypeNext = mapChipFeild_->GetMapChipTypeByIndex(indexSet.xindex, indexSet.yindex - 1);
 	if (mapChipType == MapChipType::kBlock && mapChipTypeNext != MapChipType::kBlock) {
 		hit = true;
+		knockbackvelocity_ = Vector3(0.0f, 0.0f, 0.0f);
 	}
 
 	// ブロックヒットー

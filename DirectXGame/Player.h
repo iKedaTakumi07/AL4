@@ -61,7 +61,7 @@ public:
 
 	AABB GetAABB();
 
-	void OnCollision(const Enemy* enemy);
+	void OnCollision(const Enemy* enemy, AABB pos, AABB pos2);
 
 	// ですフラグのトリがー
 	bool IsDead() const { return isDead_; };
@@ -173,4 +173,15 @@ private:
 	// 余韻動作の時間
 	static inline const uint32_t kRecoveryTime = 12;
 	WorldTransform worldTransformAttack_;
+
+	// 自身の体力
+	int health = 5;
+	// ノックバック/飛ばされる距離/無敵時間/点滅カウント
+	Vector3 knockbackvelocity_{};
+	static inline const float knockback = 0.15f;
+	static inline const float kJumpknockback = 15.0f;
+	float invincibilityTimer = 0.0f;
+	int count = 0;
+	static inline const float invincibilityTime = 3.0f;
+	bool isinvincible = false;
 };

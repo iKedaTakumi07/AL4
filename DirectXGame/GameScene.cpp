@@ -180,7 +180,7 @@ void GameScene::CheckAllCollisions() {
 			// AABB同士の交差判定
 			if (IsCollision(aabb1, aabb2)) {
 				// 自キャラの衝突関数を呼び出す
-				player_->OnCollision(enemy);
+				player_->OnCollision(enemy, aabb2, aabb1);
 
 				// 敵キャラの衝突判定を呼び出す
 				enemy->OnCollision(player_);
