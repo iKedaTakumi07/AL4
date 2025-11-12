@@ -76,6 +76,10 @@ public:
 
 	bool IsAttack() const { return behavior_ == Behavior::kAttack && attackPhase_ == AttackPhase::kAction; }
 
+	bool isGetShot() ;
+
+	int isGetCharge();
+
 private:
 	// ワールド変換データ
 	WorldTransform worldTransform_;
@@ -184,4 +188,10 @@ private:
 	int count = 0;
 	static inline const float invincibilityTime = 3.0f;
 	bool isinvincible = false;
+
+	// チャージショット判定
+	bool ischarge_ = false;
+	bool isshot_ = false;
+	int chargePower = 0;
+	int chargeMaxPower = 150;
 };

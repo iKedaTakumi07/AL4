@@ -19,7 +19,7 @@ public:
 		KNumCorner, // 要素数
 	};
 
-	void Initialize(Model* model, Camera* camera, const Vector3& position);
+	void Initialize(Model* model, Camera* camera, const Vector3& position, int chage);
 
 	void Update();
 
@@ -37,6 +37,8 @@ public:
 
 	bool isDead() const { return isDead_; };
 	// bool IsCollisionDisabled() const { return isCollisionDisabled_; };
+
+	float isGetLevel() { return chargeLevel_; };
 
 private:
 	// トランスフォーム
@@ -64,8 +66,8 @@ private:
 	Vector3 velocity_ = {};
 
 	// 弾の速さ
-	static inline const float kbulletSpeed = 0.1f;
-	static inline const float kLimitRunSpeed = 0.15f;
+	static inline const float kbulletSpeed = 0.15f;
+	static inline const float kLimitRunSpeed = 0.3f;
 	// 向き
 	Vector3 kBulletdirection = {};
 
@@ -88,4 +90,7 @@ private:
 	// 指定した角の計算
 	Vector3 CornerPosition(const Vector3& center, Corner Corner);
 	static inline const float kBlank = 0.04f;
+
+	// チャージショット系列
+	float chargeLevel_;
 };

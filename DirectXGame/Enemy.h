@@ -44,7 +44,7 @@ public:
 	Vector3 GetWorldPosition();
 
 	void OnCollision(const Player* player);
-	void OnCollision();
+	void OnCollision(const float Level);
 
 	bool isDead() const { return isDead_; }
 
@@ -68,6 +68,9 @@ private:
 	static inline const float kwalkSpeed = 0.02f;
 	// 速度
 	Vector3 velocity_ = {};
+
+	// 体力
+	int isLife = 5;
 
 	// 最初の角度
 	static inline const float kWalkMotionAngleStart = 0.0f;

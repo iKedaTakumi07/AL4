@@ -78,6 +78,10 @@ void HitEffect::Draw() {
 	assert(model_);
 	assert(camera_);
 
+	if (IsDead()) {
+		return; // 既に消滅している場合は更新しない
+	}
+
 	model_->Draw(circleWorldTransform_, *camera_, &objectColor_);
 
 	for (auto& slashWorldTransform : ellipseWorldTransforms_) {

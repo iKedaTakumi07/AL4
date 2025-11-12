@@ -402,6 +402,7 @@ void Enemy::OnCollision(const Player* player) {
 	}
 
 	if (player->IsAttack()) {
+		isLife -= 3;
 		if (gameScene_) {
 
 			Vector3 pos = player->GetWorldPosition();
@@ -413,18 +414,27 @@ void Enemy::OnCollision(const Player* player) {
 			effectPos.z = (GetWorldPosition() + pos).z / 2.0f;
 			gameScene_->CreateEffect(effectPos);
 		}
+		if (isLife < 0) {
+			behaviorRequest_ = Behavior::kDefeated;
 
-		behaviorRequest_ = Behavior::kDefeated;
-
-		isCollisionDisabled_ = true;
+			isCollisionDisabled_ = true;
+		}
 	}
 }
 
-void Enemy::OnCollision() {
+void Enemy::OnCollision(const float Level) {
 
 	// ふふふ
 	if (behavior_ == Behavior::kDefeated) {
 		return;
+	}
+
+	if (Level < 1.5f) {
+		isLife--;
+	} else if (Level > 1.5f && Level < 2.1f) {
+		isLife -= 3;
+	} else if (Level > 2.1f) {
+		isLife -= 5;
 	}
 
 	if (gameScene_) {
@@ -437,9 +447,11 @@ void Enemy::OnCollision() {
 		gameScene_->CreateEffect(effectPos);
 	}
 
-	behaviorRequest_ = Behavior::kDefeated;
+	if (isLife <= 0) {
+		behaviorRequest_ = Behavior::kDefeated;
 
-	isCollisionDisabled_ = true;
+		isCollisionDisabled_ = true;
+	}
 }
 
 void Enemy::UpDateOnGround(const CollisionMapInfo& info) {

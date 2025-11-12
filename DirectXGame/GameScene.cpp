@@ -194,7 +194,7 @@ void GameScene::CheckAllCollisions() {
 
 				// 弾と敵の当たり判定
 				if (IsCollision(aabb2, aabb4)) {
-					enemy->OnCollision();
+					enemy->OnCollision(bullet->isGetLevel());
 
 					bullet->OnCollision();
 				}
@@ -325,25 +325,18 @@ void GameScene::Update() { /* 更新勝利を書く */
 		}
 		goal->Update();
 
-		if (Input::GetInstance()->TriggerKey(DIK_SPACE)) {
-			// ここに弾を生成する(今は仮の生成コード)
-			//
-			// プレイヤーの座標
-			// マウスの座標
-			// 内積か外積を利用して方向を割り出す
-			//
-			// // ↓これを使て発射位置を調整?
-			// Input::GetInstance()->GetMousePosition();
-			// set関数で方向を指定
-			//
-			//
+		// チャージショット
+
+		if (player_->isGetShot()) {
+
 			// プレイヤー位置を基準に弾をスポーン
 			Vector3 spawnPos = player_->GetWorldPosition();
 			Vector3 direction = player_->Getdirection();
+			int charge = player_->isGetCharge();
 			// プレイヤーの向きがわかればそれに合わせる
 
 			Bullet* newBullet = new Bullet();
-			newBullet->Initialize(modelBullet_, &camera_, spawnPos);
+			newBullet->Initialize(modelBullet_, &camera_, spawnPos, charge);
 			newBullet->Setdirection(direction);
 			newBullet->SetMapChipField(mapChipField_);
 

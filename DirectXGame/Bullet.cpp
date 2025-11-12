@@ -7,7 +7,7 @@
 
 using namespace KamataEngine;
 
-void Bullet::Initialize(Model* model, Camera* camera, const Vector3& position) {
+void Bullet::Initialize(Model* model, Camera* camera, const Vector3& position, int chage) {
 	// nullポインタチェック
 	assert(model);
 
@@ -19,6 +19,17 @@ void Bullet::Initialize(Model* model, Camera* camera, const Vector3& position) {
 	worldTransform_.Initialize();
 	worldTransform_.translation_ = position;
 	worldTransform_.rotation_.y = std::numbers::pi_v<float> / 2.0f;
+
+	if (chage < 50) {
+		worldTransform_.scale_ = {1.0f, 1.0f, 1.0f};
+		chargeLevel_ = 1.0f;
+	} else if (chage > 50 && chage < 100) {
+		worldTransform_.scale_ = {1.5f, 1.5f, 1.5f};
+		chargeLevel_ = 2.0f;
+	} else if (chage > 100) {
+		worldTransform_.scale_ = {2.0f, 2.0f, 2.0f};
+		chargeLevel_ = 2.5f;
+	}
 }
 
 void Bullet::Update() {
@@ -294,8 +305,8 @@ AABB Bullet::GetAABB() {
 	Vector3 worldPos = GetWorldPosition();
 
 	AABB aabb;
-	aabb.min = {worldPos.x - kWidth / 2.0f, worldPos.y - kHeight / 2.0f, worldPos.z - kWidth / 2.0f};
-	aabb.max = {worldPos.x + kWidth / 2.0f, worldPos.y + kHeight / 2.0f, worldPos.z + kWidth / 2.0f};
+	aabb.min = {worldPos.x - kWidth / 2.0f, worldPos.y - kHeight * chargeLevel_ / 2.0f, worldPos.z - kWidth / 2.0f};
+	aabb.max = {worldPos.x + kWidth / 2.0f, worldPos.y + kHeight * chargeLevel_ / 2.0f, worldPos.z + kWidth / 2.0f};
 
 	return aabb;
 }

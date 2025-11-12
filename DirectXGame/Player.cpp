@@ -292,6 +292,24 @@ void Player::BehaviorAttackUpdata() {
 	worldTransformAttack_.rotation_ = worldTransform_.rotation_;
 }
 
+bool Player::isGetShot() {
+	bool num;
+
+	num = isshot_;
+	isshot_ = false;
+
+	return num;
+}
+
+int Player::isGetCharge() {
+	int num;
+
+	num = chargePower;
+	chargePower = 0;
+
+	return num;
+}
+
 void Player::InputMove() {
 
 	// 移動入力
@@ -369,6 +387,18 @@ void Player::InputMove() {
 		velocity_.y += -kGravityAcceleration / 60.0f;
 		// 落下速度制限
 		velocity_.y = std::max(velocity_.y, -kLimitFallSpeed);
+	}
+
+	if (Input::GetInstance()->PushKey(DIK_SPACE)) {
+		ischarge_ = true;
+		if (chargePower < chargeMaxPower) {
+			chargePower++;
+		}
+	} else {
+		if (ischarge_) {
+			ischarge_ = false;
+			isshot_ = true;
+		}
 	}
 }
 
