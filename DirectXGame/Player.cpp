@@ -392,7 +392,7 @@ void Player::InputMove() {
 	if (Input::GetInstance()->PushKey(DIK_SPACE)) {
 		ischarge_ = true;
 		if (chargePower < chargeMaxPower) {
-			chargePower++;
+			chargePower += 2;
 		}
 	} else {
 		if (ischarge_) {

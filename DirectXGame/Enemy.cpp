@@ -432,9 +432,9 @@ void Enemy::OnCollision(const float Level) {
 	if (Level < 1.5f) {
 		isLife--;
 	} else if (Level > 1.5f && Level < 2.1f) {
-		isLife -= 3;
-	} else if (Level > 2.1f) {
 		isLife -= 5;
+	} else if (Level > 2.1f) {
+		isLife -= 10;
 	}
 
 	if (gameScene_) {
