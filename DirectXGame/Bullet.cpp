@@ -7,7 +7,7 @@
 
 using namespace KamataEngine;
 
-void Bullet::Initialize(Model* model, Camera* camera, const Vector3& position, int chage) {
+void Bullet::Initialize(Model* model, Camera* camera, const Vector3& position, float chage) {
 	// nullポインタチェック
 	assert(model);
 
@@ -20,13 +20,13 @@ void Bullet::Initialize(Model* model, Camera* camera, const Vector3& position, i
 	worldTransform_.translation_ = position;
 	worldTransform_.rotation_.y = std::numbers::pi_v<float> / 2.0f;
 
-	if (chage < 50) {
+	if (chage < 0.4f) {
 		worldTransform_.scale_ = {1.0f, 1.0f, 1.0f};
 		chargeLevel_ = 1.0f;
-	} else if (chage > 50 && chage < 100) {
+	} else if (chage > 0.4f && chage < 0.9f) {
 		worldTransform_.scale_ = {1.5f, 1.5f, 1.5f};
 		chargeLevel_ = 2.0f;
-	} else if (chage > 100) {
+	} else if (chage > 0.9f) {
 		worldTransform_.scale_ = {2.0f, 2.0f, 2.0f};
 		chargeLevel_ = 2.5f;
 	}

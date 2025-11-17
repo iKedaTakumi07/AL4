@@ -6,6 +6,7 @@ using namespace KamataEngine;
 
 class MapChipField;
 class Enemy;
+class ExplosionEnemy;
 
 class Player {
 public:
@@ -78,7 +79,7 @@ public:
 
 	bool isGetShot() ;
 
-	int isGetCharge();
+	float isGetCharge();
 
 private:
 	// ワールド変換データ
@@ -192,6 +193,6 @@ private:
 	// チャージショット判定
 	bool ischarge_ = false;
 	bool isshot_ = false;
-	int chargePower = 0;
-	int chargeMaxPower = 150;
+	float chargePower = 0.0f;
+	float chargeMaxPower = 1.0f;
 };

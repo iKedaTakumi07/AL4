@@ -1,6 +1,7 @@
 #pragma once
 #include "Bullet.h"
 #include "CameraController.h"
+#include "ExplosionEnemy.h"
 #include "DeathParticles.h"
 #include "Enemy.h"
 #include "Fade.h"
@@ -88,6 +89,7 @@ public:
 
 	// 敵
 	std::list<Enemy*> enemies_;
+	std::list<ExplosionEnemy*> Explosionenemies_;
 
 	// プレイヤーの球
 	list<Bullet*> PlayerBullet_;

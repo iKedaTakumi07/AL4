@@ -301,11 +301,11 @@ bool Player::isGetShot() {
 	return num;
 }
 
-int Player::isGetCharge() {
-	int num;
+float Player::isGetCharge() {
+	float num;
 
 	num = chargePower;
-	chargePower = 0;
+	chargePower = 0.0f;
 
 	return num;
 }
@@ -392,7 +392,7 @@ void Player::InputMove() {
 	if (Input::GetInstance()->PushKey(DIK_SPACE)) {
 		ischarge_ = true;
 		if (chargePower < chargeMaxPower) {
-			chargePower += 2;
+			chargePower += 1.0f/60.0f;
 		}
 	} else {
 		if (ischarge_) {

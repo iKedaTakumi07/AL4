@@ -30,6 +30,10 @@ GameScene::~GameScene() {
 	for (Enemy* enemy : enemies_) {
 		delete enemy;
 	}
+	for (ExplosionEnemy* exEnemy : Explosionenemies_) {
+		delete exEnemy;
+	}
+
 	delete modelEnemy_;
 
 	delete modelDeathParticles_;
@@ -99,6 +103,8 @@ void GameScene::Initialize() { /*初期化を書く*/
 
 	std::vector<Vector3>* enemyPosition = nullptr;
 	enemyPosition = &stage3Enemies;
+	std::vector<Vector3>* eEnemyPosition = nullptr;
+	eEnemyPosition = &stage2Enemies;
 
 	/*for (int32_t i = 0; i < 1; ++i) {
 	    Enemy* newEnemy = new Enemy();
@@ -116,6 +122,15 @@ void GameScene::Initialize() { /*初期化を書く*/
 		newEnemy->Initialize(modelEnemy_, &camera_, spawnPos);
 		newEnemy->SetGameScene(this);
 		enemies_.push_back(newEnemy);
+	}
+
+	for (auto& epos : *eEnemyPosition) {
+		ExplosionEnemy* NeweEnemy = new ExplosionEnemy();
+		Vector3 spawnPos = mapChipField_->GetMapChipPositionByIndex(static_cast<uint32_t>(epos.x), static_cast<uint32_t>(epos.y));
+		NeweEnemy->SetMapChipField(mapChipField_);
+		NeweEnemy->Initialize(modelEnemy_, &camera_, spawnPos);
+		NeweEnemy->SetGameScene(this);
+		Explosionenemies_.push_back(NeweEnemy);
 	}
 
 	// デスパーティクル
@@ -272,6 +287,14 @@ void GameScene::Update() { /* 更新勝利を書く */
 		return false;
 	});
 
+	Explosionenemies_.remove_if([](ExplosionEnemy* enemy) {
+		if (enemy->isDead()) {
+			delete enemy;
+			return true;
+		}
+		return false;
+	});
+
 	PlayerBullet_.remove_if([](Bullet* bullet) {
 		if (bullet->isDead()) {
 			delete bullet;
@@ -296,6 +319,10 @@ void GameScene::Update() { /* 更新勝利を書く */
 	}
 
 	for (Enemy* enemy : enemies_) {
+		enemy->Update();
+	}
+
+	for (ExplosionEnemy* enemy : Explosionenemies_) {
 		enemy->Update();
 	}
 
@@ -332,7 +359,7 @@ void GameScene::Update() { /* 更新勝利を書く */
 			// プレイヤー位置を基準に弾をスポーン
 			Vector3 spawnPos = player_->GetWorldPosition();
 			Vector3 direction = player_->Getdirection();
-			int charge = player_->isGetCharge();
+			float charge = player_->isGetCharge();
 			// プレイヤーの向きがわかればそれに合わせる
 
 			Bullet* newBullet = new Bullet();
@@ -394,6 +421,10 @@ void GameScene::Draw() {
 
 	// 敵
 	for (Enemy* enemy : enemies_) {
+		enemy->Draw();
+	}
+
+	for (ExplosionEnemy* enemy : Explosionenemies_) {
 		enemy->Draw();
 	}
 

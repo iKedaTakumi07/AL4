@@ -19,7 +19,7 @@ public:
 		KNumCorner, // 要素数
 	};
 
-	void Initialize(Model* model, Camera* camera, const Vector3& position, int chage);
+	void Initialize(Model* model, Camera* camera, const Vector3& position, float chage);
 
 	void Update();
 
