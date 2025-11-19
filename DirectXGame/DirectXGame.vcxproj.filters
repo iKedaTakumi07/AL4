@@ -87,6 +87,9 @@
     <ClCompile Include="HitEffect.cpp">
       <Filter>Player</Filter>
     </ClCompile>
+    <ClCompile Include="strongEnemy.cpp">
+      <Filter>Enemy</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\shaders\SpritePS.hlsl">
@@ -185,6 +188,9 @@
     </ClInclude>
     <ClInclude Include="HitEffect.h">
       <Filter>Player</Filter>
+    </ClInclude>
+    <ClInclude Include="strongEnemy.h">
+      <Filter>Enemy</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

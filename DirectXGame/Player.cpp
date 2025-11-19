@@ -139,6 +139,37 @@ void Player::OnCollision(const Enemy* enemy, AABB pos, AABB pos2) {
 		velocity_ = Vector3(0.0f, 0.0f, 0.0f);
 		knockbackvelocity_ = Vector3(knockback, kJumpknockback / 60.0f, 0.0f);
 		isSpaceJump = true;
+		onGround_ = false;
+
+	} else {
+		velocity_ = Vector3(0.0f, 0.0f, 0.0f);
+		knockbackvelocity_ = Vector3(-knockback, kJumpknockback / 60.0f, 0.0f);
+		isSpaceJump = true;
+		onGround_ = false;
+	}
+
+	// 体力関連
+	health--;
+	isinvincible = true;
+	invincibilityTimer = invincibilityTime;
+	count = 0;
+	if (health <= 0) {
+		isDead_ = true;
+	}
+
+	(void)enemy;
+}
+
+void Player::OnCollision(const ExplosionEnemy* enemy, AABB pos, AABB pos2) {
+	if (IsAttack() || isinvincible) {
+		return;
+	}
+
+	// 敵のいる方向と逆方向に飛ばす。&2弾ジャンプロック
+	if (pos.max.x < pos2.max.x) {
+		velocity_ = Vector3(0.0f, 0.0f, 0.0f);
+		knockbackvelocity_ = Vector3(knockback, kJumpknockback / 60.0f, 0.0f);
+		isSpaceJump = true;
 
 	} else {
 		velocity_ = Vector3(0.0f, 0.0f, 0.0f);
@@ -178,6 +209,7 @@ void Player::BehaviorRootUpdata() {
 
 	if (collisionMapInfo.ceiling) {
 		velocity_.y = 0;
+		knockbackvelocity_.y = 0.0f;
 	}
 
 	UpdateOnWall(collisionMapInfo);
@@ -392,7 +424,7 @@ void Player::InputMove() {
 	if (Input::GetInstance()->PushKey(DIK_SPACE)) {
 		ischarge_ = true;
 		if (chargePower < chargeMaxPower) {
-			chargePower += 1.0f/60.0f;
+			chargePower += 1.0f / 60.0f;
 		}
 	} else {
 		if (ischarge_) {

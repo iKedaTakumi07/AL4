@@ -414,11 +414,12 @@ void Enemy::OnCollision(const Player* player) {
 			effectPos.z = (GetWorldPosition() + pos).z / 2.0f;
 			gameScene_->CreateEffect(effectPos);
 		}
-		if (isLife < 0) {
-			behaviorRequest_ = Behavior::kDefeated;
+	}
 
-			isCollisionDisabled_ = true;
-		}
+	if (isLife < 0) {
+		behaviorRequest_ = Behavior::kDefeated;
+
+		isCollisionDisabled_ = true;
 	}
 }
 

@@ -1,7 +1,7 @@
 #pragma once
 #include "Bullet.h"
 #include "CameraController.h"
-#include "ExplosionEnemy.h"
+#include "strongEnemy.h"
 #include "DeathParticles.h"
 #include "Enemy.h"
 #include "Fade.h"

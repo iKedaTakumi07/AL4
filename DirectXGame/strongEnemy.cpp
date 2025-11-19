@@ -1,6 +1,6 @@
 #define NOMINMAX
 
-#include "ExplosionEnemy.h"
+#include "strongEnemy.h"
 #include "Bullet.h"
 #include "GameScene.h"
 #include "MapChipField.h"
@@ -400,12 +400,13 @@ void ExplosionEnemy::CheckMapCollisionLeft(CollisionMapInfo& info) {
 
 void ExplosionEnemy::Draw() {
 	// 描画
-	/*if () {*/
-		if (static_cast<int>(ExplosionTimer) % 2 == 0) {
+	if (isToExplosion) {
+		if (static_cast<int>(ExplosionTimer * 10) % 2 == 0) {
+			model_->Draw(worldTransform_, *camera_, textureHandele);
 		}
-	//} else {
+	} else {
 		model_->Draw(worldTransform_, *camera_, textureHandele);
-	//}
+	}
 }
 
 AABB ExplosionEnemy::GetAABB() {

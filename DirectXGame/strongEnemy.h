@@ -71,7 +71,7 @@ private:
 	Vector3 velocity_ = {};
 
 	// 体力
-	int isLife = 5;
+	int isLife = 20;
 
 	// 最初の角度
 	static inline const float kWalkMotionAngleStart = 0.0f;

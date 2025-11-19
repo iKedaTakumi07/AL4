@@ -63,6 +63,7 @@ public:
 	AABB GetAABB();
 
 	void OnCollision(const Enemy* enemy, AABB pos, AABB pos2);
+	void OnCollision(const ExplosionEnemy* enemy, AABB pos, AABB pos2);
 
 	// ですフラグのトリがー
 	bool IsDead() const { return isDead_; };

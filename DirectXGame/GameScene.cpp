@@ -182,7 +182,7 @@ void GameScene::CheckAllCollisions() {
 
 #pragma region
 	{
-		AABB aabb1, aabb2, aabb3, aabb4;
+		AABB aabb1, aabb2, aabb3, aabb4, aabb5;
 
 		aabb1 = player_->GetAABB();
 
@@ -209,6 +209,36 @@ void GameScene::CheckAllCollisions() {
 
 				// 弾と敵の当たり判定
 				if (IsCollision(aabb2, aabb4)) {
+					enemy->OnCollision(bullet->isGetLevel());
+
+					bullet->OnCollision();
+				}
+			}
+		}
+
+		for (ExplosionEnemy* enemy : Explosionenemies_) {
+			if (enemy->IsCollisionDisabled())
+				continue;
+
+			aabb5 = enemy->GetAABB();
+
+			// AABB同士の交差判定
+			if (IsCollision(aabb1, aabb5)) {
+				// 自キャラの衝突関数を呼び出す
+				player_->OnCollision(enemy, aabb5, aabb1);
+
+				// 敵キャラの衝突判定を呼び出す
+				enemy->OnCollision(player_);
+			}
+
+			for (Bullet* bullet : PlayerBullet_) {
+				if (bullet->isDead())
+					continue;
+
+				aabb4 = bullet->GetAABB();
+
+				// 弾と敵の当たり判定
+				if (IsCollision(aabb5, aabb4)) {
 					enemy->OnCollision(bullet->isGetLevel());
 
 					bullet->OnCollision();
