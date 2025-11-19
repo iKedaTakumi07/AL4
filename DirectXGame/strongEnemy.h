@@ -41,6 +41,8 @@ public:
 
 	AABB GetAABB();
 
+	AABB GetAABBExplosion();
+
 	Vector3 GetWorldPosition();
 
 	void OnCollision(const Player* player);

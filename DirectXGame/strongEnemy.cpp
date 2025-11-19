@@ -114,6 +114,7 @@ void ExplosionEnemy::Update() {
 		worldTransform_.rotation_.x = EaseOut(ToRadians(kDefeatedMotionAngleStaart), ToRadians(kDefeatedMotionAngleEnd), counter_ / kDefeatedTime);
 
 		if (counter_ >= kDefeatedTime) {
+			worldTransform_.scale_ = {2.0f, 2.0f, 2.0f};
 			isDead_ = true;
 		}
 
@@ -132,6 +133,11 @@ void ExplosionEnemy::Update() {
 		UpDateOnGround(collisionMapInfo);
 
 		ExplosionTimer -= 1.0f / 60.0f;
+
+		if (ExplosionTimer <= 0.0f) {
+			worldTransform_.scale_ = {2.0f, 2.0f, 2.0f};
+			isDead_ = true;
+		}
 
 		break;
 	}
@@ -419,6 +425,18 @@ AABB ExplosionEnemy::GetAABB() {
 
 	return aabb;
 }
+
+AABB ExplosionEnemy::GetAABBExplosion() {
+
+	Vector3 worldPos = GetWorldPosition();
+
+	AABB aabb;
+	aabb.min = {worldPos.x - kWidth * 2.0f, worldPos.y - kHeight * 2.0f, worldPos.z - kWidth * 2.0f};
+	aabb.max = {worldPos.x + kWidth * 2.0f, worldPos.y + kHeight * 2.0f, worldPos.z + kWidth * 2.0f};
+
+	return aabb;
+}
+
 void ExplosionEnemy::OnCollision(const Player* player) {
 
 	// ふふふ
@@ -441,11 +459,11 @@ void ExplosionEnemy::OnCollision(const Player* player) {
 			effectPos.z = (GetWorldPosition() + pos).z / 2.0f;
 			gameScene_->CreateEffect(effectPos);
 		}
-		if (isLife < 0) {
-			behaviorRequest_ = Behavior::kDefeated;
+	}
+	if (isLife < 0) {
+		behaviorRequest_ = Behavior::kDefeated;
 
-			isCollisionDisabled_ = true;
-		}
+		isCollisionDisabled_ = true;
 	}
 }
 
