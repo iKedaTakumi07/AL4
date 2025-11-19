@@ -73,7 +73,7 @@ private:
 	Vector3 velocity_ = {};
 
 	// 体力
-	int isLife = 20;
+	int isLife = 10;
 
 	// 最初の角度
 	static inline const float kWalkMotionAngleStart = 0.0f;
@@ -157,6 +157,6 @@ private:
 	static inline const float kExplosionHeight = 1.5f;
 
 	bool isToExplosion = false;
-	float ExplosionTimer = 2.0f;
+	float ExplosionTimer = 3.0f;
 	bool isExplosion = false;
 };
