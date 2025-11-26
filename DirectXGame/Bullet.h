@@ -19,7 +19,7 @@ public:
 		KNumCorner, // 要素数
 	};
 
-	void Initialize(Model* model, Camera* camera, const Vector3& position, float chage);
+	void Initialize(Model* model, Camera* camera, const Vector3& position, float chage, Vector2 mouesPos);
 
 	void Update();
 
@@ -93,4 +93,7 @@ private:
 
 	// チャージショット系列
 	float chargeLevel_;
+	Vector2 mousePos_;
+	bool isaim_ = false;
+	float theta = 0.0f;
 };

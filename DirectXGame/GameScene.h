@@ -1,7 +1,6 @@
 #pragma once
 #include "Bullet.h"
 #include "CameraController.h"
-#include "strongEnemy.h"
 #include "DeathParticles.h"
 #include "Enemy.h"
 #include "Fade.h"
@@ -13,6 +12,7 @@
 #include "Player.h"
 #include "Skydome.h"
 #include "cheese.h"
+#include "strongEnemy.h"
 #include <vector>
 
 using namespace KamataEngine;
@@ -93,6 +93,7 @@ public:
 
 	// プレイヤーの球
 	list<Bullet*> PlayerBullet_;
+	Vector2 mousePos_;
 
 	// ですパーティクル
 	DeathParticles* deathParticles_ = nullptr;

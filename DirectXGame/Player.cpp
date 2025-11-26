@@ -421,6 +421,12 @@ void Player::InputMove() {
 		velocity_.y = std::max(velocity_.y, -kLimitFallSpeed);
 	}
 
+	if (Input::GetInstance()->PushKey(DIK_LSHIFT)) {
+		isaim_ = true;
+	} else {
+		isaim_ = false;
+	}
+
 	if (Input::GetInstance()->PushKey(DIK_SPACE)) {
 		ischarge_ = true;
 		if (chargePower < chargeMaxPower) {

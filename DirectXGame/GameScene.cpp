@@ -313,6 +313,12 @@ void GameScene::Update() { /* 更新勝利を書く */
 		camera_.UpdateMatrix();
 	}
 
+	ImGui::Begin("pos");
+	ImGui::Text(" pos.x : % .2f, pos.y : % .2f", mousePos_.x, mousePos_.y);
+	ImGui::End();
+
+	mousePos_ = Input::GetInstance()->GetMousePosition();
+
 	// bgm
 	/*if (!Audio::GetInstance()->IsPlaying(voiceHAndel)) {
 	    voiceHAndel = Audio::GetInstance()->PlayWave(soundBGM, true, 0.5f);
@@ -402,7 +408,7 @@ void GameScene::Update() { /* 更新勝利を書く */
 			// プレイヤーの向きがわかればそれに合わせる
 
 			Bullet* newBullet = new Bullet();
-			newBullet->Initialize(modelBullet_, &camera_, spawnPos, charge);
+			newBullet->Initialize(modelBullet_, &camera_, spawnPos, charge, mousePos_);
 			newBullet->Setdirection(direction);
 			newBullet->SetMapChipField(mapChipField_);
 

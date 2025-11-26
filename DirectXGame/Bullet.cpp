@@ -7,18 +7,47 @@
 
 using namespace KamataEngine;
 
-void Bullet::Initialize(Model* model, Camera* camera, const Vector3& position, float chage) {
+void Bullet::Initialize(Model* model, Camera* camera, const Vector3& position, float chage, Vector2 mouesPos) {
 	// nullポインタチェック
 	assert(model);
 
 	// 初期化
 	model_ = model;
 	camera_ = camera;
+	mousePos_ = mouesPos;
 
 	// ワールド変換の初期アk
 	worldTransform_.Initialize();
 	worldTransform_.translation_ = position;
 	worldTransform_.rotation_.y = std::numbers::pi_v<float> / 2.0f;
+
+	if (Input::GetInstance()->PushKey(DIK_LSHIFT)) {
+		isaim_ = true;
+	}
+
+	POINT mousePosition;
+	GetCursorPos(&mousePosition);
+
+	// クライアントエリア
+	HWND hwnd = WinApp::GetInstance()->GetHwnd();
+	ScreenToClient(hwnd, &mousePosition);
+	Matrix4x4 wipo = Multiply(MakeAffineMatrix({1.0f, 1.0f, 1.0f}, camera_->rotation_, camera_->translation_), Multiply(camera_->matView, camera_->matProjection));
+
+	Matrix4x4 matInverseVPV = Multiply(Inverse(wipo), Multiply(Inverse(camera_->matView), Inverse(camera_->matProjection)));
+
+	Vector3 posNear = Vector3(static_cast<float>(mousePosition.x), static_cast<float>(mousePosition.y), 0);
+	Vector3 posFar = Vector3(static_cast<float>(mousePosition.x), static_cast<float>(mousePosition.y), 1);
+
+	posNear = Transform(posNear, matInverseVPV);
+	posFar = Transform(posFar, matInverseVPV);
+
+	Vector3 mouseDirection = Normalize(posFar - posNear);
+
+	// 発射方向の処理
+	Vector3 dot;
+	dot.x = worldTransform_.translation_.x - mouseDirection.x;
+	dot.y = worldTransform_.translation_.y - mouseDirection.y;
+	theta = atan2f(dot.y, dot.x);
 
 	if (chage < 0.4f) {
 		worldTransform_.scale_ = {1.0f, 1.0f, 1.0f};
@@ -36,17 +65,26 @@ void Bullet::Update() {
 
 	// 左右加速
 	Vector3 acceleration = {};
-	if (kBulletdirection.y <= 2.5f) {
-		acceleration.x += kbulletSpeed;
+	if (isaim_) {
+		acceleration.x -= kbulletSpeed * cosf(theta);
+		acceleration.y -= kbulletSpeed * cosf(theta);
 	} else {
-		acceleration.x += kbulletSpeed * -1.0f;
+		if (kBulletdirection.y <= 2.5f) {
+			acceleration.x += kbulletSpeed;
+			acceleration.y = 0.0f;
+		} else {
+			acceleration.x += kbulletSpeed * -1.0f;
+			acceleration.y = 0.0f;
+		}
 	}
 
 	// 加速/減速
 	velocity_.x += acceleration.x;
+	velocity_.y += acceleration.y;
 
 	// 最大速度制限
 	velocity_.x = std::clamp(velocity_.x, -kLimitRunSpeed, kLimitRunSpeed);
+	velocity_.y = std::clamp(velocity_.y, -kLimitRunSpeed, kLimitRunSpeed);
 
 	// 衝突情報を初期化
 	CollisionMapInfo collisionMapInfo;

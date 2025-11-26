@@ -17,10 +17,13 @@ KamataEngine::Vector3 Lerp(KamataEngine::Vector3 x1, KamataEngine::Vector3 x2, f
 float easeInOutQuint(float x1, float x2, float t);
 
 const Vector3 operator+(const Vector3& lhv, const Vector3& rhv);
+const Vector3 operator-(const Vector3& lhv, const Vector3& rhv);
 
+Vector3 operator-=(Vector3& v1, const Vector3& v2);
 Vector3& operator+=(Vector3& lhs, const Vector3& rhv);
 Vector3 operator+(const Vector3& v);
 Vector3 operator-(const Vector3& v);
+
 
 bool IsCollision(const AABB& aabb1, const AABB& aabb2);
 
@@ -36,3 +39,8 @@ inline float ToRadians(float degrees) { return degrees * (3.1415f / 180.0f); }
 inline float ToDegrees(float radians) { return radians * (180.0f / 3.1415f); }
 
 float EaseInQuint(float t);
+Matrix4x4 Inverse(const Matrix4x4& m);
+Matrix4x4 Multiply(const Matrix4x4& m1, const Matrix4x4& m2);
+Matrix4x4 MakeAffineMatrix(const Vector3& scale, const Vector3& rotate, const Vector3& translate);
+
+Vector3 Normalize(const Vector3& v);

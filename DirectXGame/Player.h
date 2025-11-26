@@ -78,7 +78,7 @@ public:
 
 	bool IsAttack() const { return behavior_ == Behavior::kAttack && attackPhase_ == AttackPhase::kAction; }
 
-	bool isGetShot() ;
+	bool isGetShot();
 
 	float isGetCharge();
 
@@ -193,6 +193,8 @@ private:
 
 	// チャージショット判定
 	bool ischarge_ = false;
+	bool isaim_ = false;
+	
 	bool isshot_ = false;
 	float chargePower = 0.0f;
 	float chargeMaxPower = 1.0f;
