@@ -57,6 +57,8 @@ public:
 	bool isDebugCameraActive_ = false;
 
 	// 3Dモデル
+	uint32_t blockTextureHandele;
+
 	KamataEngine::Model* modelblock_ = nullptr;
 	KamataEngine::Model* modelSkydome_ = nullptr;
 	KamataEngine::Model* modelPlayer_ = nullptr;

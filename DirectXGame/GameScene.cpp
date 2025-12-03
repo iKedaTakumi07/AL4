@@ -76,6 +76,7 @@ void GameScene::Initialize() { /*初期化を書く*/
 	// マップチップ
 	mapChipField_ = new MapChipField;
 	mapChipField_->LoadMapChipCsv("Resources/map3.csv");
+	blockTextureHandele = TextureManager::Load("block/BreakableBlock.png");
 	GenerateBlocks();
 
 	// プレイヤー
@@ -266,6 +267,24 @@ void GameScene::CheckAllCollisions() {
 		if (IsCollision(aabbPlayer, aabbGoal)) {
 			goal->OnCollision(player_);
 		}
+
+		// ブロックが破壊されたとき存在しないようにする
+		uint32_t numBlockVirtical = mapChipField_->GetNumBlockVirtical();
+		uint32_t numBlockHorizontal = mapChipField_->GetNumBlockHorizontal();
+
+		for (uint32_t i = 0; i < numBlockVirtical; i++) {
+			for (uint32_t j = 0; j < numBlockHorizontal; j++) {
+				if (mapChipField_->GetMapChipTypeByIndex(j, i) != MapChipType::kBlank)
+					continue;
+
+				if (mapChipField_->GetMapChipTypeByIndex(j, i) == MapChipType::kBlank) {
+					if (worldTransformBlocks_[i][j] == nullptr)
+						continue;
+					delete worldTransformBlocks_[i][j];
+					worldTransformBlocks_[i][j] = nullptr;
+				}
+			}
+		}
 	}
 }
 
@@ -352,9 +371,9 @@ void GameScene::Update() { /* 更新勝利を書く */
 	CameraController_->Update();
 
 	// ブロックの更新
+
 	for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) {
 		for (WorldTransform*& worldTransformBlock : worldTransformBlockLine) {
-
 			if (!worldTransformBlock)
 				continue;
 
@@ -477,13 +496,20 @@ void GameScene::Draw() {
 		bullet->Draw();
 	}
 
-	// ブロックの描画
-	for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) {
-		for (WorldTransform*& worldTransformBlock : worldTransformBlockLine) {
-			if (!worldTransformBlock)
+	// ブロックが破壊されたとき存在しないようにする
+	uint32_t numBlockVirtical = mapChipField_->GetNumBlockVirtical();
+	uint32_t numBlockHorizontal = mapChipField_->GetNumBlockHorizontal();
+
+	for (uint32_t i = 0; i < numBlockVirtical; i++) {
+		for (uint32_t j = 0; j < numBlockHorizontal; j++) {
+			if (mapChipField_->GetMapChipTypeByIndex(j, i) == MapChipType::kBlank)
 				continue;
 
-			modelblock_->Draw(*worldTransformBlock, camera_);
+			if (mapChipField_->GetMapChipTypeByIndex(j, i) == MapChipType::kBreakableBlock) {
+				modelblock_->Draw(*worldTransformBlocks_[i][j], camera_, blockTextureHandele);
+			} else {
+				modelblock_->Draw(*worldTransformBlocks_[i][j], camera_);
+			}
 		}
 	}
 
