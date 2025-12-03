@@ -46,7 +46,7 @@ public:
 	void OnCollision(const Player* player);
 	void OnCollision(const float Level);
 
-	bool isDead() const { return isDead_; }
+	bool IsDead() const { return isDead_; }
 
 	bool IsCollisionDisabled() const { return isCollisionDisabled_; };
 

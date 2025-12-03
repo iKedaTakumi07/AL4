@@ -5,11 +5,10 @@
 #include <string>
 #include <vector>
 
-using namespace KamataEngine;
-
 enum class MapChipType {
-	kBlank, // 空白
-	kBlock, // ブロック
+	kBlank,          // 空白
+	kBlock,          // ブロック
+	kBreakableBlock, // 破壊可能ブロック
 };
 
 struct MapChipDate {
@@ -52,8 +51,11 @@ public:
 
 	Rect GetRectByindex(uint32_t xindex, uint32_t yindex);
 
+	// set
+	void SetMapChipType(uint32_t xIndex, uint32_t yIndex, MapChipType mapChipType) { mapChipData_.data[yIndex][xIndex] = mapChipType; };
+
 private:
-	MapChipDate mapCgipData_;
+	MapChipDate mapChipData_;
 
 	// ブロックの個数
 	static inline const uint32_t kNumBlockVirtical = 20;

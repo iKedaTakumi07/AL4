@@ -2,8 +2,6 @@
 #include "KamataEngine.h"
 #include "Math.h"
 
-using namespace KamataEngine;
-
 class Enemy;
 class MapChipField;
 
@@ -19,36 +17,36 @@ public:
 		KNumCorner, // 要素数
 	};
 
-	void Initialize(Model* model, Camera* camera, const Vector3& position, float chage);
+	void Initialize(KamataEngine::Model* model, KamataEngine::Camera* camera, const KamataEngine::Vector3& position, float chage);
 
 	void Update();
 
 	void Draw();
 
 	AABB GetAABB();
+	
+	KamataEngine::Vector3 GetWorldPosition() const;
 
-	Vector3 GetWorldPosition() const;
-
-	void Setdirection(Vector3 direction) { kBulletdirection = direction; };
+	void Setdirection(KamataEngine::Vector3 direction) { kBulletdirection = direction; };
 
 	void SetMapChipField(MapChipField* mapChipField) { mapChipFeild_ = mapChipField; };
 
 	void OnCollision();
 
-	bool isDead() const { return isDead_; };
+	bool IsDead() const { return isDead_; };
 	// bool IsCollisionDisabled() const { return isCollisionDisabled_; };
 
 	float isGetLevel() { return chargeLevel_; };
 
 private:
 	// トランスフォーム
-	WorldTransform worldTransform_;
+	KamataEngine::WorldTransform worldTransform_;
 
 	struct CollisionMapInfo {
 		bool ceiling = false;
 		bool landing = false;
 		bool hitWall = false;
-		Vector3 move;
+		KamataEngine::Vector3 move;
 	};
 
 	// 当たり判定
@@ -63,19 +61,19 @@ private:
 	void isHit(const CollisionMapInfo& info);
 
 	// 速度
-	Vector3 velocity_ = {};
+	KamataEngine::Vector3 velocity_ = {};
 
 	// 弾の速さ
 	static inline const float kbulletSpeed = 0.15f;
 	static inline const float kLimitRunSpeed = 0.3f;
 	// 向き
-	Vector3 kBulletdirection = {};
+	KamataEngine::Vector3 kBulletdirection = {};
 
 	// モデル
-	Model* model_ = nullptr;
+	KamataEngine::Model* model_ = nullptr;
 
 	// カメラ
-	Camera* camera_ = nullptr;
+	KamataEngine::Camera* camera_ = nullptr;
 
 	// フラグ
 	bool isDead_ = false;
@@ -88,7 +86,7 @@ private:
 	// マップチップによるフィールド
 	MapChipField* mapChipFeild_ = nullptr;
 	// 指定した角の計算
-	Vector3 CornerPosition(const Vector3& center, Corner Corner);
+	KamataEngine::Vector3 CornerPosition(const KamataEngine::Vector3& center, Corner Corner);
 	static inline const float kBlank = 0.04f;
 
 	// チャージショット系列

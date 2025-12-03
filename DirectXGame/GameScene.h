@@ -15,9 +15,6 @@
 #include "cheese.h"
 #include <vector>
 
-using namespace KamataEngine;
-using namespace std;
-
 // ゲームシーン
 class GameScene {
 public:
@@ -44,7 +41,7 @@ public:
 
 	bool isCleraed() const { return isGoal_; };
 
-	void CreateEffect(const Vector3& position);
+	void CreateEffect(const KamataEngine::Vector3& position);
 
 public:
 	// bgm
@@ -52,28 +49,28 @@ public:
 	uint32_t voiceHAndel;
 
 	// カメラ
-	Camera camera_;
+	KamataEngine::Camera camera_;
 	// 追跡カメラ
 	CameraController* CameraController_ = nullptr;
 	// デバックカメラ
-	DebugCamera* debugCamera_ = nullptr;
+	KamataEngine::DebugCamera* debugCamera_ = nullptr;
 	bool isDebugCameraActive_ = false;
 
 	// 3Dモデル
-	Model* modelblock_ = nullptr;
-	Model* modelSkydome_ = nullptr;
-	Model* modelPlayer_ = nullptr;
-	Model* modelPlayerAttck_ = nullptr;
-	Model* modelBullet_ = nullptr;
-	Model* modelEnemy_ = nullptr;
-	Model* modelDeathParticles_ = nullptr;
-	Model* modelHitEffect = nullptr;
-	Model* goalmodel_ = nullptr;
-	Model* modelcheese_ = nullptr;
+	KamataEngine::Model* modelblock_ = nullptr;
+	KamataEngine::Model* modelSkydome_ = nullptr;
+	KamataEngine::Model* modelPlayer_ = nullptr;
+	KamataEngine::Model* modelPlayerAttck_ = nullptr;
+	KamataEngine::Model* modelBullet_ = nullptr;
+	KamataEngine::Model* modelEnemy_ = nullptr;
+	KamataEngine::Model* modelDeathParticles_ = nullptr;
+	KamataEngine::Model* modelHitEffect = nullptr;
+	KamataEngine::Model* goalmodel_ = nullptr;
+	KamataEngine::Model* modelcheese_ = nullptr;
 
 	// 座標
-	WorldTransform tutorialWorldTransform_;
-	std::vector<std::vector<WorldTransform*>> worldTransformBlocks_;
+	KamataEngine::WorldTransform tutorialWorldTransform_;
+	std::vector<std::vector<KamataEngine::WorldTransform*>> worldTransformBlocks_;
 
 	// 背景
 	Skydome* skydome_ = nullptr;
@@ -92,7 +89,7 @@ public:
 	std::list<ExplosionEnemy*> Explosionenemies_;
 
 	// プレイヤーの球
-	list<Bullet*> PlayerBullet_;
+	std::list<Bullet*> PlayerBullet_;
 
 	// ですパーティクル
 	DeathParticles* deathParticles_ = nullptr;
@@ -115,18 +112,18 @@ public:
 	bool isGoal_ = false;
 
 	// 敵配置→josnとかにしたい
-	std::vector<Vector3> stage0Enemies = {
+	std::vector<KamataEngine::Vector3> stage0Enemies = {
 	    {38.0f, 7.0f, 0.0f},
 	};
 
-	std::vector<Vector3> stage1Enemies = {
+	std::vector<KamataEngine::Vector3> stage1Enemies = {
 	    {25.0f, 2.0f, 0.0f},
         {30.0f, 5.0f, 0.0f},
         {40.0f, 7.0f, 0.0f},
         {50.0f, 6.0f, 0.0f}
     };
 
-	std::vector<Vector3> stage2Enemies = {
+	std::vector<KamataEngine::Vector3> stage2Enemies = {
 	    {10.0f, 2.0f,  0.0f},
         {20.0f, 5.0f,  0.0f},
         {45.0f, 7.0f,  0.0f},
@@ -135,7 +132,7 @@ public:
         {80.0f, 4.0f,  0.0f}
     };
 
-	std::vector<Vector3> stage3Enemies = {
+	std::vector<KamataEngine::Vector3> stage3Enemies = {
 	    {18.0f, 2.0f,  0.0f},
         {22.0f, 5.0f,  0.0f},
         {45.0f, 7.0f,  0.0f},

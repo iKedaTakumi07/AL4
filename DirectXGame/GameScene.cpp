@@ -174,6 +174,13 @@ void GameScene::GenerateBlocks() {
 				worldTransformBlocks_[i][j] = worldTransform;
 				worldTransformBlocks_[i][j]->translation_ = mapChipField_->GetMapChipPositionByIndex(j, i);
 			}
+			// テクスチャを後で買える
+			if (mapChipField_->GetMapChipTypeByIndex(j, i) == MapChipType::kBreakableBlock) {
+				WorldTransform* worldTransform = new WorldTransform();
+				worldTransform->Initialize();
+				worldTransformBlocks_[i][j] = worldTransform;
+				worldTransformBlocks_[i][j]->translation_ = mapChipField_->GetMapChipPositionByIndex(j, i);
+			}
 		}
 	}
 }
@@ -182,33 +189,33 @@ void GameScene::CheckAllCollisions() {
 
 #pragma region
 	{
-		AABB aabb1, aabb2, aabb3, aabb4, aabb5, aabb6;
+		AABB aabbPlayer, aabbEnemy, aabbGoal, aabbPBullet, aabbExpEnemy;
 
-		aabb1 = player_->GetAABB();
+		aabbPlayer = player_->GetAABB();
 
 		for (Enemy* enemy : enemies_) {
 			if (enemy->IsCollisionDisabled())
 				continue;
 
-			aabb2 = enemy->GetAABB();
+			aabbEnemy = enemy->GetAABB();
 
 			// AABB同士の交差判定
-			if (IsCollision(aabb1, aabb2)) {
+			if (IsCollision(aabbPlayer, aabbEnemy)) {
 				// 自キャラの衝突関数を呼び出す
-				player_->OnCollision(enemy, aabb2, aabb1);
+				player_->OnCollision(enemy, aabbEnemy, aabbPlayer);
 
 				// 敵キャラの衝突判定を呼び出す
 				enemy->OnCollision(player_);
 			}
 
 			for (Bullet* bullet : PlayerBullet_) {
-				if (bullet->isDead())
+				if (bullet->IsDead())
 					continue;
 
-				aabb4 = bullet->GetAABB();
+				aabbPBullet = bullet->GetAABB();
 
 				// 弾と敵の当たり判定
-				if (IsCollision(aabb2, aabb4)) {
+				if (IsCollision(aabbEnemy, aabbPBullet)) {
 					enemy->OnCollision(bullet->isGetLevel());
 
 					bullet->OnCollision();
@@ -220,34 +227,33 @@ void GameScene::CheckAllCollisions() {
 			if (enemy->IsCollisionDisabled())
 				continue;
 
-			aabb5 = enemy->GetAABB();
+			aabbExpEnemy = enemy->GetAABB();
 
 			if (enemy->isDead()) {
-				aabb6 = enemy->GetAABBExplosion();
 				// AABB同士の交差判定
-				if (IsCollision(aabb1, aabb6)) {
+				if (IsCollision(aabbPlayer, aabbExpEnemy)) {
 					// 自キャラの衝突関数を呼び出す
-					player_->OnCollision(enemy, aabb6, aabb1);
+					player_->OnCollision(enemy, aabbExpEnemy, aabbPlayer);
 				}
 			}
 
 			// AABB同士の交差判定
-			if (IsCollision(aabb1, aabb5)) {
+			if (IsCollision(aabbPlayer, aabbExpEnemy)) {
 				// 自キャラの衝突関数を呼び出す
-				player_->OnCollision(enemy, aabb5, aabb1);
+				player_->OnCollision(enemy, aabbExpEnemy, aabbPlayer);
 
 				// 敵キャラの衝突判定を呼び出す
 				enemy->OnCollision(player_);
 			}
 
 			for (Bullet* bullet : PlayerBullet_) {
-				if (bullet->isDead())
+				if (bullet->IsDead())
 					continue;
 
-				aabb4 = bullet->GetAABB();
+				aabbPBullet = bullet->GetAABB();
 
 				// 弾と敵の当たり判定
-				if (IsCollision(aabb5, aabb4)) {
+				if (IsCollision(aabbExpEnemy, aabbPBullet)) {
 					enemy->OnCollision(bullet->isGetLevel());
 
 					bullet->OnCollision();
@@ -255,9 +261,9 @@ void GameScene::CheckAllCollisions() {
 			}
 		}
 
-		aabb3 = goal->GetAABB();
+		aabbGoal = goal->GetAABB();
 
-		if (IsCollision(aabb1, aabb3)) {
+		if (IsCollision(aabbPlayer, aabbGoal)) {
 			goal->OnCollision(player_);
 		}
 	}
@@ -319,7 +325,7 @@ void GameScene::Update() { /* 更新勝利を書く */
 	}*/
 
 	enemies_.remove_if([](Enemy* enemy) {
-		if (enemy->isDead()) {
+		if (enemy->IsDead()) {
 			delete enemy;
 			return true;
 		}
@@ -335,7 +341,7 @@ void GameScene::Update() { /* 更新勝利を書く */
 	});
 
 	PlayerBullet_.remove_if([](Bullet* bullet) {
-		if (bullet->isDead()) {
+		if (bullet->IsDead()) {
 			delete bullet;
 			return true;
 		}

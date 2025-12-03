@@ -100,7 +100,8 @@ void Bullet::CheckMapCollisionUP(CollisionMapInfo& info) {
 	indexSet = mapChipFeild_->GetMapChipIndexSetByPosition(positionsNew[KLeftTop]);
 	mapChipType = mapChipFeild_->GetMapChipTypeByIndex(indexSet.xindex, indexSet.yindex);
 	mapChipTypeNext = mapChipFeild_->GetMapChipTypeByIndex(indexSet.xindex, indexSet.yindex + 1);
-	if (mapChipType == MapChipType::kBlock && mapChipTypeNext != MapChipType::kBlock) {
+	if (mapChipType == MapChipType::kBlock && mapChipTypeNext != MapChipType::kBlock ||
+	    mapChipType == MapChipType::kBreakableBlock && mapChipTypeNext != MapChipType::kBreakableBlock && mapChipTypeNext != MapChipType::kBlock) {
 		hit = true;
 	}
 
@@ -108,12 +109,17 @@ void Bullet::CheckMapCollisionUP(CollisionMapInfo& info) {
 	indexSet = mapChipFeild_->GetMapChipIndexSetByPosition(positionsNew[kRightTop]);
 	mapChipType = mapChipFeild_->GetMapChipTypeByIndex(indexSet.xindex, indexSet.yindex);
 	mapChipTypeNext = mapChipFeild_->GetMapChipTypeByIndex(indexSet.xindex, indexSet.yindex + 1);
-	if (mapChipType == MapChipType::kBlock && mapChipTypeNext != MapChipType::kBlock) {
+	if (mapChipType == MapChipType::kBlock && mapChipTypeNext != MapChipType::kBlock ||
+	    mapChipType == MapChipType::kBreakableBlock && mapChipTypeNext != MapChipType::kBreakableBlock && mapChipTypeNext != MapChipType::kBlock) {
 		hit = true;
 	}
 
 	// ブロックにヒット?
 	if (hit) {
+		if (mapChipType == MapChipType::kBreakableBlock) {
+			mapChipFeild_->SetMapChipType(indexSet.xindex, indexSet.yindex, MapChipType::kBlank);
+		}
+
 		// めり込みを排除
 		indexSet = mapChipFeild_->GetMapChipIndexSetByPosition(worldTransform_.translation_ + info.move + Vector3(0, +kHeight / 2.0f, 0));
 		// 現在座標が壁の祖とかの判定
@@ -150,7 +156,8 @@ void Bullet::CheckMapCollisionDown(CollisionMapInfo& info) {
 	indexSet = mapChipFeild_->GetMapChipIndexSetByPosition(positionNew[kLeftBottom]);
 	mapChipType = mapChipFeild_->GetMapChipTypeByIndex(indexSet.xindex, indexSet.yindex);
 	mapChipTypeNext = mapChipFeild_->GetMapChipTypeByIndex(indexSet.xindex, indexSet.yindex - 1);
-	if (mapChipType == MapChipType::kBlock && mapChipTypeNext != MapChipType::kBlock) {
+	if (mapChipType == MapChipType::kBlock && mapChipTypeNext != MapChipType::kBlock && mapChipTypeNext != MapChipType::kBreakableBlock ||
+	    mapChipType == MapChipType::kBreakableBlock && mapChipTypeNext != MapChipType::kBreakableBlock && mapChipTypeNext != MapChipType::kBlock) {
 		hit = true;
 	}
 
@@ -159,12 +166,17 @@ void Bullet::CheckMapCollisionDown(CollisionMapInfo& info) {
 	indexSet = mapChipFeild_->GetMapChipIndexSetByPosition(positionNew[kRightBottom]);
 	mapChipType = mapChipFeild_->GetMapChipTypeByIndex(indexSet.xindex, indexSet.yindex);
 	mapChipTypeNext = mapChipFeild_->GetMapChipTypeByIndex(indexSet.xindex, indexSet.yindex - 1);
-	if (mapChipType == MapChipType::kBlock && mapChipTypeNext != MapChipType::kBlock) {
+	if (mapChipType == MapChipType::kBlock && mapChipTypeNext != MapChipType::kBlock && mapChipTypeNext != MapChipType::kBreakableBlock ||
+	    mapChipType == MapChipType::kBreakableBlock && mapChipTypeNext != MapChipType::kBreakableBlock && mapChipTypeNext != MapChipType::kBlock) {
 		hit = true;
 	}
 
 	// ブロックヒットー
 	if (hit) {
+		if (mapChipType == MapChipType::kBreakableBlock) {
+			mapChipFeild_->SetMapChipType(indexSet.xindex, indexSet.yindex, MapChipType::kBlank);
+		}
+
 		// めり込み排除
 		indexSet = mapChipFeild_->GetMapChipIndexSetByPosition(worldTransform_.translation_ + info.move + Vector3(0, -kHeight / 2.0f, 0));
 		// 現在座標が壁の祖とかの判定
@@ -203,7 +215,8 @@ void Bullet::CheckMapCollisionRight(CollisionMapInfo& info) {
 	indexSet = mapChipFeild_->GetMapChipIndexSetByPosition(positionNew[kRightTop]);
 	mapChipType = mapChipFeild_->GetMapChipTypeByIndex(indexSet.xindex, indexSet.yindex);
 	mapChipTypeNext = mapChipFeild_->GetMapChipTypeByIndex(indexSet.xindex - 1, indexSet.yindex);
-	if (mapChipType == MapChipType::kBlock && mapChipTypeNext != MapChipType::kBlock) {
+	if (mapChipType == MapChipType::kBlock && mapChipTypeNext != MapChipType::kBlock && mapChipTypeNext != MapChipType::kBreakableBlock ||
+	    mapChipType == MapChipType::kBreakableBlock && mapChipTypeNext != MapChipType::kBreakableBlock && mapChipTypeNext != MapChipType::kBlock) {
 		hit = true;
 	}
 	// 右下点の判定
@@ -211,11 +224,16 @@ void Bullet::CheckMapCollisionRight(CollisionMapInfo& info) {
 	indexSet = mapChipFeild_->GetMapChipIndexSetByPosition(positionNew[kRightBottom]);
 	mapChipType = mapChipFeild_->GetMapChipTypeByIndex(indexSet.xindex, indexSet.yindex);
 	mapChipTypeNext = mapChipFeild_->GetMapChipTypeByIndex(indexSet.xindex - 1, indexSet.yindex);
-	if (mapChipType == MapChipType::kBlock && mapChipTypeNext != MapChipType::kBlock) {
+	if (mapChipType == MapChipType::kBlock && mapChipTypeNext != MapChipType::kBlock && mapChipTypeNext != MapChipType::kBreakableBlock ||
+	    mapChipType == MapChipType::kBreakableBlock && mapChipTypeNext != MapChipType::kBreakableBlock && mapChipTypeNext != MapChipType::kBlock) {
 		hit = true;
 	}
 
 	if (hit) {
+		if (mapChipType == MapChipType::kBreakableBlock) {
+			mapChipFeild_->SetMapChipType(indexSet.xindex, indexSet.yindex, MapChipType::kBlank);
+		}
+
 		MapChipField::IndexSet indexSetNow;
 		indexSetNow = mapChipFeild_->GetMapChipIndexSetByPosition(worldTransform_.translation_ + Vector3(+kWidth / 2.0f, 0, 0));
 		if (indexSetNow.xindex != indexSet.xindex) {
@@ -255,7 +273,8 @@ void Bullet::CheckMapCollisionLeft(CollisionMapInfo& info) {
 	indexSet = mapChipFeild_->GetMapChipIndexSetByPosition(positionNew[KLeftTop]);
 	mapChipType = mapChipFeild_->GetMapChipTypeByIndex(indexSet.xindex, indexSet.yindex);
 	mapChipTypeNext = mapChipFeild_->GetMapChipTypeByIndex(indexSet.xindex + 1, indexSet.yindex);
-	if (mapChipType == MapChipType::kBlock && mapChipTypeNext != MapChipType::kBlock) {
+	if (mapChipType == MapChipType::kBlock && mapChipTypeNext != MapChipType::kBlock && mapChipTypeNext != MapChipType::kBreakableBlock ||
+	    mapChipType == MapChipType::kBreakableBlock && mapChipTypeNext != MapChipType::kBreakableBlock && mapChipTypeNext != MapChipType::kBlock) {
 		hit = true;
 	}
 	// 左下点の判定
@@ -263,11 +282,15 @@ void Bullet::CheckMapCollisionLeft(CollisionMapInfo& info) {
 	indexSet = mapChipFeild_->GetMapChipIndexSetByPosition(positionNew[kLeftBottom]);
 	mapChipType = mapChipFeild_->GetMapChipTypeByIndex(indexSet.xindex, indexSet.yindex);
 	mapChipTypeNext = mapChipFeild_->GetMapChipTypeByIndex(indexSet.xindex + 1, indexSet.yindex);
-	if (mapChipType == MapChipType::kBlock && mapChipTypeNext != MapChipType::kBlock) {
+	if (mapChipType == MapChipType::kBlock && mapChipTypeNext != MapChipType::kBlock && mapChipTypeNext != MapChipType::kBreakableBlock ||
+	    mapChipType == MapChipType::kBreakableBlock && mapChipTypeNext != MapChipType::kBreakableBlock && mapChipTypeNext != MapChipType::kBlock) {
 		hit = true;
 	}
 
 	if (hit) {
+		if (mapChipType == MapChipType::kBreakableBlock) {
+			mapChipFeild_->SetMapChipType(indexSet.xindex, indexSet.yindex, MapChipType::kBlank);
+		}
 
 		MapChipField::IndexSet indexSetNow;
 		indexSetNow = mapChipFeild_->GetMapChipIndexSetByPosition(worldTransform_.translation_ + Vector3(-kWidth / 2.0f, 0, 0));
