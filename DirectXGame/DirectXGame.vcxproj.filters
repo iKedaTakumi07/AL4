@@ -90,6 +90,9 @@
     <ClCompile Include="strongEnemy.cpp">
       <Filter>Enemy</Filter>
     </ClCompile>
+    <ClCompile Include="AbilityItem.cpp">
+      <Filter>Player</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\shaders\SpritePS.hlsl">
@@ -191,6 +194,9 @@
     </ClInclude>
     <ClInclude Include="strongEnemy.h">
       <Filter>Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="AbilityItem.h">
+      <Filter>Player</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

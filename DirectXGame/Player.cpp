@@ -421,17 +421,25 @@ void Player::InputMove() {
 		velocity_.y = std::max(velocity_.y, -kLimitFallSpeed);
 	}
 
-	if (Input::GetInstance()->PushKey(DIK_SPACE)) {
+	if (coolTimer >= 0.0f) {
+		coolTimer -= 1.0f / 60.0f;
+	}
 
+	if (Input::GetInstance()->PushKey(DIK_SPACE)) {
 		if (isGetCarge_) {
-			ischarge_ = true;
-			if (chargePower < chargeMaxPower) {
-				chargePower += 1.0f / 60.0f;
+			if (coolTimer <= 0.0f) {
+				ischarge_ = true;
+				if (chargePower < chargeMaxPower) {
+					chargePower += 1.0f / 60.0f;
+				}
 			}
 		} else {
-			isshot_ = true;
+			if (coolTimer <= 0.0f) {
+				isshot_ = true;
+				coolTimer = 1.0f;
+			}
 		}
-		
+
 	} else {
 		if (ischarge_) {
 			ischarge_ = false;
@@ -472,7 +480,7 @@ void Player::CheckMapCollisionUP(CollisionMapInfo& info) {
 	indexSet = mapChipFeild_->GetMapChipIndexSetByPosition(positionsNew[KLeftTop]);
 	mapChipType = mapChipFeild_->GetMapChipTypeByIndex(indexSet.xindex, indexSet.yindex);
 	mapChipTypeNext = mapChipFeild_->GetMapChipTypeByIndex(indexSet.xindex, indexSet.yindex + 1);
-	if (mapChipType == MapChipType::kBlock && mapChipTypeNext != MapChipType::kBlock &&mapChipTypeNext != MapChipType::kBreakableBlock ||
+	if (mapChipType == MapChipType::kBlock && mapChipTypeNext != MapChipType::kBlock && mapChipTypeNext != MapChipType::kBreakableBlock ||
 	    mapChipType == MapChipType::kBreakableBlock && mapChipTypeNext != MapChipType::kBreakableBlock && mapChipTypeNext != MapChipType::kBlock) {
 		hit = true;
 	}

@@ -196,6 +196,7 @@ private:
 	bool isshot_ = false;
 	float chargePower = 0.0f;
 	float chargeMaxPower = 1.0f;
+	float coolTimer = 0.0f;
 
 	// プレイヤーの強化状態設定
 	bool isGetCarge_ = false;
