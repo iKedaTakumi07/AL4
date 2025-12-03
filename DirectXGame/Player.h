@@ -196,4 +196,8 @@ private:
 	bool isshot_ = false;
 	float chargePower = 0.0f;
 	float chargeMaxPower = 1.0f;
+
+	// プレイヤーの強化状態設定
+	bool isGetCarge_ = false;
+	bool isGetSpaceJump_ = false;
 };

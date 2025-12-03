@@ -422,10 +422,16 @@ void Player::InputMove() {
 	}
 
 	if (Input::GetInstance()->PushKey(DIK_SPACE)) {
-		ischarge_ = true;
-		if (chargePower < chargeMaxPower) {
-			chargePower += 1.0f / 60.0f;
+
+		if (isGetCarge_) {
+			ischarge_ = true;
+			if (chargePower < chargeMaxPower) {
+				chargePower += 1.0f / 60.0f;
+			}
+		} else {
+			isshot_ = true;
 		}
+		
 	} else {
 		if (ischarge_) {
 			ischarge_ = false;
