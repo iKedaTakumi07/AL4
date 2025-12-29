@@ -189,6 +189,15 @@ void Player::OnCollision(const ExplosionEnemy* enemy, AABB pos, AABB pos2) {
 	(void)enemy;
 }
 
+void Player::OnCollision(uint32_t i) {
+
+	if (i == uint32_t(1)) {
+		isGetCarge_ = true;
+	}
+	if (i == uint32_t(2)) {
+		isGetSpaceJump_ = true;
+	}
+}
 void Player::BehaviorRootInitialize() {}
 
 void Player::BehaviorRootUpdata() {
@@ -405,13 +414,15 @@ void Player::InputMove() {
 	} else {
 
 		// スペースジャンプ(2弾ジャンプ)
-		if (Input::GetInstance()->TriggerKey(DIK_W)) {
-			if (!isSpaceJump) {
-				isSpaceJump = true;
+		if (isGetSpaceJump_) {
+			if (Input::GetInstance()->TriggerKey(DIK_W)) {
+				if (!isSpaceJump) {
+					isSpaceJump = true;
 
-				// 落下速度をリセットする必要あり
-				velocity_.y = 0.0f;
-				velocity_.y += kSpaceJumpAcceleration / 60.0f;
+					// 落下速度をリセットする必要あり
+					velocity_.y = 0.0f;
+					velocity_.y += kSpaceJumpAcceleration / 60.0f;
+				}
 			}
 		}
 

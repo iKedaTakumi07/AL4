@@ -1,7 +1,6 @@
 #pragma once
 #include "Bullet.h"
 #include "CameraController.h"
-#include "strongEnemy.h"
 #include "DeathParticles.h"
 #include "Enemy.h"
 #include "Fade.h"
@@ -13,7 +12,10 @@
 #include "Player.h"
 #include "Skydome.h"
 #include "cheese.h"
+#include "strongEnemy.h"
 #include <vector>
+
+class AbilityItem;
 
 // ゲームシーン
 class GameScene {
@@ -83,9 +85,6 @@ public:
 	// マップチップフィールド
 	MapChipField* mapChipField_;
 
-	// スターコイン(チーズ)→パワーアップアイテムに変更予定
-	cheese* Cheese_;
-
 	// 敵
 	std::list<Enemy*> enemies_;
 	std::list<ExplosionEnemy*> Explosionenemies_;
@@ -96,6 +95,9 @@ public:
 	// ですパーティクル
 	DeathParticles* deathParticles_ = nullptr;
 	std::list<HitEffect*> hitEffects_;
+
+	// アビリティ
+	std::list<AbilityItem*> AbilityItem_;
 
 	// フェード
 	enum class Phase {

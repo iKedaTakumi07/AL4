@@ -1,4 +1,5 @@
 #include "GameScene.h"
+#include "AbilityItem.h"
 #include "HitEffect.h"
 #include "Math.h"
 #include <cassert>
@@ -43,12 +44,15 @@ GameScene::~GameScene() {
 		delete hitEffect;
 	}
 
+	for (AbilityItem* abilityItem : AbilityItem_) {
+		delete abilityItem;
+	}
+
 	delete fade_;
 	delete goal;
 	delete goalmodel_;
 
 	delete modelcheese_;
-	delete Cheese_;
 }
 
 void GameScene::Initialize() { /*初期化を書く*/
@@ -134,6 +138,23 @@ void GameScene::Initialize() { /*初期化を書く*/
 		Explosionenemies_.push_back(NeweEnemy);
 	}
 
+	modelcheese_ = Model::CreateFromOBJ("cheese");
+
+	// アビリティ
+	for (uint32_t i = 0; i < 2; i++) {
+		AbilityItem* abilityItem = new AbilityItem();
+		Vector3 AbilityPos;
+		if (i == 0) {
+			AbilityPos = mapChipField_->GetMapChipPositionByIndex(uint32_t(15), uint32_t(10));
+			abilityItem->SetNunber(uint32_t(1));
+		} else {
+			AbilityPos = mapChipField_->GetMapChipPositionByIndex(uint32_t(20), uint32_t(10));
+			abilityItem->SetNunber(uint32_t(2));
+		}
+		abilityItem->Initialize(modelcheese_, &camera_, AbilityPos);
+		AbilityItem_.push_back(abilityItem);
+	}
+
 	// デスパーティクル
 	modelDeathParticles_ = Model::CreateFromOBJ("deathParticle");
 
@@ -190,9 +211,25 @@ void GameScene::CheckAllCollisions() {
 
 #pragma region
 	{
-		AABB aabbPlayer, aabbEnemy, aabbGoal, aabbPBullet, aabbExpEnemy;
+		AABB aabbPlayer, aabbEnemy, aabbGoal, aabbPBullet, aabbExpEnemy, aabbAbility;
 
 		aabbPlayer = player_->GetAABB();
+
+		for (AbilityItem* ability : AbilityItem_) {
+			if (ability->IsCollisionDisabled())
+				continue;
+
+			aabbAbility = ability->GetAABB();
+
+			if (IsCollision(aabbPlayer, aabbAbility)) {
+				uint32_t num;
+
+				num = ability->GetNumber();
+				player_->OnCollision(num);
+
+				ability->OnCollision();
+			}
+		}
 
 		for (Enemy* enemy : enemies_) {
 			if (enemy->IsCollisionDisabled())
@@ -367,6 +404,14 @@ void GameScene::Update() { /* 更新勝利を書く */
 		return false;
 	});
 
+	AbilityItem_.remove_if([](AbilityItem* Ability) {
+		if (Ability->isDead()) {
+			delete Ability;
+			return true;
+		}
+		return false;
+	});
+
 	skydome_->Update();
 	CameraController_->Update();
 
@@ -388,6 +433,10 @@ void GameScene::Update() { /* 更新勝利を書く */
 
 	for (ExplosionEnemy* enemy : Explosionenemies_) {
 		enemy->Update();
+	}
+
+	for (AbilityItem* Ability : AbilityItem_) {
+		Ability->Update();
 	}
 
 	ChangePhase();
@@ -494,6 +543,10 @@ void GameScene::Draw() {
 
 	for (Bullet* bullet : PlayerBullet_) {
 		bullet->Draw();
+	}
+
+	for (AbilityItem* Ability : AbilityItem_) {
+		Ability->Draw();
 	}
 
 	// ブロックが破壊されたとき存在しないようにする

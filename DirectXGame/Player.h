@@ -64,6 +64,7 @@ public:
 
 	void OnCollision(const Enemy* enemy, AABB pos, AABB pos2);
 	void OnCollision(const ExplosionEnemy* enemy, AABB pos, AABB pos2);
+	void OnCollision(uint32_t i);
 
 	// ですフラグのトリがー
 	bool IsDead() const { return isDead_; };
