@@ -1,0 +1,105 @@
+#include "TitleScene.h"
+#include "Math.h"
+#include <numbers>
+
+using namespace KamataEngine;
+
+void TitleScene::Initialize() {
+	// モデル
+	modelTitle_ = Model::CreateFromOBJ("titleFont", true);
+	modelPlayer_ = Model::CreateFromOBJ("newplayer");
+	modelStart_ = Model::CreateFromOBJ("startFont");
+
+	camera_.Initialize();
+
+	worldTransformTitle_.Initialize();
+
+	const float kTitleScale = 2.0f;
+
+	worldTransformTitle_.scale_ = {kTitleScale, kTitleScale, kTitleScale};
+	worldTransformTitle_.translation_.y = 0.95f * std::numbers::pi_v<float>;
+
+	worldTransformplayer_.Initialize();
+
+	const float kplayerScale = 10.0f;
+
+	worldTransformplayer_.scale_ = {kplayerScale, kplayerScale, kplayerScale};
+	worldTransformplayer_.rotation_.y = 0.95f * std::numbers::pi_v<float>;
+	worldTransformplayer_.translation_.x = -2.0f;
+	worldTransformplayer_.translation_.y = -5.0f;
+
+	worldTransformStart_.Initialize();
+
+	const float kStartScale = 2.0f;
+
+	worldTransformStart_.scale_ = {kStartScale, kStartScale, kStartScale};
+	worldTransformStart_.translation_.x = -0.0f;
+	worldTransformStart_.translation_.y = -14.0f;
+
+	fade_ = new Fade;
+	fade_->Initialize();
+	fade_->Start(Fade::Status::FadeIn, 1.0f);
+}
+
+void TitleScene::Update() {
+
+	switch (phase_) {
+	case TitleScene::Phase::kFadeIn:
+		fade_->Update();
+
+		if (fade_->IsFinished()) {
+			phase_ = Phase::kMain;
+		}
+		break;
+	case TitleScene::Phase::kMain:
+		if (Input::GetInstance()->PushKey(DIK_SPACE)) {
+			fade_->Start(Fade::Status::FadeOut, 1.0f);
+			phase_ = Phase::kFadeOut;
+		}
+		break;
+	case TitleScene::Phase::kFadeOut:
+		fade_->Update();
+		if (fade_->IsFinished()) {
+			finished_ = true;
+		}
+
+		break;
+	}
+
+	counter_ += 1.0f / 60.0f;
+	counter_ = std::fmod(counter_, kTimeTitleMove);
+
+	float angle = counter_ / kTimeTitleMove * 2.0f * std::numbers::pi_v<float>;
+	worldTransformTitle_.translation_.y = std::sin(angle) + 10.0f;
+
+	camera_.TransferMatrix();
+
+	WorldtransformUpdate(worldTransformplayer_);
+	WorldtransformUpdate(worldTransformTitle_);
+	WorldtransformUpdate(worldTransformStart_);
+}
+
+void TitleScene::Draw() {
+
+	// directXCommonインスタンスの取得
+	DirectXCommon* dxCommon = DirectXCommon::GetInstance();
+
+	Model::PreDraw(dxCommon->GetCommandList());
+
+	// 描画
+	modelPlayer_->Draw(worldTransformplayer_, camera_);
+	modelTitle_->Draw(worldTransformTitle_, camera_);
+	modelStart_->Draw(worldTransformStart_, camera_);
+
+	fade_->Draw();
+
+	Model::PostDraw();
+}
+
+TitleScene::~TitleScene() {
+
+	delete modelPlayer_;
+	delete modelTitle_;
+
+	delete fade_;
+}
