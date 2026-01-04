@@ -4,6 +4,7 @@
 #include "DeathParticles.h"
 #include "Enemy.h"
 #include "Fade.h"
+#include "GameSceneUI.h"
 #include "Goal.h"
 #include "HitEffect.h"
 #include "KamataEngine.h"
@@ -62,6 +63,7 @@ public:
 	uint32_t blockTextureHandele;
 
 	KamataEngine::Model* modelblock_ = nullptr;
+	KamataEngine::Model* modelplayerHp_ = nullptr;
 	KamataEngine::Model* modelSkydome_ = nullptr;
 	KamataEngine::Model* modelPlayer_ = nullptr;
 	KamataEngine::Model* modelPlayerAttck_ = nullptr;
@@ -81,6 +83,9 @@ public:
 
 	// プレイヤー
 	Player* player_ = nullptr;
+
+	// UI
+	GameSceneUI* ui_ = nullptr;
 
 	// マップチップフィールド
 	MapChipField* mapChipField_;

@@ -79,7 +79,9 @@ public:
 
 	bool IsAttack() const { return behavior_ == Behavior::kAttack && attackPhase_ == AttackPhase::kAction; }
 
-	bool isGetShot() ;
+	bool isGetShot();
+
+	int GetPlayerHp() { return health; };
 
 	float isGetCharge();
 
