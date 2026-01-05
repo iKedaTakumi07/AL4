@@ -237,7 +237,7 @@ void Player::BehaviorRootUpdata() {
 	}
 
 	if (Input::GetInstance()->TriggerKey(DIK_E)) {
-		behaviorRequest_ = Behavior::kAttack;
+		//behaviorRequest_ = Behavior::kAttack;
 	}
 }
 
@@ -447,7 +447,7 @@ void Player::InputMove() {
 		} else {
 			if (coolTimer <= 0.0f) {
 				isshot_ = true;
-				coolTimer = 1.0f;
+				coolTimer = 0.5f;
 			}
 		}
 

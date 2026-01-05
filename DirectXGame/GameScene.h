@@ -133,12 +133,12 @@ public:
     };
 
 	std::vector<KamataEngine::Vector3> stage2Enemies = {
-	    {10.0f, 2.0f,  0.0f},
-        {20.0f, 5.0f,  0.0f},
-        {45.0f, 7.0f,  0.0f},
-        {15.0f, 10.0f, 0.0f},
-        {60.0f, 3.0f,  0.0f},
-        {80.0f, 4.0f,  0.0f}
+	    {48.0f, 2.0f,  0.0f},
+        {90.0f, 5.0f,  0.0f},
+        {93.0f, 7.0f,  0.0f},
+        {72.0f, 10.0f, 0.0f},
+        {64.0f, 3.0f,  0.0f},
+        {85.0f, 4.0f,  0.0f}
     };
 
 	std::vector<KamataEngine::Vector3> stage3Enemies = {

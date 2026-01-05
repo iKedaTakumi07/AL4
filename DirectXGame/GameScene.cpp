@@ -155,10 +155,10 @@ void GameScene::Initialize() { /*初期化を書く*/
 		AbilityItem* abilityItem = new AbilityItem();
 		Vector3 AbilityPos;
 		if (i == 0) {
-			AbilityPos = mapChipField_->GetMapChipPositionByIndex(uint32_t(15), uint32_t(10));
+			AbilityPos = mapChipField_->GetMapChipPositionByIndex(uint32_t(29), uint32_t(18));
 			abilityItem->SetNunber(uint32_t(1));
 		} else {
-			AbilityPos = mapChipField_->GetMapChipPositionByIndex(uint32_t(20), uint32_t(10));
+			AbilityPos = mapChipField_->GetMapChipPositionByIndex(uint32_t(52), uint32_t(18));
 			abilityItem->SetNunber(uint32_t(2));
 		}
 		abilityItem->Initialize(modelcheese_, &camera_, AbilityPos);
@@ -402,9 +402,9 @@ void GameScene::Update() { /* 更新勝利を書く */
 	ui_->Update();
 
 	// bgm
-	/*if (!Audio::GetInstance()->IsPlaying(voiceHAndel)) {
+	if (!Audio::GetInstance()->IsPlaying(voiceHAndel)) {
 	    voiceHAndel = Audio::GetInstance()->PlayWave(soundBGM, true, 0.5f);
-	}*/
+	}
 
 	enemies_.remove_if([](Enemy* enemy) {
 		if (enemy->IsDead()) {
