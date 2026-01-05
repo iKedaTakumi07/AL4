@@ -278,8 +278,7 @@ void GameScene::CheckAllCollisions() {
 		for (ExplosionEnemy* enemy : Explosionenemies_) {
 			if (enemy->IsCollisionDisabled())
 				continue;
-
-			aabbExpEnemy = enemy->GetAABB();
+			aabbExpEnemy = enemy->GetAABBExplosion();
 
 			if (enemy->isDead()) {
 				// AABB同士の交差判定
@@ -293,6 +292,7 @@ void GameScene::CheckAllCollisions() {
 				}
 			}
 
+			aabbExpEnemy = enemy->GetAABB();
 			// AABB同士の交差判定
 			if (IsCollision(aabbPlayer, aabbExpEnemy)) {
 				// 自キャラの衝突関数を呼び出す
@@ -385,7 +385,6 @@ void GameScene::Update() { /* 更新勝利を書く */
 	}
 #endif
 
-
 	// カメラの処理
 	if (isDebugCameraActive_) {
 		debugCamera_->Update();
@@ -403,7 +402,7 @@ void GameScene::Update() { /* 更新勝利を書く */
 
 	// bgm
 	if (!Audio::GetInstance()->IsPlaying(voiceHAndel)) {
-	    voiceHAndel = Audio::GetInstance()->PlayWave(soundBGM, true, 0.5f);
+		voiceHAndel = Audio::GetInstance()->PlayWave(soundBGM, true, 0.5f);
 	}
 
 	enemies_.remove_if([](Enemy* enemy) {
