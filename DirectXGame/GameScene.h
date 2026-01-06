@@ -4,6 +4,7 @@
 #include "DeathParticles.h"
 #include "Enemy.h"
 #include "Fade.h"
+#include "GameSceneUI.h"
 #include "Goal.h"
 #include "HitEffect.h"
 #include "KamataEngine.h"
@@ -62,6 +63,7 @@ public:
 	uint32_t blockTextureHandele;
 
 	KamataEngine::Model* modelblock_ = nullptr;
+	KamataEngine::Model* modelplayerHp_ = nullptr;
 	KamataEngine::Model* modelSkydome_ = nullptr;
 	KamataEngine::Model* modelPlayer_ = nullptr;
 	KamataEngine::Model* modelPlayerAttck_ = nullptr;
@@ -81,6 +83,9 @@ public:
 
 	// プレイヤー
 	Player* player_ = nullptr;
+
+	// UI
+	GameSceneUI* ui_ = nullptr;
 
 	// マップチップフィールド
 	MapChipField* mapChipField_;
@@ -128,12 +133,12 @@ public:
     };
 
 	std::vector<KamataEngine::Vector3> stage2Enemies = {
-	    {10.0f, 2.0f,  0.0f},
-        {20.0f, 5.0f,  0.0f},
-        {45.0f, 7.0f,  0.0f},
-        {15.0f, 10.0f, 0.0f},
-        {60.0f, 3.0f,  0.0f},
-        {80.0f, 4.0f,  0.0f}
+	    {48.0f, 2.0f,  0.0f},
+        {90.0f, 5.0f,  0.0f},
+        {93.0f, 7.0f,  0.0f},
+        {72.0f, 10.0f, 0.0f},
+        {64.0f, 3.0f,  0.0f},
+        {85.0f, 4.0f,  0.0f}
     };
 
 	std::vector<KamataEngine::Vector3> stage3Enemies = {

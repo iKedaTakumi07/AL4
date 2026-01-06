@@ -1,6 +1,7 @@
 #include "AbilityItem.h"
 #include "Math.h"
 #include <numbers>
+#include <cassert>
 
 void AbilityItem::Initialize(KamataEngine::Model* model, KamataEngine::Camera* camera, const KamataEngine::Vector3& position) {
 	// nullポインタチェック

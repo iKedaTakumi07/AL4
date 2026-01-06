@@ -4,6 +4,7 @@
 #include "MapChipField.h"
 #include <algorithm>
 #include <numbers>
+#include <cassert>
 
 using namespace KamataEngine;
 

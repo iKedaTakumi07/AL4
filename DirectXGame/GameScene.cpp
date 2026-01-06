@@ -40,6 +40,9 @@ GameScene::~GameScene() {
 	delete modelDeathParticles_;
 	delete deathParticles_;
 
+	delete modelplayerHp_;
+
+	delete ui_;
 	for (HitEffect* hitEffect : hitEffects_) {
 		delete hitEffect;
 	}
@@ -94,6 +97,13 @@ void GameScene::Initialize() { /*初期化を書く*/
 	player_->SetMapChipField(mapChipField_);
 	player_->Initialize(modelPlayer_, modelPlayerAttck_, &camera_, playerPosition);
 
+	// ui
+	modelplayerHp_ = Model::CreateFromOBJ("playerHp");
+	int playerhp = player_->GetPlayerHp();
+	ui_ = new GameSceneUI();
+	ui_->Initialize(modelplayerHp_, &camera_);
+	ui_->SetPlayerHp(playerhp);
+
 	// 追跡カメラ
 	CameraController_ = new CameraController();
 	CameraController_->Initialize(&camera_);
@@ -145,10 +155,10 @@ void GameScene::Initialize() { /*初期化を書く*/
 		AbilityItem* abilityItem = new AbilityItem();
 		Vector3 AbilityPos;
 		if (i == 0) {
-			AbilityPos = mapChipField_->GetMapChipPositionByIndex(uint32_t(15), uint32_t(10));
+			AbilityPos = mapChipField_->GetMapChipPositionByIndex(uint32_t(29), uint32_t(18));
 			abilityItem->SetNunber(uint32_t(1));
 		} else {
-			AbilityPos = mapChipField_->GetMapChipPositionByIndex(uint32_t(20), uint32_t(10));
+			AbilityPos = mapChipField_->GetMapChipPositionByIndex(uint32_t(52), uint32_t(18));
 			abilityItem->SetNunber(uint32_t(2));
 		}
 		abilityItem->Initialize(modelcheese_, &camera_, AbilityPos);
@@ -242,6 +252,10 @@ void GameScene::CheckAllCollisions() {
 				// 自キャラの衝突関数を呼び出す
 				player_->OnCollision(enemy, aabbEnemy, aabbPlayer);
 
+				int playerhp;
+				playerhp = player_->GetPlayerHp();
+				ui_->SetPlayerHp(playerhp);
+
 				// 敵キャラの衝突判定を呼び出す
 				enemy->OnCollision(player_);
 			}
@@ -264,21 +278,29 @@ void GameScene::CheckAllCollisions() {
 		for (ExplosionEnemy* enemy : Explosionenemies_) {
 			if (enemy->IsCollisionDisabled())
 				continue;
-
-			aabbExpEnemy = enemy->GetAABB();
+			aabbExpEnemy = enemy->GetAABBExplosion();
 
 			if (enemy->isDead()) {
 				// AABB同士の交差判定
 				if (IsCollision(aabbPlayer, aabbExpEnemy)) {
 					// 自キャラの衝突関数を呼び出す
 					player_->OnCollision(enemy, aabbExpEnemy, aabbPlayer);
+
+					int playerhp;
+					playerhp = player_->GetPlayerHp();
+					ui_->SetPlayerHp(playerhp);
 				}
 			}
 
+			aabbExpEnemy = enemy->GetAABB();
 			// AABB同士の交差判定
 			if (IsCollision(aabbPlayer, aabbExpEnemy)) {
 				// 自キャラの衝突関数を呼び出す
 				player_->OnCollision(enemy, aabbExpEnemy, aabbPlayer);
+
+				int playerhp;
+				playerhp = player_->GetPlayerHp();
+				ui_->SetPlayerHp(playerhp);
 
 				// 敵キャラの衝突判定を呼び出す
 				enemy->OnCollision(player_);
@@ -357,15 +379,15 @@ void GameScene::CreateEffect(const Vector3& position) {
 void GameScene::Update() { /* 更新勝利を書く */
 
 #ifdef _DEBUG
-	// if (Input::GetInstance()->TriggerKey(DIK_SPACE)) {
-	//	// フラグをトグル
-	//	isDebugCameraActive_ = !isDebugCameraActive_;
-	// }
+	if (Input::GetInstance()->TriggerKey(DIK_F1)) {
+		// フラグをトグル
+		isDebugCameraActive_ = !isDebugCameraActive_;
+	}
 #endif
 
 	// カメラの処理
 	if (isDebugCameraActive_) {
-		/*debugCamera_->Update();*/
+		debugCamera_->Update();
 		camera_.matView = debugCamera_->GetCamera().matView;
 		camera_.matProjection = debugCamera_->GetCamera().matProjection;
 		// ビュープロジェクション行列の転送
@@ -373,12 +395,15 @@ void GameScene::Update() { /* 更新勝利を書く */
 	} else {
 		// ビュープロジェクション行列の更新と転送
 		camera_.UpdateMatrix();
+		CameraController_->Update();
 	}
 
+	ui_->Update();
+
 	// bgm
-	/*if (!Audio::GetInstance()->IsPlaying(voiceHAndel)) {
-	    voiceHAndel = Audio::GetInstance()->PlayWave(soundBGM, true, 0.5f);
-	}*/
+	if (!Audio::GetInstance()->IsPlaying(voiceHAndel)) {
+		voiceHAndel = Audio::GetInstance()->PlayWave(soundBGM, true, 0.5f);
+	}
 
 	enemies_.remove_if([](Enemy* enemy) {
 		if (enemy->IsDead()) {
@@ -413,7 +438,6 @@ void GameScene::Update() { /* 更新勝利を書く */
 	});
 
 	skydome_->Update();
-	CameraController_->Update();
 
 	// ブロックの更新
 
@@ -526,6 +550,8 @@ void GameScene::Draw() {
 	if (!player_->IsDead()) {
 		player_->Draw();
 	}
+
+	ui_->Draw();
 
 	// 背景
 	skydome_->Draw();
