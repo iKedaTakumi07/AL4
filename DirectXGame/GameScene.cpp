@@ -402,7 +402,7 @@ void GameScene::Update() { /* 更新勝利を書く */
 
 	// bgm
 	if (!Audio::GetInstance()->IsPlaying(voiceHAndel)) {
-		voiceHAndel = Audio::GetInstance()->PlayWave(soundBGM, true, 0.5f);
+		//voiceHAndel = Audio::GetInstance()->PlayWave(soundBGM, true, 0.5f);
 	}
 
 	enemies_.remove_if([](Enemy* enemy) {
