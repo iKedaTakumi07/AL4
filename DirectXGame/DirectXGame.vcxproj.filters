@@ -34,18 +34,18 @@
     <Filter Include="Player\Bullet">
       <UniqueIdentifier>{6bf81988-cbfc-4fde-8881-50754af210db}</UniqueIdentifier>
     </Filter>
+    <Filter Include="UI">
+      <UniqueIdentifier>{e8a940d9-6e0b-43cb-b042-d31f9a761147}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Player\Ability">
+      <UniqueIdentifier>{e729d9b9-ab08-4287-94f1-dea42e946808}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="Math.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="Fade.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="cheese.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="Player.cpp">
@@ -90,11 +90,17 @@
     <ClCompile Include="strongEnemy.cpp">
       <Filter>Enemy</Filter>
     </ClCompile>
-    <ClCompile Include="AbilityItem.cpp">
-      <Filter>Player</Filter>
-    </ClCompile>
     <ClCompile Include="GameSceneUI.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Fade.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="AbilityItem.cpp">
+      <Filter>Player\Ability</Filter>
+    </ClCompile>
+    <ClCompile Include="cheese.cpp">
+      <Filter>Player\Ability</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -150,12 +156,6 @@
     <ClInclude Include="Math.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Fade.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="cheese.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="Player.h">
       <Filter>Player</Filter>
     </ClInclude>
@@ -198,11 +198,17 @@
     <ClInclude Include="strongEnemy.h">
       <Filter>Enemy</Filter>
     </ClInclude>
-    <ClInclude Include="AbilityItem.h">
-      <Filter>Player</Filter>
-    </ClInclude>
     <ClInclude Include="GameSceneUI.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Fade.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="AbilityItem.h">
+      <Filter>Player\Ability</Filter>
+    </ClInclude>
+    <ClInclude Include="cheese.h">
+      <Filter>Player\Ability</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

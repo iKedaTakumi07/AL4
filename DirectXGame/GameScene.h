@@ -61,6 +61,7 @@ public:
 
 	// 3Dモデル
 	uint32_t blockTextureHandele;
+	uint32_t ChageblockTextureHandele;
 
 	KamataEngine::Model* modelblock_ = nullptr;
 	KamataEngine::Model* modelplayerHp_ = nullptr;
@@ -119,52 +120,4 @@ public:
 	// フラグ
 	bool finished_ = false;
 	bool isGoal_ = false;
-
-	// 敵配置→josnとかにしたい
-	std::vector<KamataEngine::Vector3> stage0Enemies = {
-	    {38.0f, 7.0f, 0.0f},
-	};
-
-	std::vector<KamataEngine::Vector3> stage1Enemies = {
-	    {25.0f, 2.0f, 0.0f},
-        {30.0f, 5.0f, 0.0f},
-        {40.0f, 7.0f, 0.0f},
-        {50.0f, 6.0f, 0.0f}
-    };
-
-	std::vector<KamataEngine::Vector3> stage2Enemies = {
-	    {48.0f, 2.0f,  0.0f},
-        {90.0f, 5.0f,  0.0f},
-        {93.0f, 7.0f,  0.0f},
-        {72.0f, 10.0f, 0.0f},
-        {64.0f, 3.0f,  0.0f},
-        {85.0f, 4.0f,  0.0f}
-    };
-
-	std::vector<KamataEngine::Vector3> stage3Enemies = {
-	    {18.0f, 2.0f,  0.0f},
-        {22.0f, 5.0f,  0.0f},
-        {45.0f, 7.0f,  0.0f},
-        {60.0f, 10.0f, 0.0f},
-        {80.0f, 2.0f,  0.0f}
-    };
-
-	struct StageGoal {
-		int goalX;
-		int goalY;
-	};
-
-	StageGoal StageGoals_[4] = {
-	    {45, 16},
-        {62, 15},
-        {97, 8 },
-        {97, 18}
-    };
-
-	StageGoal Stagecheese_[4] = {
-	    {16, 15},
-        {17, 13},
-        {5,  10},
-        {29, 8 }
-    };
 };

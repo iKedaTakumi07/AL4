@@ -18,7 +18,7 @@ void CameraController::Update() {
 
 	// 目標座標を計算
 	destination_.x = targetWorldTransForm.translation_.x + targetOffset_.x + targetVelocity.x * KVelocityBias;
-	destination_.y = targetWorldTransForm.translation_.y + targetOffset_.y + targetVelocity.y * KVelocityBias;
+	destination_.y = targetWorldTransForm.translation_.y + targetOffset_.y + (targetVelocity.y / 10.0f) * (KVelocityBias / 15.0f);
 	destination_.z = targetWorldTransForm.translation_.z + targetOffset_.z + targetVelocity.z * KVelocityBias;
 
 	// 対象者のカメラ座標を計算
