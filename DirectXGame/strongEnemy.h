@@ -93,7 +93,7 @@ private:
 	Behavior behavior_ = Behavior::kWalk;
 	Behavior behaviorRequest_ = Behavior::kUnknown;
 
-	static inline const float kDefeatedTime = 0.6f;
+	static inline const float kDefeatedTime = 0.5f;
 	static inline const float kDefeatedMotionAngleStaart = 0.0f;
 	static inline const float kDefeatedMotionAngleEnd = -60.0f;
 	float counter_ = 0.0f;

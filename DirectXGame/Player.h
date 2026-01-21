@@ -186,21 +186,22 @@ private:
 	// 自身の体力
 	int health = 5;
 	// ノックバック/飛ばされる距離/無敵時間/点滅カウント
-	Vector3 knockbackvelocity_{};
+	Vector3 knockbackVelocity_{};
 	static inline const float knockback = 0.15f;
-	static inline const float kJumpknockback = 15.0f;
+	static inline const float kJumpNockBack = 15.0f;
 	float invincibilityTimer = 0.0f;
 	int count = 0;
 	static inline const float invincibilityTime = 3.0f;
-	bool isinvincible = false;
+	bool isInvincible = false;
 
 	// チャージショット判定
-	bool ischarge_ = false;
-	bool isshot_ = false;
+	bool isCharge_ = false;
+	bool isShot_ = false;
 	float chargePower = 0.0f;
 	float chargeMaxPower = 1.0f;
-	float coolTimer = 0.0f;
 
+	float coolTimer = 0.0f;
+	ObjectColor objectColor;
 	// プレイヤーの強化状態設定
 	bool isGetCarge_ = false;
 	bool isGetSpaceJump_ = false;

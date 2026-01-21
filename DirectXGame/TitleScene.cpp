@@ -7,7 +7,7 @@ using namespace KamataEngine;
 void TitleScene::Initialize() {
 	// モデル
 	modelTitle_ = Model::CreateFromOBJ("titleFont", true);
-	modelPlayer_ = Model::CreateFromOBJ("newplayer");
+	modelPlayer_ = Model::CreateFromOBJ("player");
 	modelStart_ = Model::CreateFromOBJ("startFont");
 
 	camera_.Initialize();
@@ -91,9 +91,13 @@ void TitleScene::Draw() {
 	modelTitle_->Draw(worldTransformTitle_, camera_);
 	modelStart_->Draw(worldTransformStart_, camera_);
 
+	Model::PostDraw();
+
+	Sprite::PreDraw(dxCommon->GetCommandList());
+
 	fade_->Draw();
 
-	Model::PostDraw();
+	Sprite::PostDraw();
 }
 
 TitleScene::~TitleScene() {

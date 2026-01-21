@@ -29,8 +29,8 @@ void ClearScene::Initialize() {
 	worldTransformStart_.translation_.y = -14.0f;
 
 	// bgm
-	if (!Audio::GetInstance()->IsPlaying(voiceHAndel)) {
-		voiceHAndel = Audio::GetInstance()->PlayWave(soundBGM, false, 0.5f);
+	if (!Audio::GetInstance()->IsPlaying(voiceHandel)) {
+		voiceHandel = Audio::GetInstance()->PlayWave(soundBGM, false, 0.5f);
 	}
 
 	fade_ = new Fade;
@@ -57,7 +57,7 @@ void ClearScene::Update() {
 	case ClearScene::Phase::kFadeOut:
 		fade_->Update();
 		if (fade_->IsFinished()) {
-			Audio::GetInstance()->StopWave(voiceHAndel);
+			Audio::GetInstance()->StopWave(voiceHandel);
 			finished_ = true;
 		}
 
@@ -86,9 +86,13 @@ void ClearScene::Draw() {
 	modelClearFont_->Draw(worldTransformClearFont_, camera_);
 	modelStart_->Draw(worldTransformStart_, camera_);
 
+	Model::PostDraw();
+
+	Sprite::PreDraw(dxCommon->GetCommandList());
+
 	fade_->Draw();
 
-	Model::PostDraw();
+	Sprite::PostDraw();
 }
 
 ClearScene::~ClearScene() {

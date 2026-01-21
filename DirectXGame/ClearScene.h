@@ -25,7 +25,7 @@ public:
 private:
 	// bgm
 	uint32_t soundBGM;
-	uint32_t voiceHAndel;
+	uint32_t voiceHandel;
 	// 3Dモデル
 	Model* modelClearFont_ = nullptr;
 	Model* modelStart_ = nullptr;

@@ -180,10 +180,12 @@ void SelectScene::Draw() {
 
 	SelectModel_->Draw(SelectTransform_, camera_);
 	SelectkeyModel_->Draw(SelectkeyTransform_, camera_);
+	Model::PostDraw();
+	Sprite::PreDraw(dxCommon->GetCommandList());
 
 	fade_->Draw();
 
-	Model::PostDraw();
+	Sprite::PostDraw();
 }
 
 SelectScene::~SelectScene() {

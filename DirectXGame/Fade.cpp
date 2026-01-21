@@ -41,9 +41,7 @@ void Fade::Draw() {
 		return;
 	}
 
-	Sprite::PreDraw(DirectXCommon::GetInstance()->GetCommandList());
 	sprite_->Draw();
-	Sprite::PostDraw();
 }
 
 void Fade::Start(Status status, float duration) {
