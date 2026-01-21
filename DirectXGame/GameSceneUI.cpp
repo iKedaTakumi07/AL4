@@ -20,6 +20,7 @@ void GameSceneUI::Initialize(KamataEngine::Model* model, KamataEngine::Camera* c
 		wt->rotation_.y = std::numbers::pi_v<float> / 2.0f;
 		wt->translation_.x = i * 10.0f;
 		wt->translation_.y = 20.0f;
+		wt->translation_.z = -0.6f;
 		worldTransforms_.push_back(wt);
 	}
 }

@@ -82,20 +82,23 @@ void GameScene::Initialize() { /*初期化を書く*/
 
 	// マップチップ
 	mapChipField_ = new MapChipField;
-	mapChipField_->LoadMapChipCsv("Resources/map3.csv");
+	mapChipField_->LoadMapChipCsv("Resources/NewMap.csv");
 	blockTextureHandele = TextureManager::Load("block/BreakableBlock.png");
-	GenerateBlocks();
+	ChageblockTextureHandele = TextureManager::Load("block/ChageBreakableBlock.png");
 
-	// プレイヤー
-	player_ = new Player();
+	modelEnemy_ = Model::CreateFromOBJ("newEnemy");
 
+	modelcheese_ = Model::CreateFromOBJ("cheese");
 	modelPlayer_ = Model::CreateFromOBJ("newplayer");
 	modelPlayerAttck_ = Model::CreateFromOBJ("attack_effect");
 	modelBullet_ = Model::CreateFromOBJ("bullet");
-	Vector3 playerPosition = mapChipField_->GetMapChipPositionByIndex(2, 13);
 
-	player_->SetMapChipField(mapChipField_);
-	player_->Initialize(modelPlayer_, modelPlayerAttck_, &camera_, playerPosition);
+	// ゴール
+
+	goalmodel_ = Model::CreateFromOBJ("goal");
+
+
+	GenerateBlocks();
 
 	// ui
 	modelplayerHp_ = Model::CreateFromOBJ("playerHp");
@@ -110,60 +113,8 @@ void GameScene::Initialize() { /*初期化を書く*/
 	CameraController_->SetTarget(player_);
 	CameraController_->Reset();
 
-	CameraController::Rect cameraArea = {12.0f, 100 - 12.0f, 6.0f, 6.0f};
+	CameraController::Rect cameraArea = {12.0f, 100 - 12.0f, 33.0f, 6.0f};
 	CameraController_->SetMovableArea(cameraArea);
-
-	// 敵
-	modelEnemy_ = Model::CreateFromOBJ("newEnemy");
-
-	std::vector<Vector3>* enemyPosition = nullptr;
-	enemyPosition = &stage3Enemies;
-	std::vector<Vector3>* eEnemyPosition = nullptr;
-	eEnemyPosition = &stage2Enemies;
-
-	/*for (int32_t i = 0; i < 1; ++i) {
-	    Enemy* newEnemy = new Enemy();
-	    Vector3 enemyPosition = mapChipField_->GetMapChipPositionByIndex(25, 2);
-	    newEnemy->SetMapChipField(mapChipField_);
-	    newEnemy->Initialize(modelEnemy_, &camera_, enemyPosition);
-	    newEnemy->SetGameScene(this);
-	    enemies_.push_back(newEnemy);
-	}*/
-
-	for (auto& pos : *enemyPosition) {
-		Enemy* newEnemy = new Enemy();
-		Vector3 spawnPos = mapChipField_->GetMapChipPositionByIndex(static_cast<uint32_t>(pos.x), static_cast<uint32_t>(pos.y));
-		newEnemy->SetMapChipField(mapChipField_);
-		newEnemy->Initialize(modelEnemy_, &camera_, spawnPos);
-		newEnemy->SetGameScene(this);
-		enemies_.push_back(newEnemy);
-	}
-
-	for (auto& epos : *eEnemyPosition) {
-		ExplosionEnemy* NeweEnemy = new ExplosionEnemy();
-		Vector3 spawnPos = mapChipField_->GetMapChipPositionByIndex(static_cast<uint32_t>(epos.x), static_cast<uint32_t>(epos.y));
-		NeweEnemy->SetMapChipField(mapChipField_);
-		NeweEnemy->Initialize(modelEnemy_, &camera_, spawnPos);
-		NeweEnemy->SetGameScene(this);
-		Explosionenemies_.push_back(NeweEnemy);
-	}
-
-	modelcheese_ = Model::CreateFromOBJ("cheese");
-
-	// アビリティ
-	for (uint32_t i = 0; i < 2; i++) {
-		AbilityItem* abilityItem = new AbilityItem();
-		Vector3 AbilityPos;
-		if (i == 0) {
-			AbilityPos = mapChipField_->GetMapChipPositionByIndex(uint32_t(29), uint32_t(18));
-			abilityItem->SetNunber(uint32_t(1));
-		} else {
-			AbilityPos = mapChipField_->GetMapChipPositionByIndex(uint32_t(52), uint32_t(18));
-			abilityItem->SetNunber(uint32_t(2));
-		}
-		abilityItem->Initialize(modelcheese_, &camera_, AbilityPos);
-		AbilityItem_.push_back(abilityItem);
-	}
 
 	// デスパーティクル
 	modelDeathParticles_ = Model::CreateFromOBJ("deathParticle");
@@ -175,13 +126,6 @@ void GameScene::Initialize() { /*初期化を書く*/
 	modelHitEffect = Model::CreateFromOBJ("particle");
 	HitEffect::SetModel(modelHitEffect);
 	HitEffect::SetCamera(&camera_);
-
-	// ゴール
-	goal = new Goal();
-
-	goalmodel_ = Model::CreateFromOBJ("goal");
-	Vector3 goalPosition = mapChipField_->GetMapChipPositionByIndex(static_cast<uint32_t>(StageGoals_[3].goalX), static_cast<uint32_t>(StageGoals_[3].goalY));
-	goal->Initialize(goalmodel_, &camera_, goalPosition);
 }
 
 void GameScene::GenerateBlocks() {
@@ -200,18 +144,119 @@ void GameScene::GenerateBlocks() {
 
 		for (uint32_t j = 0; j < numBlockHorizontal; ++j) {
 
-			if (mapChipField_->GetMapChipTypeByIndex(j, i) == MapChipType::kBlock) {
-				WorldTransform* worldTransform = new WorldTransform();
+			MapChipType mapChipType;
+			uint8_t SubID;
+			Enemy* newEnemy;
+			ExplosionEnemy* NeweEnemy;
+			AbilityItem* abilityItem;
+			Vector3 spawnPos;
+			mapChipType = mapChipField_->GetMapChipTypeByIndex(j, i);
+
+			WorldTransform* worldTransform = nullptr;
+			switch (mapChipType) {
+			case MapChipType::kBlock:
+				worldTransform = new WorldTransform();
 				worldTransform->Initialize();
 				worldTransformBlocks_[i][j] = worldTransform;
 				worldTransformBlocks_[i][j]->translation_ = mapChipField_->GetMapChipPositionByIndex(j, i);
-			}
-			// テクスチャを後で買える
-			if (mapChipField_->GetMapChipTypeByIndex(j, i) == MapChipType::kBreakableBlock) {
-				WorldTransform* worldTransform = new WorldTransform();
-				worldTransform->Initialize();
-				worldTransformBlocks_[i][j] = worldTransform;
-				worldTransformBlocks_[i][j]->translation_ = mapChipField_->GetMapChipPositionByIndex(j, i);
+
+				SubID = mapChipField_->GetMapChipSubIDByIndex(j, i);
+				switch (SubID) {
+				case 0:
+
+					break;
+				case 1:
+					mapChipField_->SetMapChipType(j, i, MapChipType::kBreakableBlock);
+
+					break;
+				case 2:
+					mapChipField_->SetMapChipType(j, i, MapChipType::kChageBreakeBlock);
+					break;
+				default:
+					break;
+				}
+				break;
+			case MapChipType::kPlayer:
+				assert(player_ == nullptr && "自キャラを2重に配置しようとしています");
+				// プレイヤー
+				player_ = new Player();
+				spawnPos = mapChipField_->GetMapChipPositionByIndex(2, 14);
+
+				player_->SetMapChipField(mapChipField_);
+				player_->Initialize(modelPlayer_, modelPlayerAttck_, &camera_, spawnPos);
+				break;
+			case MapChipType::kEnemy:
+
+				SubID = mapChipField_->GetMapChipSubIDByIndex(j, i);
+				switch (SubID) {
+				case 0:
+					newEnemy = new Enemy();
+					spawnPos = mapChipField_->GetMapChipPositionByIndex(j, i);
+
+					newEnemy->SetMapChipField(mapChipField_);
+					newEnemy->Initialize(modelEnemy_, &camera_, spawnPos);
+					newEnemy->SetGameScene(this);
+					enemies_.push_back(newEnemy);
+
+					break;
+				case 1:
+					NeweEnemy = new ExplosionEnemy();
+					spawnPos = mapChipField_->GetMapChipPositionByIndex(j, i);
+					NeweEnemy->SetMapChipField(mapChipField_);
+					NeweEnemy->Initialize(modelEnemy_, &camera_, spawnPos);
+					NeweEnemy->SetGameScene(this);
+					Explosionenemies_.push_back(NeweEnemy);
+
+					break;
+				case 2:
+					break;
+				default:
+					break;
+				}
+				break;
+			case MapChipType::kAbility:
+				SubID = mapChipField_->GetMapChipSubIDByIndex(j, i);
+
+				switch (SubID) {
+				case 0:
+					abilityItem = new AbilityItem();
+					spawnPos = mapChipField_->GetMapChipPositionByIndex(j, i);
+					abilityItem->SetNunber(uint32_t(0));
+					abilityItem->Initialize(modelcheese_, &camera_, spawnPos);
+					AbilityItem_.push_back(abilityItem);
+					SubID = mapChipField_->GetMapChipSubIDByIndex(j, i);
+
+					break;
+				case 1:
+					abilityItem = new AbilityItem();
+					spawnPos = mapChipField_->GetMapChipPositionByIndex(j, i);
+					abilityItem->SetNunber(uint32_t(1));
+					abilityItem->Initialize(modelcheese_, &camera_, spawnPos);
+					AbilityItem_.push_back(abilityItem);
+					SubID = mapChipField_->GetMapChipSubIDByIndex(j, i);
+
+					break;
+				case 2:
+					abilityItem = new AbilityItem();
+					spawnPos = mapChipField_->GetMapChipPositionByIndex(j, i);
+					abilityItem->SetNunber(uint32_t(2));
+					abilityItem->Initialize(modelcheese_, &camera_, spawnPos);
+					AbilityItem_.push_back(abilityItem);
+					SubID = mapChipField_->GetMapChipSubIDByIndex(j, i);
+
+					break;
+				default:
+					break;
+				}
+
+				break;
+			case MapChipType::kGoal:
+				goal = new Goal();
+				spawnPos = mapChipField_->GetMapChipPositionByIndex(j, i);
+				goal->Initialize(goalmodel_, &camera_, spawnPos);
+				break;
+			default:
+				break;
 			}
 		}
 	}
@@ -402,7 +447,7 @@ void GameScene::Update() { /* 更新勝利を書く */
 
 	// bgm
 	if (!Audio::GetInstance()->IsPlaying(voiceHAndel)) {
-		//voiceHAndel = Audio::GetInstance()->PlayWave(soundBGM, true, 0.5f);
+		// voiceHAndel = Audio::GetInstance()->PlayWave(soundBGM, true, 0.5f);
 	}
 
 	enemies_.remove_if([](Enemy* enemy) {
@@ -551,8 +596,6 @@ void GameScene::Draw() {
 		player_->Draw();
 	}
 
-	ui_->Draw();
-
 	// 背景
 	skydome_->Draw();
 
@@ -581,16 +624,21 @@ void GameScene::Draw() {
 
 	for (uint32_t i = 0; i < numBlockVirtical; i++) {
 		for (uint32_t j = 0; j < numBlockHorizontal; j++) {
-			if (mapChipField_->GetMapChipTypeByIndex(j, i) == MapChipType::kBlank)
+			if (mapChipField_->GetMapChipTypeByIndex(j, i) != MapChipType::kBlock && mapChipField_->GetMapChipTypeByIndex(j, i) != MapChipType::kBreakableBlock &&
+			    mapChipField_->GetMapChipTypeByIndex(j, i) != MapChipType::kChageBreakeBlock)
 				continue;
 
-			if (mapChipField_->GetMapChipTypeByIndex(j, i) == MapChipType::kBreakableBlock) {
+			if (mapChipField_->GetMapChipSubIDByIndex(j, i) == 1) {
 				modelblock_->Draw(*worldTransformBlocks_[i][j], camera_, blockTextureHandele);
+			} else if (mapChipField_->GetMapChipSubIDByIndex(j, i) == 2) {
+				modelblock_->Draw(*worldTransformBlocks_[i][j], camera_, ChageblockTextureHandele);
 			} else {
 				modelblock_->Draw(*worldTransformBlocks_[i][j], camera_);
 			}
 		}
 	}
+
+	ui_->Draw();
 
 	// パーティクル
 	if (deathParticles_) {

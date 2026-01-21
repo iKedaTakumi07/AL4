@@ -204,4 +204,5 @@ private:
 	// プレイヤーの強化状態設定
 	bool isGetCarge_ = false;
 	bool isGetSpaceJump_ = false;
+	bool isBullet_ = false;
 };

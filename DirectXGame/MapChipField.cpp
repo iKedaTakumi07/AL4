@@ -8,18 +8,22 @@
 using namespace KamataEngine;
 
 namespace {
-std::map<std::string, MapChipType> mapChipTable = {
-    {"0", MapChipType::kBlank},
-    {"1", MapChipType::kBlock},
-    {"2", MapChipType::kBreakableBlock},
+
+// マップチップ種別テーブル
+std::map<char, MapChipType> mapChipTypeTable = {
+    {'B', MapChipType::kBlock  },
+    {'P', MapChipType::kPlayer },
+    {'E', MapChipType::kEnemy  },
+    {'A', MapChipType::kAbility},
+    {'G', MapChipType::kGoal   },
 };
-}
+} // namespace
 
 void MapChipField::ResetMapChipData() {
 	// マップチップデータをリセット
 	mapChipData_.data.clear();
 	mapChipData_.data.resize(kNumBlockVirtical);
-	for (std::vector<MapChipType>& mapChipDataLine : mapChipData_.data) {
+	for (std::vector<MapChipDataUnit>& mapChipDataLine : mapChipData_.data) {
 		mapChipDataLine.resize(kNumBlockHorizontal);
 	}
 }
@@ -40,10 +44,9 @@ void MapChipField::LoadMapChipCsv(const std::string& filePath) {
 	// マップチップデータをリセット
 	ResetMapChipData();
 
-	std::string line;
-
 	// csvからマップチップデータを読み込む
 	for (uint32_t i = 0; i < kNumBlockVirtical; ++i) {
+		std::string line;
 		getline(mapChipCsv, line);
 
 		// 1行分の文字列をストリームに変換して解析しやすくする
@@ -53,9 +56,26 @@ void MapChipField::LoadMapChipCsv(const std::string& filePath) {
 			std::string word;
 			getline(line_stream, word, (','));
 
-			if (mapChipTable.contains(word)) {
-				mapChipData_.data[i][j] = mapChipTable[word];
+			// 空白の場合はスキップ
+			if (word.empty()) {
+
+				continue;
 			}
+
+			// 先頭文字がマップチップ種別に該当するか確認
+			if (!mapChipTypeTable.contains(word[kChipType])) {
+				continue;
+			}
+
+			mapChipData_.data[i][j].type = mapChipTypeTable[word[kChipType]];
+
+			// サブIDを含まない場合はスキップ
+			if (word.size() <= kChipSubID) {
+				continue;
+			}
+
+			// マップチップのサブIDを設定
+			mapChipData_.data[i][j].SubID = static_cast<uint8_t>(word[kChipSubID] - '0');
 		}
 	}
 }
@@ -69,8 +89,10 @@ MapChipType MapChipField::GetMapChipTypeByIndex(uint32_t xIndex, uint32_t yIndex
 		return MapChipType::kBlank;
 	}
 
-	return mapChipData_.data[yIndex][xIndex];
+	return mapChipData_.data[yIndex][xIndex].type;
 }
+
+uint8_t MapChipField::GetMapChipSubIDByIndex(uint32_t xIndex, uint32_t yIndex) { return mapChipData_.data[yIndex][xIndex].SubID; }
 
 KamataEngine::Vector3 MapChipField::GetMapChipPositionByIndex(uint32_t xIndex, uint32_t yIndex) {
 
