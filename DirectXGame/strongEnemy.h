@@ -62,7 +62,7 @@ private:
 
 	// モデル
 	Model* model_ = nullptr;
-	uint32_t textureHandele;
+	uint32_t textureHandle;
 
 	// カメラ
 	Camera* camera_ = nullptr;

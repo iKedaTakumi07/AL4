@@ -15,6 +15,7 @@
 #include "Skydome.h"
 #include "cheese.h"
 #include "strongEnemy.h"
+#include "GameUI.h"
 #include <vector>
 
 class AbilityItem;
@@ -67,6 +68,11 @@ public:
 	uint32_t SpaceJumpTexttextureHandle;
 	uint32_t ChargeTextTextureHandle;
 
+	uint32_t GameUIMoveTextureHandle;
+	uint32_t GameUIShotTextureHandle;
+	uint32_t GameUISpaceTextureHandle;
+	uint32_t GameUIChargeTextureHandle;
+
 	KamataEngine::Model* modelblock_ = nullptr;
 	KamataEngine::Model* modelplayerHp_ = nullptr;
 	KamataEngine::Model* modelSkydome_ = nullptr;
@@ -92,6 +98,7 @@ public:
 	// UI
 	GameSceneUI* ui_ = nullptr;
 	AbilityInfo* info_;
+	GameUI* GameUI_ = nullptr;
 
 	// マップチップフィールド
 	MapChipField* mapChipField_;

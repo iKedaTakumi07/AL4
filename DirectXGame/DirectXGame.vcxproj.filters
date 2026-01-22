@@ -105,6 +105,9 @@
     <ClCompile Include="Fade.cpp">
       <Filter>UI</Filter>
     </ClCompile>
+    <ClCompile Include="GameUI.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\shaders\SpritePS.hlsl">
@@ -214,6 +217,9 @@
       <Filter>UI</Filter>
     </ClInclude>
     <ClInclude Include="Fade.h">
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="GameUI.h">
       <Filter>UI</Filter>
     </ClInclude>
   </ItemGroup>

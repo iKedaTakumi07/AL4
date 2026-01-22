@@ -199,7 +199,7 @@ void Player::OnCollision(uint32_t i) {
 		isBullet_ = true;
 	}
 	if (i == uint32_t(2)) {
-		isGetCarge_ = true;
+		isGetCharge_ = true;
 	}
 	if (i == uint32_t(1)) {
 		isGetSpaceJump_ = true;
@@ -497,7 +497,7 @@ void Player::InputMove() {
 
 		if (Input::GetInstance()->PushKey(DIK_SPACE)) {
 			// チャージできるか
-			if (isGetCarge_) {
+			if (isGetCharge_) {
 				objectColor.SetColor({1.0f, 1.0f - chargePower, 1.0f - chargePower, 1.0f});
 
 				if (coolTimer <= 0.0f) {

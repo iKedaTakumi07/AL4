@@ -203,7 +203,7 @@ private:
 	float coolTimer = 0.0f;
 	ObjectColor objectColor;
 	// プレイヤーの強化状態設定
-	bool isGetCarge_ = false;
+	bool isGetCharge_ = false;
 	bool isGetSpaceJump_ = false;
 	bool isBullet_ = false;
 };

@@ -17,7 +17,7 @@ void ExplosionEnemy::Initialize(KamataEngine::Model* model, KamataEngine::Camera
 
 	// 初期化
 	model_ = model;
-	textureHandele = TextureManager::Load("newEnemy/ExplosionEnemy.png");
+	textureHandle = TextureManager::Load("newEnemy/ExplosionEnemy.png");
 
 	camera_ = camera;
 
@@ -420,10 +420,10 @@ void ExplosionEnemy::Draw() {
 	// 描画
 	if (isToExplosion) {
 		if (static_cast<int>(ExplosionTimer * 10) % 2 == 0) {
-			model_->Draw(worldTransform_, *camera_, textureHandele);
+			model_->Draw(worldTransform_, *camera_, textureHandle);
 		}
 	} else {
-		model_->Draw(worldTransform_, *camera_, textureHandele);
+		model_->Draw(worldTransform_, *camera_, textureHandle);
 	}
 }
 

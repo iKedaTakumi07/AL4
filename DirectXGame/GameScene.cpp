@@ -58,6 +58,7 @@ GameScene::~GameScene() {
 	delete modelCheese_;
 
 	delete info_;
+	delete GameUI_;
 }
 
 void GameScene::Initialize() { /*初期化を書く*/
@@ -134,6 +135,14 @@ void GameScene::Initialize() { /*初期化を書く*/
 
 	info_ = new AbilityInfo();
 	info_->Initialize(bulletTextTextureHandle, Vector2(140.0f, 200.0f));
+
+	GameUIMoveTextureHandle = TextureManager::Load("GameUI/MoveText.png");
+	GameUIShotTextureHandle = TextureManager::Load("GameUI/ShotText.png");
+	GameUISpaceTextureHandle = TextureManager::Load("GameUI/SpaceJumpText.png");
+	GameUIChargeTextureHandle = TextureManager::Load("GameUI/ChargeText.png");
+
+	GameUI_ = new GameUI();
+	GameUI_->Initialize(GameUIMoveTextureHandle, Vector2(0.0f, 720.0f - 64.0f));
 }
 
 void GameScene::GenerateBlocks() {
@@ -693,6 +702,8 @@ void GameScene::Draw() {
 	Sprite::PreDraw(dxCommon->GetCommandList());
 
 	fade_->Draw();
+
+	GameUI_->Draw();
 
 	if (phase_ == Phase::kInformation) {
 		info_->Draw();
