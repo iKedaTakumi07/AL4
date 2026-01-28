@@ -183,11 +183,11 @@ void GameScene::GenerateBlocks() {
 
 					break;
 				case 1:
-					mapChipField_->SetMapChipType(j, i, MapChipType::kBreakableBlock);
+					// mapChipField_->SetMapChipType(j, i, MapChipType::kBreakableBlock);
 
 					break;
 				case 2:
-					mapChipField_->SetMapChipType(j, i, MapChipType::kChageBreakeBlock);
+					// mapChipField_->SetMapChipType(j, i, MapChipType::kChageBreakeBlock);
 					break;
 				default:
 					break;
