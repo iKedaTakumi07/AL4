@@ -300,11 +300,13 @@ void GameScene::CheckAllCollisions() {
 				player_->OnCollision(num);
 				if (num == 0) {
 					info_->SetTextureHandle(bulletTextTextureHandle);
+					GameUI_->SetTextureHandle(GameUIShotTextureHandle);
 				} else if (num == 1) {
 					info_->SetTextureHandle(SpaceJumpTexttextureHandle);
-
+					GameUI_->SetTextureHandle(GameUISpaceTextureHandle);
 				} else if (num == 2) {
 					info_->SetTextureHandle(ChargeTextTextureHandle);
+					GameUI_->SetTextureHandle(GameUIChargeTextureHandle);
 				}
 				ability->OnCollision();
 
