@@ -63,7 +63,7 @@ GameScene::~GameScene() {
 
 void GameScene::Initialize() { /*初期化を書く*/
 
-	soundBGM = Audio::GetInstance()->LoadWave("stage.wav");
+	soundBGM = Audio::GetInstance()->LoadWave("newStage.wav");
 
 	// ゲームプレイフェーズから開始
 	phase_ = Phase::kFadeIn;
@@ -475,7 +475,7 @@ void GameScene::Update() { /* 更新勝利を書く */
 
 	// bgm
 	if (!Audio::GetInstance()->IsPlaying(voiceHandel)) {
-		// voiceHandel = Audio::GetInstance()->PlayWave(soundBGM, true, 0.5f);
+		 voiceHandel = Audio::GetInstance()->PlayWave(soundBGM, true, 0.5f);
 	}
 
 	enemies_.remove_if([](Enemy* enemy) {
