@@ -5,6 +5,8 @@
 using namespace KamataEngine;
 
 void TitleScene::Initialize() {
+	soundBGM = Audio::GetInstance()->LoadWave("title.wav");
+	
 	// モデル
 	modelTitle_ = Model::CreateFromOBJ("titleFont", true);
 	modelPlayer_ = Model::CreateFromOBJ("player");
@@ -42,6 +44,11 @@ void TitleScene::Initialize() {
 }
 
 void TitleScene::Update() {
+	// bgm
+	if (!Audio::GetInstance()->IsPlaying(voiceHandel)) {
+		voiceHandel = Audio::GetInstance()->PlayWave(soundBGM, true, 0.5f);
+	}
+
 
 	switch (phase_) {
 	case TitleScene::Phase::kFadeIn:
@@ -59,6 +66,7 @@ void TitleScene::Update() {
 		break;
 	case TitleScene::Phase::kFadeOut:
 		fade_->Update();
+		Audio::GetInstance()->StopWave(voiceHandel);
 		if (fade_->IsFinished()) {
 			finished_ = true;
 		}
