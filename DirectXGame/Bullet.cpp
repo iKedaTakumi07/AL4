@@ -115,10 +115,10 @@ void Bullet::CheckMapCollisionUP(CollisionMapInfo& info) {
 
 	// ブロックにヒット?
 	if (hit) {
-		if (mapChipType == MapChipType::kBreakableBlock) {
+		uint8_t SubID = mapChipFeild_->GetMapChipSubIDByIndex(indexSet.xindex, indexSet.yindex);
+		if (SubID == 1) {
 			mapChipFeild_->SetMapChipType(indexSet.xindex, indexSet.yindex, MapChipType::kBlank);
-		}
-		if (mapChipType == MapChipType::kChageBreakeBlock) {
+		} else if (SubID == 2) {
 			if (chargeLevel_ >= 3.0f) {
 				mapChipFeild_->SetMapChipType(indexSet.xindex, indexSet.yindex, MapChipType::kBlank);
 			}
@@ -175,10 +175,10 @@ void Bullet::CheckMapCollisionDown(CollisionMapInfo& info) {
 
 	// ブロックヒットー
 	if (hit) {
-		if (mapChipType == MapChipType::kBreakableBlock) {
+		uint8_t SubID = mapChipFeild_->GetMapChipSubIDByIndex(indexSet.xindex, indexSet.yindex);
+		if (SubID == 1) {
 			mapChipFeild_->SetMapChipType(indexSet.xindex, indexSet.yindex, MapChipType::kBlank);
-		}
-		if (mapChipType == MapChipType::kChageBreakeBlock) {
+		} else if (SubID == 2) {
 			if (chargeLevel_ >= 3.0f) {
 				mapChipFeild_->SetMapChipType(indexSet.xindex, indexSet.yindex, MapChipType::kBlank);
 			}
@@ -235,10 +235,10 @@ void Bullet::CheckMapCollisionRight(CollisionMapInfo& info) {
 	}
 
 	if (hit) {
-		if (mapChipType == MapChipType::kBreakableBlock) {
+		uint8_t SubID = mapChipFeild_->GetMapChipSubIDByIndex(indexSet.xindex, indexSet.yindex);
+		if (SubID == 1) {
 			mapChipFeild_->SetMapChipType(indexSet.xindex, indexSet.yindex, MapChipType::kBlank);
-		}
-		if (mapChipType == MapChipType::kChageBreakeBlock) {
+		} else if (SubID == 2) {
 			if (chargeLevel_ >= 3.0f) {
 				mapChipFeild_->SetMapChipType(indexSet.xindex, indexSet.yindex, MapChipType::kBlank);
 			}
@@ -296,10 +296,10 @@ void Bullet::CheckMapCollisionLeft(CollisionMapInfo& info) {
 	}
 
 	if (hit) {
-		if (mapChipType == MapChipType::kBreakableBlock) {
+		uint8_t SubID = mapChipFeild_->GetMapChipSubIDByIndex(indexSet.xindex, indexSet.yindex);
+		if (SubID == 1) {
 			mapChipFeild_->SetMapChipType(indexSet.xindex, indexSet.yindex, MapChipType::kBlank);
-		}
-		if (mapChipType == MapChipType::kChageBreakeBlock) {
+		} else if (SubID == 2) {
 			if (chargeLevel_ >= 3.0f) {
 				mapChipFeild_->SetMapChipType(indexSet.xindex, indexSet.yindex, MapChipType::kBlank);
 			}

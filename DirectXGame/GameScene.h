@@ -1,4 +1,5 @@
 #pragma once
+#include "AbilityInfo.h"
 #include "Bullet.h"
 #include "CameraController.h"
 #include "DeathParticles.h"
@@ -14,6 +15,7 @@
 #include "Skydome.h"
 #include "cheese.h"
 #include "strongEnemy.h"
+#include "GameUI.h"
 #include <vector>
 
 class AbilityItem;
@@ -49,7 +51,7 @@ public:
 public:
 	// bgm
 	uint32_t soundBGM;
-	uint32_t voiceHAndel;
+	uint32_t voiceHandel;
 
 	// カメラ
 	KamataEngine::Camera camera_;
@@ -61,7 +63,15 @@ public:
 
 	// 3Dモデル
 	uint32_t blockTextureHandele;
-	uint32_t ChageblockTextureHandele;
+	uint32_t chageBlockTextureHandele;
+	uint32_t bulletTextTextureHandle;
+	uint32_t SpaceJumpTexttextureHandle;
+	uint32_t ChargeTextTextureHandle;
+
+	uint32_t GameUIMoveTextureHandle;
+	uint32_t GameUIShotTextureHandle;
+	uint32_t GameUISpaceTextureHandle;
+	uint32_t GameUIChargeTextureHandle;
 
 	KamataEngine::Model* modelblock_ = nullptr;
 	KamataEngine::Model* modelplayerHp_ = nullptr;
@@ -73,7 +83,7 @@ public:
 	KamataEngine::Model* modelDeathParticles_ = nullptr;
 	KamataEngine::Model* modelHitEffect = nullptr;
 	KamataEngine::Model* goalmodel_ = nullptr;
-	KamataEngine::Model* modelcheese_ = nullptr;
+	KamataEngine::Model* modelCheese_ = nullptr;
 
 	// 座標
 	KamataEngine::WorldTransform tutorialWorldTransform_;
@@ -87,13 +97,15 @@ public:
 
 	// UI
 	GameSceneUI* ui_ = nullptr;
+	AbilityInfo* info_;
+	GameUI* GameUI_ = nullptr;
 
 	// マップチップフィールド
 	MapChipField* mapChipField_;
 
 	// 敵
 	std::list<Enemy*> enemies_;
-	std::list<ExplosionEnemy*> Explosionenemies_;
+	std::list<ExplosionEnemy*> ExplosionEnemies_;
 
 	// プレイヤーの球
 	std::list<Bullet*> PlayerBullet_;
@@ -111,6 +123,7 @@ public:
 		kPlay,
 		kDeath,
 		kFadeOut,
+		kInformation,
 	};
 	Phase phase_;
 	Fade* fade_ = nullptr;

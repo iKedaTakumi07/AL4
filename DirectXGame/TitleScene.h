@@ -22,6 +22,10 @@ public:
 	bool isFinished() const { return finished_; };
 
 private:
+	// bgm
+	uint32_t soundBGM;
+	uint32_t voiceHandel;
+
 	// 3Dモデル
 	Model* modelTitle_ = nullptr;
 	Model* modelPlayer_ = nullptr;

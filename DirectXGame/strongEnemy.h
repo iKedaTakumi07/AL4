@@ -62,7 +62,7 @@ private:
 
 	// モデル
 	Model* model_ = nullptr;
-	uint32_t textureHandele;
+	uint32_t textureHandle;
 
 	// カメラ
 	Camera* camera_ = nullptr;
@@ -93,7 +93,7 @@ private:
 	Behavior behavior_ = Behavior::kWalk;
 	Behavior behaviorRequest_ = Behavior::kUnknown;
 
-	static inline const float kDefeatedTime = 0.6f;
+	static inline const float kDefeatedTime = 0.5f;
 	static inline const float kDefeatedMotionAngleStaart = 0.0f;
 	static inline const float kDefeatedMotionAngleEnd = -60.0f;
 	float counter_ = 0.0f;
@@ -157,6 +157,6 @@ private:
 	static inline const float kExplosionHeight = 1.5f;
 
 	bool isToExplosion = false;
-	float ExplosionTimer = 3.0f;
+	float ExplosionTimer = 1.5f;
 	bool isExplosion = false;
 };

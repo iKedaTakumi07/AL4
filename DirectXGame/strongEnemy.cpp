@@ -17,7 +17,7 @@ void ExplosionEnemy::Initialize(KamataEngine::Model* model, KamataEngine::Camera
 
 	// 初期化
 	model_ = model;
-	textureHandele = TextureManager::Load("newEnemy/ExplosionEnemy.png");
+	textureHandle = TextureManager::Load("newEnemy/ExplosionEnemy.png");
 
 	camera_ = camera;
 
@@ -114,7 +114,6 @@ void ExplosionEnemy::Update() {
 		worldTransform_.rotation_.x = EaseOut(ToRadians(kDefeatedMotionAngleStaart), ToRadians(kDefeatedMotionAngleEnd), counter_ / kDefeatedTime);
 
 		if (counter_ >= kDefeatedTime) {
-			worldTransform_.scale_ = {2.0f, 2.0f, 2.0f};
 			isDead_ = true;
 		}
 
@@ -122,6 +121,13 @@ void ExplosionEnemy::Update() {
 	case ExplosionEnemy::Behavior::kExplosion:
 
 		isToExplosion = true;
+
+				// タイマーの更新
+		walkTimer_ += 10.0f / 60.0f;
+
+		// 回転
+		// float param = std::sin()
+		worldTransform_.rotation_.x = std::sin(std::numbers::pi_v<float> * 2.0f * walkTimer_ / kWalkMotionTime);
 
 		collisionMapInfo.landing = false;
 		collisionMapInfo.hitWall = false;
@@ -414,10 +420,10 @@ void ExplosionEnemy::Draw() {
 	// 描画
 	if (isToExplosion) {
 		if (static_cast<int>(ExplosionTimer * 10) % 2 == 0) {
-			model_->Draw(worldTransform_, *camera_, textureHandele);
+			model_->Draw(worldTransform_, *camera_, textureHandle);
 		}
 	} else {
-		model_->Draw(worldTransform_, *camera_, textureHandele);
+		model_->Draw(worldTransform_, *camera_, textureHandle);
 	}
 }
 
@@ -501,9 +507,8 @@ void ExplosionEnemy::OnCollision(const float Level) {
 	}
 
 	if (isLife <= 0) {
-		behaviorRequest_ = Behavior::kDefeated;
-
 		isCollisionDisabled_ = true;
+		behaviorRequest_ = Behavior::kDefeated;
 	}
 }
 

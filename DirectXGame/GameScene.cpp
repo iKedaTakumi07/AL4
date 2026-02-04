@@ -31,7 +31,7 @@ GameScene::~GameScene() {
 	for (Enemy* enemy : enemies_) {
 		delete enemy;
 	}
-	for (ExplosionEnemy* exEnemy : Explosionenemies_) {
+	for (ExplosionEnemy* exEnemy : ExplosionEnemies_) {
 		delete exEnemy;
 	}
 
@@ -55,12 +55,15 @@ GameScene::~GameScene() {
 	delete goal;
 	delete goalmodel_;
 
-	delete modelcheese_;
+	delete modelCheese_;
+
+	delete info_;
+	delete GameUI_;
 }
 
 void GameScene::Initialize() { /*初期化を書く*/
 
-	soundBGM = Audio::GetInstance()->LoadWave("stage.wav");
+	soundBGM = Audio::GetInstance()->LoadWave("newStage.wav");
 
 	// ゲームプレイフェーズから開始
 	phase_ = Phase::kFadeIn;
@@ -84,12 +87,12 @@ void GameScene::Initialize() { /*初期化を書く*/
 	mapChipField_ = new MapChipField;
 	mapChipField_->LoadMapChipCsv("Resources/NewMap.csv");
 	blockTextureHandele = TextureManager::Load("block/BreakableBlock.png");
-	ChageblockTextureHandele = TextureManager::Load("block/ChageBreakableBlock.png");
+	chageBlockTextureHandele = TextureManager::Load("block/chargeBreakableBlock.png");
 
 	modelEnemy_ = Model::CreateFromOBJ("newEnemy");
 
-	modelcheese_ = Model::CreateFromOBJ("cheese");
-	modelPlayer_ = Model::CreateFromOBJ("newplayer");
+	modelCheese_ = Model::CreateFromOBJ("cheese");
+	modelPlayer_ = Model::CreateFromOBJ("player");
 	modelPlayerAttck_ = Model::CreateFromOBJ("attack_effect");
 	modelBullet_ = Model::CreateFromOBJ("bullet");
 
@@ -97,15 +100,14 @@ void GameScene::Initialize() { /*初期化を書く*/
 
 	goalmodel_ = Model::CreateFromOBJ("goal");
 
-
 	GenerateBlocks();
 
 	// ui
 	modelplayerHp_ = Model::CreateFromOBJ("playerHp");
-	int playerhp = player_->GetPlayerHp();
+	int playerHp = player_->GetPlayerHp();
 	ui_ = new GameSceneUI();
 	ui_->Initialize(modelplayerHp_, &camera_);
-	ui_->SetPlayerHp(playerhp);
+	ui_->SetPlayerHp(playerHp);
 
 	// 追跡カメラ
 	CameraController_ = new CameraController();
@@ -126,6 +128,21 @@ void GameScene::Initialize() { /*初期化を書く*/
 	modelHitEffect = Model::CreateFromOBJ("particle");
 	HitEffect::SetModel(modelHitEffect);
 	HitEffect::SetCamera(&camera_);
+
+	bulletTextTextureHandle = TextureManager::Load("AbilityInfo/bulletText.png");
+	SpaceJumpTexttextureHandle = TextureManager::Load("AbilityInfo/SpaceJumpText.png");
+	ChargeTextTextureHandle = TextureManager::Load("AbilityInfo/chargeText.png");
+
+	info_ = new AbilityInfo();
+	info_->Initialize(bulletTextTextureHandle, Vector2(140.0f, 200.0f));
+
+	GameUIMoveTextureHandle = TextureManager::Load("GameUI/MoveText.png");
+	GameUIShotTextureHandle = TextureManager::Load("GameUI/ShotText.png");
+	GameUISpaceTextureHandle = TextureManager::Load("GameUI/SpaceJumpText.png");
+	GameUIChargeTextureHandle = TextureManager::Load("GameUI/ChargeText.png");
+
+	GameUI_ = new GameUI();
+	GameUI_->Initialize(GameUIMoveTextureHandle, Vector2(0.0f, 720.0f - 64.0f));
 }
 
 void GameScene::GenerateBlocks() {
@@ -166,11 +183,11 @@ void GameScene::GenerateBlocks() {
 
 					break;
 				case 1:
-					mapChipField_->SetMapChipType(j, i, MapChipType::kBreakableBlock);
+					// mapChipField_->SetMapChipType(j, i, MapChipType::kBreakableBlock);
 
 					break;
 				case 2:
-					mapChipField_->SetMapChipType(j, i, MapChipType::kChageBreakeBlock);
+					// mapChipField_->SetMapChipType(j, i, MapChipType::kChageBreakeBlock);
 					break;
 				default:
 					break;
@@ -205,7 +222,7 @@ void GameScene::GenerateBlocks() {
 					NeweEnemy->SetMapChipField(mapChipField_);
 					NeweEnemy->Initialize(modelEnemy_, &camera_, spawnPos);
 					NeweEnemy->SetGameScene(this);
-					Explosionenemies_.push_back(NeweEnemy);
+					ExplosionEnemies_.push_back(NeweEnemy);
 
 					break;
 				case 2:
@@ -222,7 +239,7 @@ void GameScene::GenerateBlocks() {
 					abilityItem = new AbilityItem();
 					spawnPos = mapChipField_->GetMapChipPositionByIndex(j, i);
 					abilityItem->SetNunber(uint32_t(0));
-					abilityItem->Initialize(modelcheese_, &camera_, spawnPos);
+					abilityItem->Initialize(modelCheese_, &camera_, spawnPos);
 					AbilityItem_.push_back(abilityItem);
 					SubID = mapChipField_->GetMapChipSubIDByIndex(j, i);
 
@@ -231,7 +248,7 @@ void GameScene::GenerateBlocks() {
 					abilityItem = new AbilityItem();
 					spawnPos = mapChipField_->GetMapChipPositionByIndex(j, i);
 					abilityItem->SetNunber(uint32_t(1));
-					abilityItem->Initialize(modelcheese_, &camera_, spawnPos);
+					abilityItem->Initialize(modelCheese_, &camera_, spawnPos);
 					AbilityItem_.push_back(abilityItem);
 					SubID = mapChipField_->GetMapChipSubIDByIndex(j, i);
 
@@ -240,7 +257,7 @@ void GameScene::GenerateBlocks() {
 					abilityItem = new AbilityItem();
 					spawnPos = mapChipField_->GetMapChipPositionByIndex(j, i);
 					abilityItem->SetNunber(uint32_t(2));
-					abilityItem->Initialize(modelcheese_, &camera_, spawnPos);
+					abilityItem->Initialize(modelCheese_, &camera_, spawnPos);
 					AbilityItem_.push_back(abilityItem);
 					SubID = mapChipField_->GetMapChipSubIDByIndex(j, i);
 
@@ -281,8 +298,19 @@ void GameScene::CheckAllCollisions() {
 
 				num = ability->GetNumber();
 				player_->OnCollision(num);
-
+				if (num == 0) {
+					info_->SetTextureHandle(bulletTextTextureHandle);
+					GameUI_->SetTextureHandle(GameUIShotTextureHandle);
+				} else if (num == 1) {
+					info_->SetTextureHandle(SpaceJumpTexttextureHandle);
+					GameUI_->SetTextureHandle(GameUISpaceTextureHandle);
+				} else if (num == 2) {
+					info_->SetTextureHandle(ChargeTextTextureHandle);
+					GameUI_->SetTextureHandle(GameUIChargeTextureHandle);
+				}
 				ability->OnCollision();
+
+				phase_ = Phase::kInformation;
 			}
 		}
 
@@ -320,7 +348,7 @@ void GameScene::CheckAllCollisions() {
 			}
 		}
 
-		for (ExplosionEnemy* enemy : Explosionenemies_) {
+		for (ExplosionEnemy* enemy : ExplosionEnemies_) {
 			if (enemy->IsCollisionDisabled())
 				continue;
 			aabbExpEnemy = enemy->GetAABBExplosion();
@@ -446,8 +474,8 @@ void GameScene::Update() { /* 更新勝利を書く */
 	ui_->Update();
 
 	// bgm
-	if (!Audio::GetInstance()->IsPlaying(voiceHAndel)) {
-		// voiceHAndel = Audio::GetInstance()->PlayWave(soundBGM, true, 0.5f);
+	if (!Audio::GetInstance()->IsPlaying(voiceHandel)) {
+		 voiceHandel = Audio::GetInstance()->PlayWave(soundBGM, true, 0.5f);
 	}
 
 	enemies_.remove_if([](Enemy* enemy) {
@@ -458,7 +486,7 @@ void GameScene::Update() { /* 更新勝利を書く */
 		return false;
 	});
 
-	Explosionenemies_.remove_if([](ExplosionEnemy* enemy) {
+	ExplosionEnemies_.remove_if([](ExplosionEnemy* enemy) {
 		if (enemy->isDead()) {
 			delete enemy;
 			return true;
@@ -496,18 +524,6 @@ void GameScene::Update() { /* 更新勝利を書く */
 		}
 	}
 
-	for (Enemy* enemy : enemies_) {
-		enemy->Update();
-	}
-
-	for (ExplosionEnemy* enemy : Explosionenemies_) {
-		enemy->Update();
-	}
-
-	for (AbilityItem* Ability : AbilityItem_) {
-		Ability->Update();
-	}
-
 	ChangePhase();
 
 	switch (phase_) {
@@ -523,6 +539,18 @@ void GameScene::Update() { /* 更新勝利を書く */
 
 		goal->Update();
 
+		for (Enemy* enemy : enemies_) {
+			enemy->Update();
+		}
+
+		for (ExplosionEnemy* enemy : ExplosionEnemies_) {
+			enemy->Update();
+		}
+
+		for (AbilityItem* Ability : AbilityItem_) {
+			Ability->Update();
+		}
+
 		break;
 	case Phase::kPlay:
 
@@ -532,7 +560,20 @@ void GameScene::Update() { /* 更新勝利を書く */
 		for (HitEffect* hitEffect : hitEffects_) {
 			hitEffect->Update();
 		}
+
 		goal->Update();
+
+		for (Enemy* enemy : enemies_) {
+			enemy->Update();
+		}
+
+		for (ExplosionEnemy* enemy : ExplosionEnemies_) {
+			enemy->Update();
+		}
+
+		for (AbilityItem* Ability : AbilityItem_) {
+			Ability->Update();
+		}
 
 		// チャージショット
 
@@ -572,15 +613,23 @@ void GameScene::Update() { /* 更新勝利を書く */
 		fade_->Update();
 		if (fade_->IsFinished() && goal->isCleraed()) {
 			isGoal_ = true;
-			Audio::GetInstance()->StopWave(voiceHAndel);
+			Audio::GetInstance()->StopWave(voiceHandel);
 		}
 		if (fade_->IsFinished() && player_->IsDead()) {
 			finished_ = true;
-			Audio::GetInstance()->StopWave(voiceHAndel);
+			Audio::GetInstance()->StopWave(voiceHandel);
 		}
 
 		goal->Update();
 
+		break;
+	case Phase::kInformation:
+
+		info_->Update();
+
+		if (Input::GetInstance()->PushKey(DIK_RETURN)) {
+			phase_ = Phase::kPlay;
+		}
 		break;
 	}
 }
@@ -606,7 +655,7 @@ void GameScene::Draw() {
 		enemy->Draw();
 	}
 
-	for (ExplosionEnemy* enemy : Explosionenemies_) {
+	for (ExplosionEnemy* enemy : ExplosionEnemies_) {
 		enemy->Draw();
 	}
 
@@ -631,7 +680,7 @@ void GameScene::Draw() {
 			if (mapChipField_->GetMapChipSubIDByIndex(j, i) == 1) {
 				modelblock_->Draw(*worldTransformBlocks_[i][j], camera_, blockTextureHandele);
 			} else if (mapChipField_->GetMapChipSubIDByIndex(j, i) == 2) {
-				modelblock_->Draw(*worldTransformBlocks_[i][j], camera_, ChageblockTextureHandele);
+				modelblock_->Draw(*worldTransformBlocks_[i][j], camera_, chageBlockTextureHandele);
 			} else {
 				modelblock_->Draw(*worldTransformBlocks_[i][j], camera_);
 			}
@@ -655,6 +704,12 @@ void GameScene::Draw() {
 	Sprite::PreDraw(dxCommon->GetCommandList());
 
 	fade_->Draw();
+
+	GameUI_->Draw();
+
+	if (phase_ == Phase::kInformation) {
+		info_->Draw();
+	}
 
 	// スプライト描画後処理
 	Sprite::PostDraw();
